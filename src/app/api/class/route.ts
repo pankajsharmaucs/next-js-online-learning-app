@@ -9,7 +9,19 @@ export async function GET() {
 
     return NextResponse.json({ classes: rows });
   } catch (error: any) {
+    // console.error('Database error:', error);
+    // return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
     console.error('Database error:', error);
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+
+    // ✅ Return dummy data on DB error
+    const dummyData = [
+      { class_id: 11, class_name: '7th', board_id: '33' },
+      { class_id: 22, class_name: '12th', board_id: '44' },
+    ];
+
+    return NextResponse.json({
+      message: 'Database connection failed. Returning dummy data.',
+      classes: dummyData,
+    });
   }
 }
