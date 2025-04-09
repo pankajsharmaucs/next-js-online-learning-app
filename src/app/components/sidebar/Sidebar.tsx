@@ -25,7 +25,7 @@ const Sidebar = ({ openCloseTrigger, setsidebarOpened }: OpenCloseType) => {
                     </div>
                     <div className="sidebar__content">
                         <div className="logo mb-40">
-                            <Link href="/">
+                            <Link href="/" onClick={() => setsidebarOpened(false)}>
                                 <img src="/img/logo/logo.png" alt="logo" />
                             </Link>
                         </div>

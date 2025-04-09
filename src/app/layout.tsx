@@ -22,8 +22,8 @@ import Footer from './components/footer/page';
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })
 
 export const metadata = {
-  title: 'Server',
-  description: 'Supports dark mode!',
+  title: 'Edusm',
+  description: 'Online Learning platform',
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -33,6 +33,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Header />
         {children}
         <Footer />
+
+       
+
       </body>
     </html>
   )

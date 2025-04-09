@@ -28,7 +28,7 @@ const SidebarMenu = ({ setsidebarOpened }: OpenCloseType) => {
         title="Blog"
         links={[
           { label: "Blog", href: "blog" },
-          { label: "Blog Category", href: "blog-category" },
+          { label: "Blog Detail", href: "blog-details" },
         ]}
       />
       <MenuItem title="Contact" href="/contact" onClick={handleClick}  />

@@ -3,11 +3,13 @@
 import React, { useEffect, useState } from 'react'
 import Preloader from '../preloader/Preloader'
 import Sidebar from '../sidebar/Sidebar'
+import Link from 'next/link'
 
 const Header = () => {
 
     const [showPreloader, setShowPreloader] = useState(false);
     const [sidebarOpened, setsidebarOpened] = useState(false);
+    const [isSticky, setIsSticky] = useState(false);
 
     useEffect(() => {
 
@@ -16,6 +18,23 @@ const Header = () => {
         }, 1500)
 
     }, [])
+
+    useEffect(() => {
+        const handleScroll = () => {
+            if (window.scrollY >= 60) {
+                setIsSticky(true);
+            } else {
+                setIsSticky(false);
+            }
+        };
+
+        window.addEventListener('scroll', handleScroll);
+
+        // Clean up
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+        };
+    }, []);
 
     return (
         <>
@@ -36,16 +55,16 @@ const Header = () => {
 
             {/* header area start */}
             <header>
-                <div id="header-sticky" className="header__area header__transparent header__padding" >
+                <div id="header-sticky" className={`header__area  header__transparent header__padding ${isSticky ? 'sticky' : ''}`} >
                     <div className="container-fluid">
                         <div className="row align-items-center">
 
                             <div className="col-xxl-3 col-xl-3 col-lg-3 col-md-3 col-sm-3 col-4 p-0">
                                 <div className="header__left d-flex">
                                     <div className="logo">
-                                        <a href="index.html">
+                                        <Link href="/">
                                             <img src="/img/logo/logo.png" alt="logo" />
-                                        </a>
+                                        </Link>
                                     </div>
                                     <div className="header__category">
                                         <nav>
@@ -126,7 +145,7 @@ const Header = () => {
                             </div>
 
                             <div className="col-xxl-9 col-xl-9 col-lg-9 col-md-9 col-sm-9 col-8 ">
-                                <div className="header__right d-flex justify-content-end align-items-center">
+                                <div className="header__right d-flex justify-content-md-around justify-content-end align-items-center">
                                     <div className="main-menu">
                                         <nav id="mobile-menu" className='d-none d-md-none d-lg-block'>
                                             <ul>
@@ -239,9 +258,9 @@ const Header = () => {
                                         </div>
                                     </div>
                                     <div className="header__btn ml-10  ">
-                                        <a href="contact.html" className="e-btn">
+                                        <Link href="/login" className="e-btn">
                                             Try free
-                                        </a>
+                                        </Link>
                                     </div>
                                     <div className="sidebar__menu d-xl-none cursor-pointer " onClick={() => setsidebarOpened(true)}>
                                         <div className="sidebar-toggle-btn ml-30" id="sidebar-toggle">
