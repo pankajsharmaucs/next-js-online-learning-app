@@ -16,7 +16,7 @@ import './styles/css/elegantFont.css';
 
 
 import { Inter } from 'next/font/google'
-import Header from './components/header/page';
+import Header from './components/header/Header';
 import Footer from './components/footer/page';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })

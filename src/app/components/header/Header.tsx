@@ -2,12 +2,12 @@
 
 import React, { useEffect, useState } from 'react'
 import Preloader from '../preloader/Preloader'
-import Sidebar from '../sidebar/page'
+import Sidebar from '../sidebar/Sidebar'
 
 const Header = () => {
 
     const [showPreloader, setShowPreloader] = useState(false);
-    const [sidebarOpened, setsidebarOpened] = useState(true);
+    const [sidebarOpened, setsidebarOpened] = useState(false);
 
     useEffect(() => {
 
