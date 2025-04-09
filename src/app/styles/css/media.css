@@ -1,0 +1,17 @@
+@media only screen and (max-width: 1200px) {
+    .header__category {
+        padding-left: 0px !important;
+        margin-left: 18px !important;
+    }
+
+    .main-menu {
+        display: none !important;
+    }
+}
+
+@media only screen and (max-width: 1200px) {
+    .header__category {
+        display: none !important;
+    }
+
+}

@@ -1,12 +1,31 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+@import "./styles/css/media.css";
 
-html {
-  transition: background-color 0.3s, color 0.3s;
+:root {
+  --color-primary: #1e40af;
+  /* Tailwind blue-800 */
+  --font-main: 'Inter', sans-serif;
+}
+
+body {
+  font-family: var(--font-main);
+}
+
+a {
+  text-decoration: none !important;
+}
+
+.menuAnchor {
+  color: #4d4d4d !important;
+  border-bottom: 1px solid #fff;
+  margin-bottom: 2px;
+}
+
+.menuAnchor:hover {
+  border-bottom: 1px solid #1b1b1b;
 }
 
 .dark {
-  background: #1f1e1e;
+  background-color: #1f1e1e;
   color: #fff;
 }
