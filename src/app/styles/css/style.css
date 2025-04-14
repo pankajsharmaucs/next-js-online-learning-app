@@ -1,45 +1,6 @@
 @charset "UTF-8";
 /*-----------------------------------------------------------------------------------
 
-    Theme Name: Educal – Online Learning and Education HTML5 Template
-    Author: Theme Pure
-    Support: basictheme@gmail.com
-    Description: Educal – Online Learning and Education HTML5 Template
-    Version: 1.0
-
------------------------------------------------------------------------------------
-
-/************ TABLE OF CONTENTS ***************
-
-    01. Common CSS
-    02. Header CSS
-    03. Hero CSS
-    04. Category CSS
-    05. Banner CSS
-    06. Course CSS
-    07. Events CSS
-    08. Price CSS
-    09. Cta CSS
-    10. Product CSS
-    11. Services CSS
-    12. About CSS
-    13. What CSS
-    14. Why CSS
-    15. Counter CSS
-    16. Testimonial CSS
-    17. Blog CSS
-    18. Slider CSS
-    19. Brand CSS
-    20. Teacher CSS
-    21. Page Title CSS
-    22. Contact CSS
-    23. Error CSS
-    24. Login CSS
-    00. Footer CSS
-
-
-**********************************************/
-/*
 
 
 */
@@ -50,11 +11,11 @@
 * {
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
+  /* box-sizing: border-box; */
 }
 
 body {
-  font-family: "Hind", sans-serif;
+  font-family: "Hind", sans-serif!important;
   font-size: 16px;
   font-weight: normal;
   color: #6d6e75;
@@ -143,7 +104,7 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: "Hind", sans-serif;
+  font-family: "Hind", sans-serif!important;
   color: #0e1133;
   margin-top: 0px;
   font-weight: 700;
@@ -189,7 +150,7 @@ li {
 }
 
 p {
-  font-family: "Hind", sans-serif;
+  font-family: "Hind", sans-serif!important;
   font-size: 16px;
   font-weight: normal;
   color: #6d6e75;
@@ -882,7 +843,7 @@ p {
 }
 
 .header__area {
-  background: #fff!important;
+  /* background: #fff!important; */
 }
 .header__area.sticky {
   position: fixed;
@@ -898,7 +859,7 @@ p {
   -moz-box-shadow: 0px 10px 20px 0px rgba(8, 0, 42, 0.08);
   box-shadow: 0px 10px 20px 0px rgba(8, 0, 42, 0.08);
 }
-.header__area .header__search input {
+.header__area.sticky .header__search input {
   background: #edeef3;
 }
 .header__area.sticky .logo .logo-white {
@@ -7325,7 +7286,7 @@ p.checkout-coupon input[type=text]:focus {
 }
 .page__title-wrapper .breadcrumb .breadcrumb-item.active::before {
   content: ".";
-  font-family: "Hind", sans-serif;
+  font-family: "Hind", sans-serif!important;
   font-size: 30px;
   color: #ffffff;
   line-height: 18px;
@@ -7341,7 +7302,7 @@ p.checkout-coupon input[type=text]:focus {
 }
 .page__title-wrapper .breadcrumb .breadcrumb-item + .breadcrumb-item::before {
   content: ".";
-  font-family: "Hind", sans-serif;
+  font-family: "Hind", sans-serif!important;
   font-size: 30px;
   color: #ffffff;
   line-height: 18px;
@@ -7480,7 +7441,7 @@ p.checkout-coupon input[type=text]:focus {
 }
 .page__title-breadcrumb .breadcrumb .breadcrumb-item.active::before {
   content: ".";
-  font-family: "Hind", sans-serif;
+  font-family: "Hind", sans-serif!important;
   font-size: 30px;
   color: #53545b;
   line-height: 18px;
@@ -7488,7 +7449,7 @@ p.checkout-coupon input[type=text]:focus {
 }
 .page__title-breadcrumb .breadcrumb .breadcrumb-item + .breadcrumb-item::before {
   content: ".";
-  font-family: "Hind", sans-serif;
+  font-family: "Hind", sans-serif!important;
   font-size: 30px;
   color: #53545b;
   line-height: 18px;

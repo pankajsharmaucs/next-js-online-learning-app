@@ -16,8 +16,8 @@ import './styles/css/elegantFont.css';
 
 
 import { Inter } from 'next/font/google'
-import Header from './components/header/Header';
-import Footer from './components/footer/page';
+import Header from '../components/header/Header';
+import Footer from '../components/footer/page';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })
 
@@ -29,7 +29,7 @@ export const metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className={`${inter.variable} font-sans bg-background text-foreground`}>
+      <body className={` font-sans bg-background text-foreground`}>
         <Header />
         {children}
         <Footer />
