@@ -8,7 +8,6 @@ import './styles/css/default.css';
 import './styles/css/fontAwesome5Pro.css';
 import './styles/css/preloader.css';
 import './styles/css/swiper-bundle.css';
-
 import './styles/css/meanmenu.css';
 import './styles/css/owl.carousel.min.css';
 import './styles/css/jquery.fancybox.min.css';
@@ -33,9 +32,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Header />
         {children}
         <Footer />
-
-       
-
       </body>
     </html>
   )

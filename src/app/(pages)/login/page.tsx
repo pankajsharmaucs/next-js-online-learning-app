@@ -4,7 +4,7 @@ const page = () => {
     return (
         <main>
             {/* sign up area start */}
-            <section className="signup__area po-rel-z1 pt-100 pb-145">
+            <section className="signup__area po-rel-z1 pt-140 pb-145">
                 <div className="sign__shape">
                     <img className="man-1" src="/img/icon/sign/man-3.png" alt="" />
                     <img
