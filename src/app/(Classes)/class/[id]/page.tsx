@@ -1,11 +1,9 @@
 import TabButton from '@/components/button/TabButton';
 
-interface ClassTypes {
-  tab_id: String;
-}
 
-const Page = ({ params }: { params: { id: string } }) => {
-  const { id } = params;
+export default async function Page({ params, }: { params: Promise<{ id: string }>}) {
+  
+  const { id } = await params;
 
   return (
     <main>
@@ -1666,5 +1664,3 @@ const Page = ({ params }: { params: { id: string } }) => {
     </main>
   )
 }
-
-export default Page;
