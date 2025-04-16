@@ -37,7 +37,7 @@ const Page = ({ params }: { params: { id: string } }) => {
                     <nav aria-label="breadcrumb">
                       <ol className="breadcrumb">
                         <li className="breadcrumb-item">
-                          <a href="index.html">Home</a>
+                          <a href="index.html">Home {id}</a>
                         </li>
                         <li className="breadcrumb-item">
                           <a href="course-grid.html">Courses</a>
@@ -117,21 +117,6 @@ const Page = ({ params }: { params: { id: string } }) => {
                 <div className="course__tab-2 mb-45">
                   <ul className="nav nav-tabs" id="courseTab" role="tablist">
                     <li className="nav-item" role="presentation">
-                      <button
-                        className="nav-link active"
-                        id="description-tab"
-                        data-bs-toggle="tab"
-                        data-bs-target="#description"
-                        type="button"
-                        role="tab"
-                        aria-controls="description"
-                        aria-selected="true"
-                      >
-                        {" "}
-                        <i className="icon_ribbon_alt" /> <span>Discription</span>{" "}
-                      </button>
-                    </li>
-                    <li className="nav-item" role="presentation">
                       <TabButton tab_id='1' />
                     </li>
                     <li className="nav-item" role="presentation">
@@ -139,6 +124,9 @@ const Page = ({ params }: { params: { id: string } }) => {
                     </li>
                     <li className="nav-item" role="presentation">
                       <TabButton tab_id='3' />
+                    </li>
+                    <li className="nav-item" role="presentation">
+                      <TabButton tab_id='4' />
                     </li>
                   </ul>
                 </div>

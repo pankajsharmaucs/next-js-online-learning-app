@@ -1330,7 +1330,7 @@ p {
   color: #2b4eff;
 }
 .main-menu ul li:hover .submenu {
-  top: 100%;
+  top: 80%;
   visibility: visible;
   opacity: 1;
 }

@@ -1,13 +1,11 @@
-import mysql from "mysql2/promise";
+// lib/db.ts
+import mysql from 'mysql2/promise';
 
-const pool = mysql.createPool({
-  host: process.env.DB_HOST || "localhost",
-  user: process.env.DB_USER || "root",
-  password: process.env.DB_PASSWORD || "",
-  database: process.env.DB_DATABASE || "edus",
-  waitForConnections: true,
-  connectionLimit: 10,
-  queueLimit: 0,
-});
-
-export default pool;
+export const connectDB = async () => {
+  return await mysql.createConnection({
+    host: process.env.DB_HOST || '119.18.54.135',
+    user: process.env.DB_USER || 'elfedxvv_sm',
+    password: process.env.DB_PASSWORD || 'Asdf@333###',
+    database: process.env.DB_NAME || 'elfedxvv_edusm',
+  });
+};
