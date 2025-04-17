@@ -187,3 +187,122 @@ paths:
           description: Invalid token
         '400':
           description: Missing board_id or token
+
+  /admin/classes:
+    get:
+      summary: Fetch all classes by Board ID
+      parameters:
+        - name: board_id
+          in: query
+          required: true
+          description: The board ID to fetch associated classes.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: List of classes by board ID
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    class_id:
+                      type: integer
+                    class_name:
+                      type: string
+                    board_id:
+                      type: string
+        '400':
+          description: Invalid or missing board_id parameter
+        '500':
+          description: Internal server error
+
+    post:
+      summary: Add a new class
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                class_name:
+                  type: string
+                  description: Name of the class
+                board_id:
+                  type: string
+                  description: ID of the board
+              required:
+                - class_name
+                - board_id
+      responses:
+        '200':
+          description: Class added successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  id:
+                    type: integer
+        '401':
+          description: Unauthorized (Superadmin token required)
+        '500':
+          description: Internal server error
+
+  /admin/classes/{class_id}:
+    put:
+      summary: Update an existing class
+      parameters:
+        - name: class_id
+          in: path
+          required: true
+          description: The ID of the class to update.
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                class_name:
+                  type: string
+                  description: Updated name of the class
+              required:
+                - class_name
+      responses:
+        '200':
+          description: Class updated successfully
+        '400':
+          description: Missing or invalid class_id parameter
+        '401':
+          description: Unauthorized (Superadmin token required)
+        '404':
+          description: Class not found
+        '500':
+          description: Internal server error
+
+    delete:
+      summary: Delete a class
+      parameters:
+        - name: class_id
+          in: path
+          required: true
+          description: The ID of the class to delete.
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Class deleted successfully
+        '400':
+          description: Invalid or missing class_id parameter
+        '401':
+          description: Unauthorized (Superadmin token required)
+        '500':
+          description: Internal server error
