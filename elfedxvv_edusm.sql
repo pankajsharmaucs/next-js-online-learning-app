@@ -2,10 +2,10 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Generation Time: Apr 08, 2025 at 08:25 AM
--- Server version: 10.4.28-MariaDB
--- PHP Version: 8.2.4
+-- Host: localhost:3306
+-- Generation Time: Apr 17, 2025 at 11:53 AM
+-- Server version: 5.7.23-23
+-- PHP Version: 8.1.32
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `edus`
+-- Database: `elfedxvv_edusm`
 --
 
 -- --------------------------------------------------------
@@ -30,11 +30,11 @@ SET time_zone = "+00:00";
 CREATE TABLE `admin_permissions` (
   `permission_id` int(11) NOT NULL,
   `admin_id` int(11) DEFAULT NULL,
-  `can_add_courses` tinyint(1) DEFAULT 1,
-  `can_edit_courses` tinyint(1) DEFAULT 1,
-  `can_delete_courses` tinyint(1) DEFAULT 1,
-  `can_manage_users` tinyint(1) DEFAULT 1
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `can_add_courses` tinyint(1) DEFAULT '0',
+  `can_edit_courses` tinyint(1) DEFAULT '0',
+  `can_delete_courses` tinyint(1) DEFAULT '0',
+  `can_manage_users` tinyint(1) DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -44,12 +44,11 @@ CREATE TABLE `admin_permissions` (
 
 CREATE TABLE `assessments` (
   `assessment_id` int(11) NOT NULL,
-  `subject_id` int(11) DEFAULT NULL,
-  `class_id` int(11) NOT NULL,
+  `topic_id` int(11) DEFAULT NULL,
   `assessment_name` varchar(255) NOT NULL,
-  `is_paid` tinyint(1) DEFAULT 0,
+  `is_paid` tinyint(1) DEFAULT '0',
   `added_by` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -65,7 +64,7 @@ CREATE TABLE `assessment_answers` (
   `option_c` text NOT NULL,
   `option_d` text NOT NULL,
   `correct_option` enum('A','B','C','D') NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -77,7 +76,7 @@ CREATE TABLE `assessment_questions` (
   `assessment_question_id` int(11) NOT NULL,
   `assessment_id` int(11) DEFAULT NULL,
   `question_id` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -90,7 +89,7 @@ CREATE TABLE `certificates` (
   `user_id` int(11) DEFAULT NULL,
   `assessment_id` int(11) DEFAULT NULL,
   `issued_date` date NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -99,18 +98,14 @@ CREATE TABLE `certificates` (
 --
 
 CREATE TABLE `chapters` (
-  `chapter_id` int(11) NOT NULL,
+  `topic_id` int(11) NOT NULL,
   `subject_id` int(11) DEFAULT NULL,
-  `chapter_name` varchar(255) NOT NULL,
-  `intro` longtext NOT NULL,
-  `moral` longtext NOT NULL,
-  `summary` text DEFAULT NULL,
+  `topic_name` varchar(255) NOT NULL,
+  `summary` text,
   `video_url` varchar(500) DEFAULT NULL,
-  `pdf` varchar(222) NOT NULL,
-  `is_pdf_paid` int(11) NOT NULL DEFAULT 1,
-  `is_video_paid` int(11) NOT NULL DEFAULT 1,
+  `pdf` varchar(232) NOT NULL,
   `added_by` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -122,7 +117,7 @@ CREATE TABLE `classes` (
   `class_id` int(11) NOT NULL,
   `class_name` varchar(255) NOT NULL,
   `board_id` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `classes`
@@ -148,14 +143,15 @@ CREATE TABLE `education_boards` (
   `board_name` varchar(255) NOT NULL,
   `image` varchar(333) DEFAULT NULL,
   `linkTo` varchar(222) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `education_boards`
 --
 
 INSERT INTO `education_boards` (`board_id`, `board_name`, `image`, `linkTo`) VALUES
-(2, 'NCERT', 'industry.png', '/board/2');
+(2, 'NCERT', 'industry.png', '/board/2'),
+(13, 'CBSE', 'CBSE.png', 'CBSE/13');
 
 -- --------------------------------------------------------
 
@@ -168,19 +164,7 @@ CREATE TABLE `pricing` (
   `plan_name` varchar(255) NOT NULL,
   `price` decimal(10,2) NOT NULL,
   `duration` enum('monthly','yearly','lifetime') NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `pricing`
---
-
-INSERT INTO `pricing` (`pricing_id`, `plan_name`, `price`, `duration`) VALUES
-(1, 'chapter', 49.00, 'yearly'),
-(2, 'subject', 99.00, 'yearly'),
-(3, 'class', 999.00, 'yearly'),
-(4, 'monthly_subscription', 1199.00, 'monthly'),
-(5, 'yearly_subscription', 5199.00, 'monthly'),
-(6, 'lifetime_subscription', 15199.00, 'monthly');
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -190,86 +174,46 @@ INSERT INTO `pricing` (`pricing_id`, `plan_name`, `price`, `duration`) VALUES
 
 CREATE TABLE `questions_answers` (
   `question_id` int(11) NOT NULL,
-  `chapter_id` int(11) DEFAULT NULL,
-  `subject_id` int(11) NOT NULL,
+  `topic_id` int(11) DEFAULT NULL,
   `question_text` text NOT NULL,
   `correct_answer` text NOT NULL,
   `added_by` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `signup_verify`
+-- Table structure for table `signUp_verify`
 --
 
-CREATE TABLE `signup_verify` (
+CREATE TABLE `signUp_verify` (
   `id` int(11) NOT NULL,
   `email` varchar(255) NOT NULL,
   `otp` varchar(6) NOT NULL,
   `sent_time` varchar(121) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data for table `signup_verify`
+-- Dumping data for table `signUp_verify`
 --
 
-INSERT INTO `signup_verify` (`id`, `email`, `otp`, `sent_time`) VALUES
+INSERT INTO `signUp_verify` (`id`, `email`, `otp`, `sent_time`) VALUES
 (0, 'pspankajsharma222@gmail.com', '8851', '02-Apr-2025 02:26:35');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `sold_chapter`
+-- Table structure for table `standalone_courses`
 --
 
-CREATE TABLE `sold_chapter` (
-  `sold_id` int(11) NOT NULL,
-  `subject_id` int(11) NOT NULL,
-  `chapter_id` int(11) NOT NULL,
-  `pricing_id` int(11) NOT NULL,
-  `user_id` varchar(222) NOT NULL,
-  `purchased_date` datetime NOT NULL DEFAULT current_timestamp(),
-  `sold_price` float NOT NULL,
-  `validity` int(11) NOT NULL,
-  `update_date` datetime DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `sold_class`
---
-
-CREATE TABLE `sold_class` (
-  `sold_id` int(11) NOT NULL,
-  `class_id` int(11) NOT NULL,
-  `board_id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `pricing_id` int(11) NOT NULL,
-  `sold_price` float NOT NULL,
-  `validity` int(11) NOT NULL,
-  `purchased_date` datetime NOT NULL DEFAULT current_timestamp(),
-  `update_date` datetime NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `sold_subject`
---
-
-CREATE TABLE `sold_subject` (
-  `sold_id` int(11) NOT NULL,
-  `subject_id` int(11) NOT NULL,
-  `class_id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `pricing_id` int(11) NOT NULL,
-  `sold_price` float NOT NULL,
-  `validity` int(11) NOT NULL,
-  `purchased_date` datetime NOT NULL DEFAULT current_timestamp(),
-  `update_date` datetime NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+CREATE TABLE `standalone_courses` (
+  `standalone_id` int(11) NOT NULL,
+  `user_id` int(11) DEFAULT NULL,
+  `topic_id` int(11) DEFAULT NULL,
+  `validity` enum('monthly','yearly') NOT NULL,
+  `purchase_date` date NOT NULL,
+  `expiry_date` date DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -282,7 +226,7 @@ CREATE TABLE `subjects` (
   `class_id` int(11) DEFAULT NULL,
   `subject_name` varchar(255) NOT NULL,
   `added_by` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `subjects`
@@ -303,7 +247,7 @@ CREATE TABLE `subscriptions` (
   `pricing_id` int(11) DEFAULT NULL,
   `start_date` date NOT NULL,
   `end_date` date DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -318,16 +262,17 @@ CREATE TABLE `users` (
   `password` varchar(255) NOT NULL,
   `role` enum('super_admin','sub_admin','user') DEFAULT 'user',
   `token` varchar(344) NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `active_status` int(11) NOT NULL DEFAULT 1
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `created_by` varchar(123) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `active_status` int(11) NOT NULL DEFAULT '1'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`user_id`, `name`, `email`, `password`, `role`, `token`, `created_at`, `active_status`) VALUES
-(1, 'pankaj', 'pspankajsharma222@gmail.com', '123', 'super_admin', 'baf721133dc1782a4d635153e9ce45da__pspankajsharma222@gmail.com', '2025-03-31 12:12:20', 1);
+INSERT INTO `users` (`user_id`, `name`, `email`, `password`, `role`, `token`, `created_by`, `created_at`, `active_status`) VALUES
+(3, '', 'pankaj@gmail.com', '$2b$10$dpd4Qm.raykc3RlEc.E61eEhHuEo8/7ZgEqLZB0yoRey2p64YprIO', 'super_admin', '0719f3d266cf726ac1c698bf64dc80d356c6412d9418d5c51b9f1e97250a2b6f', '', '2025-04-17 05:33:30', 1);
 
 -- --------------------------------------------------------
 
@@ -340,9 +285,9 @@ CREATE TABLE `user_assessments` (
   `user_id` int(11) DEFAULT NULL,
   `assessment_id` int(11) DEFAULT NULL,
   `score` int(11) DEFAULT NULL,
-  `completed` tinyint(1) DEFAULT 0,
+  `completed` tinyint(1) DEFAULT '0',
   `certificate_id` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -357,10 +302,10 @@ CREATE TABLE `user_course_progress` (
   `subject_id` int(11) DEFAULT NULL,
   `topic_id` int(11) DEFAULT NULL,
   `status` enum('not_started','in_progress','assessment','completed') DEFAULT 'not_started',
-  `started_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `started_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `assessment_started_at` timestamp NULL DEFAULT NULL,
   `completed_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Indexes for dumped tables
@@ -378,7 +323,7 @@ ALTER TABLE `admin_permissions`
 --
 ALTER TABLE `assessments`
   ADD PRIMARY KEY (`assessment_id`),
-  ADD KEY `topic_id` (`subject_id`),
+  ADD KEY `topic_id` (`topic_id`),
   ADD KEY `added_by` (`added_by`);
 
 --
@@ -408,7 +353,7 @@ ALTER TABLE `certificates`
 -- Indexes for table `chapters`
 --
 ALTER TABLE `chapters`
-  ADD PRIMARY KEY (`chapter_id`),
+  ADD PRIMARY KEY (`topic_id`),
   ADD KEY `subject_id` (`subject_id`),
   ADD KEY `added_by` (`added_by`);
 
@@ -437,32 +382,22 @@ ALTER TABLE `pricing`
 --
 ALTER TABLE `questions_answers`
   ADD PRIMARY KEY (`question_id`),
-  ADD KEY `topic_id` (`chapter_id`),
+  ADD KEY `topic_id` (`topic_id`),
   ADD KEY `added_by` (`added_by`);
 
 --
--- Indexes for table `signup_verify`
+-- Indexes for table `signUp_verify`
 --
-ALTER TABLE `signup_verify`
+ALTER TABLE `signUp_verify`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `sold_chapter`
+-- Indexes for table `standalone_courses`
 --
-ALTER TABLE `sold_chapter`
-  ADD PRIMARY KEY (`sold_id`);
-
---
--- Indexes for table `sold_class`
---
-ALTER TABLE `sold_class`
-  ADD PRIMARY KEY (`sold_id`);
-
---
--- Indexes for table `sold_subject`
---
-ALTER TABLE `sold_subject`
-  ADD PRIMARY KEY (`sold_id`);
+ALTER TABLE `standalone_courses`
+  ADD PRIMARY KEY (`standalone_id`),
+  ADD KEY `user_id` (`user_id`),
+  ADD KEY `topic_id` (`topic_id`);
 
 --
 -- Indexes for table `subjects`
@@ -543,7 +478,7 @@ ALTER TABLE `certificates`
 -- AUTO_INCREMENT for table `chapters`
 --
 ALTER TABLE `chapters`
-  MODIFY `chapter_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `topic_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `classes`
@@ -555,13 +490,13 @@ ALTER TABLE `classes`
 -- AUTO_INCREMENT for table `education_boards`
 --
 ALTER TABLE `education_boards`
-  MODIFY `board_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `board_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `pricing`
 --
 ALTER TABLE `pricing`
-  MODIFY `pricing_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `pricing_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `questions_answers`
@@ -570,22 +505,10 @@ ALTER TABLE `questions_answers`
   MODIFY `question_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `sold_chapter`
+-- AUTO_INCREMENT for table `standalone_courses`
 --
-ALTER TABLE `sold_chapter`
-  MODIFY `sold_id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `sold_class`
---
-ALTER TABLE `sold_class`
-  MODIFY `sold_id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `sold_subject`
---
-ALTER TABLE `sold_subject`
-  MODIFY `sold_id` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `standalone_courses`
+  MODIFY `standalone_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `subjects`
@@ -603,7 +526,7 @@ ALTER TABLE `subscriptions`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `user_assessments`
@@ -631,7 +554,7 @@ ALTER TABLE `admin_permissions`
 -- Constraints for table `assessments`
 --
 ALTER TABLE `assessments`
-  ADD CONSTRAINT `assessments_ibfk_1` FOREIGN KEY (`subject_id`) REFERENCES `chapters` (`chapter_id`),
+  ADD CONSTRAINT `assessments_ibfk_1` FOREIGN KEY (`topic_id`) REFERENCES `chapters` (`topic_id`),
   ADD CONSTRAINT `assessments_ibfk_2` FOREIGN KEY (`added_by`) REFERENCES `users` (`user_id`);
 
 --
@@ -671,8 +594,15 @@ ALTER TABLE `classes`
 -- Constraints for table `questions_answers`
 --
 ALTER TABLE `questions_answers`
-  ADD CONSTRAINT `questions_answers_ibfk_1` FOREIGN KEY (`chapter_id`) REFERENCES `chapters` (`chapter_id`),
+  ADD CONSTRAINT `questions_answers_ibfk_1` FOREIGN KEY (`topic_id`) REFERENCES `chapters` (`topic_id`),
   ADD CONSTRAINT `questions_answers_ibfk_2` FOREIGN KEY (`added_by`) REFERENCES `users` (`user_id`);
+
+--
+-- Constraints for table `standalone_courses`
+--
+ALTER TABLE `standalone_courses`
+  ADD CONSTRAINT `standalone_courses_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`),
+  ADD CONSTRAINT `standalone_courses_ibfk_2` FOREIGN KEY (`topic_id`) REFERENCES `chapters` (`topic_id`);
 
 --
 -- Constraints for table `subjects`
@@ -702,7 +632,7 @@ ALTER TABLE `user_course_progress`
   ADD CONSTRAINT `user_course_progress_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`),
   ADD CONSTRAINT `user_course_progress_ibfk_2` FOREIGN KEY (`class_id`) REFERENCES `classes` (`class_id`),
   ADD CONSTRAINT `user_course_progress_ibfk_3` FOREIGN KEY (`subject_id`) REFERENCES `subjects` (`subject_id`),
-  ADD CONSTRAINT `user_course_progress_ibfk_4` FOREIGN KEY (`topic_id`) REFERENCES `chapters` (`chapter_id`);
+  ADD CONSTRAINT `user_course_progress_ibfk_4` FOREIGN KEY (`topic_id`) REFERENCES `chapters` (`topic_id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
