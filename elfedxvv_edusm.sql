@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Apr 17, 2025 at 11:53 AM
+-- Generation Time: Apr 18, 2025 at 03:00 PM
 -- Server version: 5.7.23-23
 -- PHP Version: 8.1.32
 
@@ -44,7 +44,7 @@ CREATE TABLE `admin_permissions` (
 
 CREATE TABLE `assessments` (
   `assessment_id` int(11) NOT NULL,
-  `topic_id` int(11) DEFAULT NULL,
+  `chapter_id` int(11) DEFAULT NULL,
   `assessment_name` varchar(255) NOT NULL,
   `is_paid` tinyint(1) DEFAULT '0',
   `added_by` int(11) DEFAULT NULL
@@ -98,14 +98,21 @@ CREATE TABLE `certificates` (
 --
 
 CREATE TABLE `chapters` (
-  `topic_id` int(11) NOT NULL,
+  `chapter_id` int(11) NOT NULL,
   `subject_id` int(11) DEFAULT NULL,
-  `topic_name` varchar(255) NOT NULL,
+  `chapter_name` varchar(255) NOT NULL,
   `summary` text,
   `video_url` varchar(500) DEFAULT NULL,
   `pdf` varchar(232) NOT NULL,
   `added_by` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `chapters`
+--
+
+INSERT INTO `chapters` (`chapter_id`, `subject_id`, `chapter_name`, `summary`, `video_url`, `pdf`, `added_by`) VALUES
+(1, 1, 'Introduction', 'Introduction of english', 'https://www.example.com', 'english.pdf', NULL);
 
 -- --------------------------------------------------------
 
@@ -150,8 +157,7 @@ CREATE TABLE `education_boards` (
 --
 
 INSERT INTO `education_boards` (`board_id`, `board_name`, `image`, `linkTo`) VALUES
-(2, 'NCERT', 'industry.png', '/board/2'),
-(13, 'CBSE', 'CBSE.png', 'CBSE/13');
+(2, 'NCERT', 'industry.png', '/board/2');
 
 -- --------------------------------------------------------
 
@@ -174,7 +180,7 @@ CREATE TABLE `pricing` (
 
 CREATE TABLE `questions_answers` (
   `question_id` int(11) NOT NULL,
-  `topic_id` int(11) DEFAULT NULL,
+  `chapter_id` int(11) DEFAULT NULL,
   `question_text` text NOT NULL,
   `correct_answer` text NOT NULL,
   `added_by` int(11) DEFAULT NULL
@@ -209,7 +215,7 @@ INSERT INTO `signUp_verify` (`id`, `email`, `otp`, `sent_time`) VALUES
 CREATE TABLE `standalone_courses` (
   `standalone_id` int(11) NOT NULL,
   `user_id` int(11) DEFAULT NULL,
-  `topic_id` int(11) DEFAULT NULL,
+  `chapter_id` int(11) DEFAULT NULL,
   `validity` enum('monthly','yearly') NOT NULL,
   `purchase_date` date NOT NULL,
   `expiry_date` date DEFAULT NULL
@@ -233,7 +239,9 @@ CREATE TABLE `subjects` (
 --
 
 INSERT INTO `subjects` (`subject_id`, `class_id`, `subject_name`, `added_by`) VALUES
-(1, 1, 'English', NULL);
+(1, 1, 'English', NULL),
+(4, 1, 'Maths', NULL),
+(5, 8, 'Science', NULL);
 
 -- --------------------------------------------------------
 
@@ -272,7 +280,8 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`user_id`, `name`, `email`, `password`, `role`, `token`, `created_by`, `created_at`, `active_status`) VALUES
-(3, '', 'pankaj@gmail.com', '$2b$10$dpd4Qm.raykc3RlEc.E61eEhHuEo8/7ZgEqLZB0yoRey2p64YprIO', 'super_admin', '0719f3d266cf726ac1c698bf64dc80d356c6412d9418d5c51b9f1e97250a2b6f', '', '2025-04-17 05:33:30', 1);
+(3, '', 'pankaj@gmail.com', '$2b$10$dpd4Qm.raykc3RlEc.E61eEhHuEo8/7ZgEqLZB0yoRey2p64YprIO', 'super_admin', '0719f3d266cf726ac1c698bf64dc80d356c6412d9418d5c51b9f1e97250a2b6f', '', '2025-04-17 05:33:30', 1),
+(6, '', 'demo@gmail.com', '$2b$10$1X5Rltf1AMuI.8htQ4PFj.kcvS71pEsUh01jv6w1IG7zcE3F1Lhsu', 'sub_admin', '923638ca937fe4e5dd132ab4976dc038f13caadf982a6e92a0d8f7ce40710cba', 'pankaj@gmail.com', '2025-04-17 06:26:28', 1);
 
 -- --------------------------------------------------------
 
@@ -300,7 +309,7 @@ CREATE TABLE `user_course_progress` (
   `user_id` int(11) DEFAULT NULL,
   `class_id` int(11) DEFAULT NULL,
   `subject_id` int(11) DEFAULT NULL,
-  `topic_id` int(11) DEFAULT NULL,
+  `chapter_id` int(11) DEFAULT NULL,
   `status` enum('not_started','in_progress','assessment','completed') DEFAULT 'not_started',
   `started_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `assessment_started_at` timestamp NULL DEFAULT NULL,
@@ -323,7 +332,7 @@ ALTER TABLE `admin_permissions`
 --
 ALTER TABLE `assessments`
   ADD PRIMARY KEY (`assessment_id`),
-  ADD KEY `topic_id` (`topic_id`),
+  ADD KEY `chapter_id` (`chapter_id`),
   ADD KEY `added_by` (`added_by`);
 
 --
@@ -353,7 +362,7 @@ ALTER TABLE `certificates`
 -- Indexes for table `chapters`
 --
 ALTER TABLE `chapters`
-  ADD PRIMARY KEY (`topic_id`),
+  ADD PRIMARY KEY (`chapter_id`),
   ADD KEY `subject_id` (`subject_id`),
   ADD KEY `added_by` (`added_by`);
 
@@ -382,7 +391,7 @@ ALTER TABLE `pricing`
 --
 ALTER TABLE `questions_answers`
   ADD PRIMARY KEY (`question_id`),
-  ADD KEY `topic_id` (`topic_id`),
+  ADD KEY `chapter_id` (`chapter_id`),
   ADD KEY `added_by` (`added_by`);
 
 --
@@ -397,7 +406,7 @@ ALTER TABLE `signUp_verify`
 ALTER TABLE `standalone_courses`
   ADD PRIMARY KEY (`standalone_id`),
   ADD KEY `user_id` (`user_id`),
-  ADD KEY `topic_id` (`topic_id`);
+  ADD KEY `chapter_id` (`chapter_id`);
 
 --
 -- Indexes for table `subjects`
@@ -438,7 +447,7 @@ ALTER TABLE `user_course_progress`
   ADD KEY `user_id` (`user_id`),
   ADD KEY `class_id` (`class_id`),
   ADD KEY `subject_id` (`subject_id`),
-  ADD KEY `topic_id` (`topic_id`);
+  ADD KEY `chapter_id` (`chapter_id`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -478,7 +487,7 @@ ALTER TABLE `certificates`
 -- AUTO_INCREMENT for table `chapters`
 --
 ALTER TABLE `chapters`
-  MODIFY `topic_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `chapter_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `classes`
@@ -514,7 +523,7 @@ ALTER TABLE `standalone_courses`
 -- AUTO_INCREMENT for table `subjects`
 --
 ALTER TABLE `subjects`
-  MODIFY `subject_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `subject_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `subscriptions`
@@ -526,7 +535,7 @@ ALTER TABLE `subscriptions`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `user_assessments`
@@ -554,7 +563,7 @@ ALTER TABLE `admin_permissions`
 -- Constraints for table `assessments`
 --
 ALTER TABLE `assessments`
-  ADD CONSTRAINT `assessments_ibfk_1` FOREIGN KEY (`topic_id`) REFERENCES `chapters` (`topic_id`),
+  ADD CONSTRAINT `assessments_ibfk_1` FOREIGN KEY (`chapter_id`) REFERENCES `chapters` (`chapter_id`),
   ADD CONSTRAINT `assessments_ibfk_2` FOREIGN KEY (`added_by`) REFERENCES `users` (`user_id`);
 
 --
@@ -594,7 +603,7 @@ ALTER TABLE `classes`
 -- Constraints for table `questions_answers`
 --
 ALTER TABLE `questions_answers`
-  ADD CONSTRAINT `questions_answers_ibfk_1` FOREIGN KEY (`topic_id`) REFERENCES `chapters` (`topic_id`),
+  ADD CONSTRAINT `questions_answers_ibfk_1` FOREIGN KEY (`chapter_id`) REFERENCES `chapters` (`chapter_id`),
   ADD CONSTRAINT `questions_answers_ibfk_2` FOREIGN KEY (`added_by`) REFERENCES `users` (`user_id`);
 
 --
@@ -602,7 +611,7 @@ ALTER TABLE `questions_answers`
 --
 ALTER TABLE `standalone_courses`
   ADD CONSTRAINT `standalone_courses_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`),
-  ADD CONSTRAINT `standalone_courses_ibfk_2` FOREIGN KEY (`topic_id`) REFERENCES `chapters` (`topic_id`);
+  ADD CONSTRAINT `standalone_courses_ibfk_2` FOREIGN KEY (`chapter_id`) REFERENCES `chapters` (`chapter_id`);
 
 --
 -- Constraints for table `subjects`
@@ -632,7 +641,7 @@ ALTER TABLE `user_course_progress`
   ADD CONSTRAINT `user_course_progress_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`),
   ADD CONSTRAINT `user_course_progress_ibfk_2` FOREIGN KEY (`class_id`) REFERENCES `classes` (`class_id`),
   ADD CONSTRAINT `user_course_progress_ibfk_3` FOREIGN KEY (`subject_id`) REFERENCES `subjects` (`subject_id`),
-  ADD CONSTRAINT `user_course_progress_ibfk_4` FOREIGN KEY (`topic_id`) REFERENCES `chapters` (`topic_id`);
+  ADD CONSTRAINT `user_course_progress_ibfk_4` FOREIGN KEY (`chapter_id`) REFERENCES `chapters` (`chapter_id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
