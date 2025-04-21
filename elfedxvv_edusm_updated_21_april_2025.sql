@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Apr 18, 2025 at 03:00 PM
+-- Generation Time: Apr 21, 2025 at 06:18 PM
 -- Server version: 5.7.23-23
 -- PHP Version: 8.1.32
 
@@ -209,17 +209,76 @@ INSERT INTO `signUp_verify` (`id`, `email`, `otp`, `sent_time`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `standalone_courses`
+-- Table structure for table `sold_chapters`
 --
 
-CREATE TABLE `standalone_courses` (
-  `standalone_id` int(11) NOT NULL,
-  `user_id` int(11) DEFAULT NULL,
-  `chapter_id` int(11) DEFAULT NULL,
-  `validity` enum('monthly','yearly') NOT NULL,
-  `purchase_date` date NOT NULL,
-  `expiry_date` date DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+CREATE TABLE `sold_chapters` (
+  `id` int(11) NOT NULL,
+  `chapter_id` int(11) NOT NULL,
+  `subject_id` int(11) NOT NULL,
+  `user_id` varchar(120) COLLATE utf8_unicode_ci NOT NULL,
+  `purchase_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `validity` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
+  `update_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `activeStatus` int(11) NOT NULL DEFAULT '1'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Dumping data for table `sold_chapters`
+--
+
+INSERT INTO `sold_chapters` (`id`, `chapter_id`, `subject_id`, `user_id`, `purchase_date`, `validity`, `update_date`, `activeStatus`) VALUES
+(1, 1, 1, 'pankajsharma@gmail.com', '2025-04-21 14:18:22', '180', '2025-04-21 14:18:22', 1),
+(2, 1, 1, 'user@example.com', '2025-04-21 14:19:20', '180', '2025-04-21 14:19:20', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `sold_class`
+--
+
+CREATE TABLE `sold_class` (
+  `id` int(11) NOT NULL,
+  `class_id` int(11) NOT NULL,
+  `user_id` varchar(120) COLLATE utf8_unicode_ci NOT NULL,
+  `purchase_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `validity` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
+  `update_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `activeStatus` int(11) DEFAULT '1'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Dumping data for table `sold_class`
+--
+
+INSERT INTO `sold_class` (`id`, `class_id`, `user_id`, `purchase_date`, `validity`, `update_date`, `activeStatus`) VALUES
+(1, 1, 'pankajsharma@gmail.com', '2025-04-21 14:18:40', '365', '2025-04-21 14:18:40', 1),
+(2, 1, 'user@example.com', '2025-04-21 14:19:20', '180', '2025-04-21 14:19:20', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `sold_subjects`
+--
+
+CREATE TABLE `sold_subjects` (
+  `id` int(11) NOT NULL,
+  `subject_id` int(11) NOT NULL,
+  `class_id` int(11) NOT NULL,
+  `user_id` varchar(120) COLLATE utf8_unicode_ci NOT NULL,
+  `purchase_date` datetime NOT NULL,
+  `validity` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
+  `update_date` datetime NOT NULL,
+  `activeStatus` int(11) NOT NULL DEFAULT '1'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Dumping data for table `sold_subjects`
+--
+
+INSERT INTO `sold_subjects` (`id`, `subject_id`, `class_id`, `user_id`, `purchase_date`, `validity`, `update_date`, `activeStatus`) VALUES
+(3, 1, 1, 'pankajsharma@gmail.com', '2025-04-21 14:18:40', '365', '2025-04-21 14:18:40', 1),
+(4, 1, 1, 'user@example.com', '2025-04-21 14:19:20', '180', '2025-04-21 14:19:20', 1);
 
 -- --------------------------------------------------------
 
@@ -281,7 +340,9 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`user_id`, `name`, `email`, `password`, `role`, `token`, `created_by`, `created_at`, `active_status`) VALUES
 (3, '', 'pankaj@gmail.com', '$2b$10$dpd4Qm.raykc3RlEc.E61eEhHuEo8/7ZgEqLZB0yoRey2p64YprIO', 'super_admin', '0719f3d266cf726ac1c698bf64dc80d356c6412d9418d5c51b9f1e97250a2b6f', '', '2025-04-17 05:33:30', 1),
-(6, '', 'demo@gmail.com', '$2b$10$1X5Rltf1AMuI.8htQ4PFj.kcvS71pEsUh01jv6w1IG7zcE3F1Lhsu', 'sub_admin', '923638ca937fe4e5dd132ab4976dc038f13caadf982a6e92a0d8f7ce40710cba', 'pankaj@gmail.com', '2025-04-17 06:26:28', 1);
+(6, '', 'demo@gmail.com', '$2b$10$dpd4Qm.raykc3RlEc.E61eEhHuEo8/7ZgEqLZB0yoRey2p64YprIO', 'sub_admin', '190426bb9db1934ee3afcca267173d77307fed40a84b6b75b4568e35357f80f9', 'pankaj@gmail.com', '2025-04-17 06:26:28', 1),
+(8, '', 'ps@gmail.com', '$2b$10$dpd4Qm.raykc3RlEc.E61eEhHuEo8/7ZgEqLZB0yoRey2p64YprIO', 'user', 'c7f08e980e3cb2dfc1d1116a8d850d04b52bc322e7cec1a7d8b518e46329438e', 'pankaj@gmail.com', '2025-04-17 06:26:28', 1),
+(9, '', 'ds@gmail.com', '$2b$10$Y1ujrvCgO7Ku/3BO1DV/MOMlyVTHWkXxnXSA2bFGruEjLhwTRZnbi', 'user', 'e1645cdd9c688769fdd083d5015509f7ee1c33d19516478856abadfdf1503ddd', 'ds@gmail.com', '2025-04-21 12:27:10', 1);
 
 -- --------------------------------------------------------
 
@@ -401,12 +462,22 @@ ALTER TABLE `signUp_verify`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `standalone_courses`
+-- Indexes for table `sold_chapters`
 --
-ALTER TABLE `standalone_courses`
-  ADD PRIMARY KEY (`standalone_id`),
-  ADD KEY `user_id` (`user_id`),
-  ADD KEY `chapter_id` (`chapter_id`);
+ALTER TABLE `sold_chapters`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `sold_class`
+--
+ALTER TABLE `sold_class`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `sold_subjects`
+--
+ALTER TABLE `sold_subjects`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `subjects`
@@ -514,10 +585,22 @@ ALTER TABLE `questions_answers`
   MODIFY `question_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `standalone_courses`
+-- AUTO_INCREMENT for table `sold_chapters`
 --
-ALTER TABLE `standalone_courses`
-  MODIFY `standalone_id` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `sold_chapters`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT for table `sold_class`
+--
+ALTER TABLE `sold_class`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT for table `sold_subjects`
+--
+ALTER TABLE `sold_subjects`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `subjects`
@@ -535,7 +618,7 @@ ALTER TABLE `subscriptions`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `user_assessments`
@@ -605,13 +688,6 @@ ALTER TABLE `classes`
 ALTER TABLE `questions_answers`
   ADD CONSTRAINT `questions_answers_ibfk_1` FOREIGN KEY (`chapter_id`) REFERENCES `chapters` (`chapter_id`),
   ADD CONSTRAINT `questions_answers_ibfk_2` FOREIGN KEY (`added_by`) REFERENCES `users` (`user_id`);
-
---
--- Constraints for table `standalone_courses`
---
-ALTER TABLE `standalone_courses`
-  ADD CONSTRAINT `standalone_courses_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`),
-  ADD CONSTRAINT `standalone_courses_ibfk_2` FOREIGN KEY (`chapter_id`) REFERENCES `chapters` (`chapter_id`);
 
 --
 -- Constraints for table `subjects`

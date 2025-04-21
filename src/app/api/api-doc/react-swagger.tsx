@@ -9,6 +9,9 @@ const SwaggerUI = dynamic(() => import('swagger-ui-react').then(mod => mod.defau
 
 export default function ReactSwagger() {
   return (
-    <SwaggerUI url="/openapi.yaml" />
+    <SwaggerUI
+      url="/openapi.yaml"
+      docExpansion="none"
+    />
   );
 }
