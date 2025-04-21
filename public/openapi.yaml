@@ -6,6 +6,9 @@ info:
 
 servers:
   - url: https://next-js-online-learning-app.vercel.app/api
+    description: Production server
+  - url: http://localhost:300/api
+    description: Local development server
 
 paths:
   /admin/create:
