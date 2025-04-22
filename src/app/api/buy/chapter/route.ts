@@ -39,14 +39,14 @@ export async function POST(req: NextRequest) {
           'UPDATE sold_chapters SET activeStatus = ?  WHERE id = ? and chapter_id = ? ',
           [0, ExistingID, chapter_id]
         );
-        return NextResponse.json({ error: 'Chapter Deactivated' }, { status: 200 });
+        return NextResponse.json({ message: 'Chapter Deactivated' }, { status: 200 });
       }
 
       await db.query(
         'UPDATE sold_chapters SET purchase_date = ?, validity = ?, update_date = ?, activeStatus = ?  WHERE id = ? and chapter_id = ? ',
         [purchase_date, validity, purchase_date, 1, ExistingID, chapter_id]
       );
-      return NextResponse.json({ error: 'User Chapter purchased validity Updated' }, { status: 200 });
+      return NextResponse.json({ message: 'User Chapter purchased validity Updated' }, { status: 200 });
 
     } else {
 
@@ -61,7 +61,7 @@ export async function POST(req: NextRequest) {
 
 
   } catch (error) {
-    console.error('Error creating user:', error);
+    console.error('Error creating chapter:', error);
     return NextResponse.json({ error: 'Failed to Add chapter', details: error }, { status: 500 });
   }
 }

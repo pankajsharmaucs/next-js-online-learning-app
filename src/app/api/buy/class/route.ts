@@ -38,14 +38,14 @@ export async function POST(req: NextRequest) {
         await db.query(
           'UPDATE sold_class SET activeStatus = ?  WHERE id = ? and class_id = ? ', [0, ExistingID, class_id]
         );
-        return NextResponse.json({ error: 'Class Deactivated' }, { status: 200 });
+        return NextResponse.json({ message: 'Class Deactivated' }, { status: 200 });
       }
 
       await db.query(
         'UPDATE sold_class SET purchase_date = ?, validity = ?, update_date = ?  WHERE id = ? and class_id = ? ',
         [purchase_date, validity, purchase_date, ExistingID, class_id]
       );
-      return NextResponse.json({ error: 'User Class purchased validity Updated' }, { status: 200 });
+      return NextResponse.json({ message: 'User Class purchased validity Updated' }, { status: 200 });
 
     } else {
 
@@ -59,7 +59,7 @@ export async function POST(req: NextRequest) {
     }
 
   } catch (error) {
-    console.error('Error creating user:', error);
+    console.error('Error creating Class:', error);
     return NextResponse.json({ error: 'Failed to Add Class', details: error }, { status: 500 });
   }
 }

@@ -38,14 +38,14 @@ export async function POST(req: NextRequest) {
         await db.query(
           'UPDATE sold_subjects SET activeStatus = ?  WHERE id = ? and subject_id = ? ', [0, ExistingID, subject_id]
         );
-        return NextResponse.json({ error: 'Subject Deactivated' }, { status: 200 });
+        return NextResponse.json({ message: 'Subject Deactivated' }, { status: 200 });
       }
 
       await db.query(
         'UPDATE sold_subjects SET purchase_date = ?, validity = ?, update_date = ?  WHERE id = ? and subject_id = ? ',
         [purchase_date, validity, purchase_date, ExistingID, subject_id]
       );
-      return NextResponse.json({ error: 'User subject purchased validity Updated' }, { status: 200 });
+      return NextResponse.json({ message: 'User subject purchased validity Updated' }, { status: 200 });
 
     } else {
 
@@ -60,7 +60,7 @@ export async function POST(req: NextRequest) {
 
 
   } catch (error) {
-    console.error('Error creating user:', error);
+    console.error('Error creating subject:', error);
     return NextResponse.json({ error: 'Failed to Add subject', details: error }, { status: 500 });
   }
 }

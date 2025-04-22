@@ -840,3 +840,368 @@ paths:
           description: Invalid credentials
         '500':
           description: Internal server error
+
+  /user/buy/chapter:
+    post:
+      summary: chapter purchase
+      tags:
+        - Purchase
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - chapter_id
+                - subject_id
+                - user_id
+                - purchase_date
+                - validity
+                - token
+                - email
+                - user_type
+              properties:
+                chapter_id:
+                  type: integer
+                  example: 1
+                subject_id:
+                  type: integer
+                  example: 2
+                user_id:
+                  type: integer
+                  example: 10
+                purchase_date:
+                  type: string
+                  format: date
+                  example: "2025-04-22"
+                validity:
+                  type: integer
+                  example: 30
+                token:
+                  type: string
+                  example: "superadmin_token_123"
+                email:
+                  type: string
+                  format: email
+                  example: "admin@example.com"
+                user_type:
+                  type: string
+                  example: "superadmin"
+                task_type:
+                  type: string
+                  enum: [update, null]
+                  example: "update"
+      responses:
+        '200':
+          description: Chapter updated successfully
+        '400':
+          description: Bad request or already purchased
+        '403':
+          description: Invalid or expired token
+        '409':
+          description: Chapter added successfully
+        '500':
+          description: Server error
+
+  /user/buy/subject:
+    post:
+      summary: subject purchase
+      tags:
+        - Purchase
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - subject_id
+                - class_id
+                - user_id
+                - purchase_date
+                - validity
+                - token
+                - email
+                - user_type
+              properties:
+                subject_id:
+                  type: integer
+                  example: 5
+                class_id:
+                  type: integer
+                  example: 10
+                user_id:
+                  type: integer
+                  example: 3
+                purchase_date:
+                  type: string
+                  format: date
+                  example: "2025-04-22"
+                validity:
+                  type: integer
+                  example: 30
+                token:
+                  type: string
+                  example: "superadmin_token_123"
+                email:
+                  type: string
+                  format: email
+                  example: "admin@example.com"
+                user_type:
+                  type: string
+                  example: "superadmin"
+                task_type:
+                  type: string
+                  enum: [update, null]
+                  example: "update"
+      responses:
+        '200':
+          description: Subject updated successfully
+        '400':
+          description: Bad request or already purchased
+        '403':
+          description: Invalid or expired token
+        '409':
+          description: Subject added successfully
+        '500':
+          description: Server error
+
+  /user/buy/class:
+    post:
+      summary: class purchase
+      tags:
+        - Purchase
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - class_id
+                - user_id
+                - purchase_date
+                - validity
+                - token
+                - email
+                - user_type
+              properties:
+                class_id:
+                  type: integer
+                  example: 101
+                user_id:
+                  type: integer
+                  example: 10
+                purchase_date:
+                  type: string
+                  format: date
+                  example: "2025-04-22"
+                validity:
+                  type: integer
+                  example: 30
+                token:
+                  type: string
+                  example: "superadmin_token_123"
+                email:
+                  type: string
+                  format: email
+                  example: "admin@example.com"
+                user_type:
+                  type: string
+                  example: "superadmin"
+                task_type:
+                  type: string
+                  enum: [update, null]
+                  example: "update"
+      responses:
+        '200':
+          description: Class updated successfully
+        '400':
+          description: Bad request or already purchased
+        '403':
+          description: Invalid or expired token
+        '409':
+          description: Class added successfully
+        '500':
+          description: Server error
+
+
+  /user/fetch/questionAns:
+    get:
+      summary: Fetch all questions and answers for a chapter by chapter ID
+      tags:
+        - Fetch
+      parameters:
+        - name: chapter_id
+          in: query
+          required: true
+          schema:
+            type: integer
+            example: 101
+          description: The ID of the chapter to fetch questions and answers for
+      responses:
+        '200':
+          description: Successfully fetched questions and answers for the chapter
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    question_id:
+                      type: integer
+                      example: 1
+                    question:
+                      type: string
+                      example: "What is the capital of France?"
+                    option_a:
+                      type: string
+                      example: "Berlin"
+                    option_b:
+                      type: string
+                      example: "Madrid"
+                    option_c:
+                      type: string
+                      example: "Paris"
+                    option_d:
+                      type: string
+                      example: "Rome"
+                    correct_option:
+                      type: string
+                      example: "option_c"
+        '400':
+          description: Bad Request (Invalid `chapter_id` or missing parameter)
+        '500':
+          description: Server error
+
+  /user/fetch/chapter:
+    post:
+      summary: Fetch chapter details and assessments
+      tags:
+        - Fetch
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - chapter_id
+                - subject_id
+                - user_id
+                - token
+                - email
+              properties:
+                chapter_id:
+                  type: integer
+                  example: 101
+                subject_id:
+                  type: integer
+                  example: 10
+                user_id:
+                  type: integer
+                  example: 5
+                token:
+                  type: string
+                  example: "superadmin_token_123"
+                email:
+                  type: string
+                  format: email
+                  example: "admin@example.com"
+      responses:
+        '200':
+          description: Successfully fetched chapter and assessments
+        '400':
+          description: Invalid user (missing token or email)
+        '403':
+          description: Invalid or expired token
+        '404':
+          description: Chapter not found
+        '500':
+          description: Server error
+
+  /user/fetch/subject:
+    post:
+      summary: Fetch subject details for a user
+      tags:
+        - Fetch
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - subject_id
+                - user_id
+                - token
+                - email
+              properties:
+                subject_id:
+                  type: integer
+                  example: 10
+                user_id:
+                  type: integer
+                  example: 5
+                token:
+                  type: string
+                  example: "superadmin_token_123"
+                email:
+                  type: string
+                  format: email
+                  example: "admin@example.com"
+      responses:
+        '200':
+          description: Successfully fetched subject details
+        '400':
+          description: Invalid user (missing token or email)
+        '403':
+          description: Invalid or expired token
+        '404':
+          description: Subject not found
+        '500':
+          description: Server error
+
+  /user/fetch/class:
+    post:
+      summary: Fetch class details for a user
+      tags:
+        - Fetch
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - class_id
+                - user_id
+                - token
+                - email
+              properties:
+                class_id:
+                  type: integer
+                  example: 101
+                user_id:
+                  type: integer
+                  example: 5
+                token:
+                  type: string
+                  example: "superadmin_token_123"
+                email:
+                  type: string
+                  format: email
+                  example: "admin@example.com"
+      responses:
+        '200':
+          description: Successfully fetched class details
+        '400':
+          description: Invalid user (missing token or email)
+        '403':
+          description: Invalid or expired token
+        '404':
+          description: Class not found
+        '500':
+          description: Server error
