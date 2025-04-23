@@ -17,6 +17,7 @@
     "bcryptjs": "^3.0.2",
     "cookie": "^1.0.2",
     "cors": "^2.8.5",
+    "dompurify": "^3.2.5",
     "express": "^5.1.0",
     "immutable": "^4.3.7",
     "jsonwebtoken": "^9.0.2",

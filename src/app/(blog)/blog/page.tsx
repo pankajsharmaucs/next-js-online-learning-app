@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import React from 'react'
 
 const page = () => {
@@ -16,7 +17,7 @@ const page = () => {
                 <nav aria-label="breadcrumb">
                   <ol className="breadcrumb">
                     <li className="breadcrumb-item">
-                      <a href="index.html">Home</a>
+                      <Link href="index.html">Home</Link>
                     </li>
                     <li className="breadcrumb-item active" aria-current="page">
                       Blog Grid
@@ -39,18 +40,18 @@ const page = () => {
                   <div className="blog__wrapper">
                     <div className="blog__item white-bg mb-30 transition-3 fix">
                       <div className="blog__thumb w-img fix">
-                        <a href="blog-details.html">
+                        <Link href="blog/test-blog">
                           <img src="/img/blog/blog-1.jpg" alt="" />
-                        </a>
+                        </Link>
                       </div>
                       <div className="blog__content">
                         <div className="blog__tag">
-                          <a href="#">Art &amp; Design</a>
+                          <Link href="#">Art &amp; Design</Link>
                         </div>
                         <h3 className="blog__title">
-                          <a href="blog-details.html">
+                          <Link href="blog/test-blog">
                             The Challenge Of Global Learning In Public Education
-                          </a>
+                          </Link>
                         </h3>
                         <div className="blog__meta d-flex align-items-center justify-content-between">
                           <div className="blog__author d-flex align-items-center">
@@ -77,20 +78,20 @@ const page = () => {
                   <div className="blog__wrapper">
                     <div className="blog__item white-bg mb-30 transition-3 fix">
                       <div className="blog__thumb w-img fix">
-                        <a href="blog-details.html">
+                        <Link href="blog/test-blog">
                           <img src="/img/blog/blog-2.jpg" alt="" />
-                        </a>
+                        </Link>
                       </div>
                       <div className="blog__content">
                         <div className="blog__tag">
-                          <a href="#" className="purple">
+                          <Link href="#" className="purple">
                             Art &amp; Design
-                          </a>
+                          </Link>
                         </div>
                         <h3 className="blog__title">
-                          <a href="blog-details.html">
+                          <Link href="blog/test-blog">
                             Exactly How Technology Can Make Reading Better
-                          </a>
+                          </Link>
                         </h3>
                         <div className="blog__meta d-flex align-items-center justify-content-between">
                           <div className="blog__author d-flex align-items-center">
@@ -117,20 +118,20 @@ const page = () => {
                   <div className="blog__wrapper">
                     <div className="blog__item white-bg mb-30 transition-3 fix">
                       <div className="blog__thumb w-img fix">
-                        <a href="blog-details.html">
+                        <Link href="blog/test-blog">
                           <img src="/img/blog/blog-3.jpg" alt="" />
-                        </a>
+                        </Link>
                       </div>
                       <div className="blog__content">
                         <div className="blog__tag">
-                          <a href="#" className="pink">
+                          <Link href="#" className="pink">
                             Art &amp; Design
-                          </a>
+                          </Link>
                         </div>
                         <h3 className="blog__title">
-                          <a href="blog-details.html">
+                          <Link href="blog/test-blog">
                             New Chicago school budget relies on state pension
-                          </a>
+                          </Link>
                         </h3>
                         <div className="blog__meta d-flex align-items-center justify-content-between">
                           <div className="blog__author d-flex align-items-center">
@@ -157,20 +158,20 @@ const page = () => {
                   <div className="blog__wrapper">
                     <div className="blog__item white-bg mb-30 transition-3 fix">
                       <div className="blog__thumb w-img fix">
-                        <a href="blog-details.html">
+                        <Link href="blog/test-blog">
                           <img src="/img/blog/blog-4.jpg" alt="" />
-                        </a>
+                        </Link>
                       </div>
                       <div className="blog__content">
                         <div className="blog__tag">
-                          <a href="#" className="green">
+                          <Link href="#" className="green">
                             Art &amp; Design
-                          </a>
+                          </Link>
                         </div>
                         <h3 className="blog__title">
-                          <a href="blog-details.html">
+                          <Link href="blog/test-blog">
                             Google Ads certifications: Are they worth it?
-                          </a>
+                          </Link>
                         </h3>
                         <div className="blog__meta d-flex align-items-center justify-content-between">
                           <div className="blog__author d-flex align-items-center">
@@ -197,20 +198,20 @@ const page = () => {
                   <div className="blog__wrapper">
                     <div className="blog__item white-bg mb-30 transition-3 fix">
                       <div className="blog__thumb w-img fix">
-                        <a href="blog-details.html">
+                        <Link href="blog/test-blog">
                           <img src="/img/blog/blog-5.jpg" alt="" />
-                        </a>
+                        </Link>
                       </div>
                       <div className="blog__content">
                         <div className="blog__tag">
-                          <a href="#" className="orange">
+                          <Link href="#" className="orange">
                             Art &amp; Design
-                          </a>
+                          </Link>
                         </div>
                         <h3 className="blog__title">
-                          <a href="blog-details.html">
+                          <Link href="blog/test-blog">
                             14 Facebook Ad Examples for Ad Creative Inspiration
-                          </a>
+                          </Link>
                         </h3>
                         <div className="blog__meta d-flex align-items-center justify-content-between">
                           <div className="blog__author d-flex align-items-center">
@@ -237,20 +238,20 @@ const page = () => {
                   <div className="blog__wrapper">
                     <div className="blog__item white-bg mb-30 transition-3 fix">
                       <div className="blog__thumb w-img fix">
-                        <a href="blog-details.html">
+                        <Link href="blog/test-blog">
                           <img src="/img/blog/blog-6.jpg" alt="" />
-                        </a>
+                        </Link>
                       </div>
                       <div className="blog__content">
                         <div className="blog__tag">
-                          <a href="#" className="blue">
+                          <Link href="#" className="blue">
                             Art &amp; Design
-                          </a>
+                          </Link>
                         </div>
                         <h3 className="blog__title">
-                          <a href="blog-details.html">
+                          <Link href="blog/test-blog">
                             How to manage Facebook ads for clients the right way
-                          </a>
+                          </Link>
                         </h3>
                         <div className="blog__meta d-flex align-items-center justify-content-between">
                           <div className="blog__author d-flex align-items-center">
@@ -282,33 +283,33 @@ const page = () => {
                   >
                     <ul className="d-flex align-items-center">
                       <li className="prev">
-                        <a href="blog.html" className="link-btn link-prev">
+                        <Link href="blog.html" className="link-btn link-prev">
                           Prev
                           <i className="arrow_left" />
                           <i className="arrow_left" />
-                        </a>
+                        </Link>
                       </li>
                       <li>
-                        <a href="#">
+                        <Link href="#">
                           <span>1</span>
-                        </a>
+                        </Link>
                       </li>
                       <li className="active">
-                        <a href="blog.html">
+                        <Link href="blog.html">
                           <span>2</span>
-                        </a>
+                        </Link>
                       </li>
                       <li>
-                        <a href="blog.html">
+                        <Link href="blog.html">
                           <span>3</span>
-                        </a>
+                        </Link>
                       </li>
                       <li className="next">
-                        <a href="blog.html" className="link-btn">
+                        <Link href="blog.html" className="link-btn">
                           Next
                           <i className="arrow_right" />
                           <i className="arrow_right" />
-                        </a>
+                        </Link>
                       </li>
                     </ul>
                   </div>
@@ -358,52 +359,52 @@ const page = () => {
                     <div className="rc__post-wrapper">
                       <div className="rc__post d-flex align-items-center">
                         <div className="rc__thumb mr-20">
-                          <a href="blog-details.html">
+                          <Link href="blog/test-blog">
                             <img src="/img/blog/sm/blog-sm-1.jpg" alt="" />
-                          </a>
+                          </Link>
                         </div>
                         <div className="rc__content">
                           <div className="rc__meta">
                             <span>October 15, 2021</span>
                           </div>
                           <h6 className="rc__title">
-                            <a href="blog-details.html">
+                            <Link href="blog/test-blog">
                               The Importance Intrinsic Motivation.
-                            </a>
+                            </Link>
                           </h6>
                         </div>
                       </div>
                       <div className="rc__post d-flex align-items-center">
                         <div className="rc__thumb mr-20">
-                          <a href="blog-details.html">
+                          <Link href="blog/test-blog">
                             <img src="/img/blog/sm/blog-sm-2.jpg" alt="" />
-                          </a>
+                          </Link>
                         </div>
                         <div className="rc__content">
                           <div className="rc__meta">
                             <span>March 26, 2021</span>
                           </div>
                           <h6 className="rc__title">
-                            <a href="blog-details.html">
+                            <Link href="blog/test-blog">
                               A Better Alternative To Grading Student.
-                            </a>
+                            </Link>
                           </h6>
                         </div>
                       </div>
                       <div className="rc__post d-flex align-items-center">
                         <div className="rc__thumb mr-20">
-                          <a href="blog-details.html">
+                          <Link href="blog/test-blog">
                             <img src="/img/blog/sm/blog-sm-3.jpg" alt="" />
-                          </a>
+                          </Link>
                         </div>
                         <div className="rc__content">
                           <div className="rc__meta">
                             <span>October 15, 2021</span>
                           </div>
                           <h6 className="rc__title">
-                            <a href="blog-details.html">
+                            <Link href="blog/test-blog">
                               Strategic Social Media &amp; Evolution of Visual
-                            </a>
+                            </Link>
                           </h6>
                         </div>
                       </div>
@@ -418,19 +419,19 @@ const page = () => {
                     <div className="sidebar__category">
                       <ul>
                         <li>
-                          <a href="blog.html">Category</a>
+                          <Link href="blog.html">Category</Link>
                         </li>
                         <li>
-                          <a href="blog.html">Video &amp; Tips (4)</a>
+                          <Link href="blog.html">Video &amp; Tips (4)</Link>
                         </li>
                         <li>
-                          <a href="blog.html">Education (8)</a>
+                          <Link href="blog.html">Education (8)</Link>
                         </li>
                         <li>
-                          <a href="blog.html">Business (5)</a>
+                          <Link href="blog.html">Business (5)</Link>
                         </li>
                         <li>
-                          <a href="blog.html">UX Design (3)</a>
+                          <Link href="blog.html">UX Design (3)</Link>
                         </li>
                       </ul>
                     </div>
@@ -442,14 +443,14 @@ const page = () => {
                   </div>
                   <div className="sidebar__widget-content">
                     <div className="sidebar__tag">
-                      <a href="#">Art &amp; Design</a>
-                      <a href="#">Course</a>
-                      <a href="#">Videos</a>
-                      <a href="#">App</a>
-                      <a href="#">Education</a>
-                      <a href="#">Data Science</a>
-                      <a href="#">Machine Learning</a>
-                      <a href="#">Tips</a>
+                      <Link href="#">Art &amp; Design</Link>
+                      <Link href="#">Course</Link>
+                      <Link href="#">Videos</Link>
+                      <Link href="#">App</Link>
+                      <Link href="#">Education</Link>
+                      <Link href="#">Data Science</Link>
+                      <Link href="#">Machine Learning</Link>
+                      <Link href="#">Tips</Link>
                     </div>
                   </div>
                 </div>

@@ -7,7 +7,7 @@ info:
 servers:
   - url: https://next-js-online-learning-app.vercel.app/api
     description: Production server
-  - url: http://localhost:300/api
+  - url: http://localhost:3000/api
     description: Local development server
 
 paths:
@@ -1026,7 +1026,6 @@ paths:
         '500':
           description: Server error
 
-
   /user/fetch/questionAns:
     get:
       summary: Fetch all questions and answers for a chapter by chapter ID
@@ -1205,3 +1204,323 @@ paths:
           description: Class not found
         '500':
           description: Server error
+
+  /blog:
+    get:
+      summary: Fetch blogs
+      description: Fetch all blogs, a single blog by `blog_id`, limited blogs, or blogs by `cat_id`.
+      operationId: getAllBlog
+      tags:
+        - Blog
+      parameters:
+        - in: query
+          name: blog_id
+          schema:
+            type: string
+          required: false
+          description: ID of the blog to fetch a specific blog
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            minimum: 1
+          required: false
+          description: Limit the number of blogs returned
+        - in: query
+          name: cat_id
+          schema:
+            type: string
+          required: false
+          description: Filter blogs by category ID
+      responses:
+        '200':
+          description: Blogs fetched successfully
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: array
+                    items:
+                      $ref: '#/components/schemas/Blog'
+                  - $ref: '#/components/schemas/Blog'
+        '404':
+          description: Blog(s) not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        components:
+          schemas:
+            Blog:
+              type: object
+              properties:
+                blog_id:
+                  type: integer
+                cat_id:
+                  type: integer
+                title:
+                  type: string
+                content:
+                  type: string
+                created_at:
+                  type: string
+                  format: date-time
+            Error:
+              type: object
+              properties:
+                error:
+                  type: string
+                details:
+                  type: string
+    
+    post:
+      summary: Add a new blog
+      operationId: addBlog
+      tags:
+        - Blog
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                cat_id:
+                  type: integer
+                  example: 2
+                title:
+                  type: string
+                  example: "New Blog Post"
+                slug:
+                  type: string
+                  example: "new-blog-post"
+                description1:
+                  type: string
+                  example: "Main content of the blog."
+                description2:
+                  type: string
+                  example: "Additional content of the blog."
+                create_date:
+                  type: string
+                  format: date
+                  example: "2023-04-21"
+                image1:
+                  type: string
+                  format: binary
+      responses:
+        '201':
+          description: Blog added successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Blog added"
+                  id:
+                    type: integer
+                    example: 1
+        '400':
+          description: Invalid input data
+        '500':
+          description: Internal server error
+    
+    put:
+      summary: Update a blog
+      operationId: updateBlog
+      tags:
+        - Blog
+      parameters:
+        - name: blog_id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: The ID of the blog to update
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                cat_id:
+                  type: integer
+                  example: 2
+                title:
+                  type: string
+                  example: "Updated Blog Post"
+                slug:
+                  type: string
+                  example: "updated-blog-post"
+                description1:
+                  type: string
+                  example: "Updated content of the blog."
+                description2:
+                  type: string
+                  example: "Updated additional content of the blog."
+                update_date:
+                  type: string
+                  format: date
+                  example: "2023-04-22"
+                image1:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: Blog updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Blog updated successfully"
+        '400':
+          description: Invalid input data
+        '404':
+          description: Blog not found
+        '500':
+          description: Internal server error
+    
+    delete:
+      summary: Delete a blog
+      operationId: deleteBlog
+      tags:
+        - Blog
+      parameters:
+        - name: blog_id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: The ID of the blog to delete
+      responses:
+        '200':
+          description: Blog deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Blog deleted"
+        '404':
+          description: Blog not found
+        '500':
+          description: Internal server error
+
+  /blog/category:
+    get:
+      summary: Fetch all blog categories
+      operationId: BlogCategory
+      tags:
+        - Blog
+      responses:
+        '200':
+          description: A list of blog categories
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    cat_id:
+                      type: integer
+                    cat_name:
+                      type: string
+        '500':
+          description: Server error
+
+    post:
+      summary: Add a new blog category
+      operationId: AddBlogCategory
+      tags:
+        - Blog
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                cat_name:
+                  type: string
+              required:
+                - cat_name
+      responses:
+        '200':
+          description: Category added
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  id:
+                    type: integer
+        '400':
+          description: Category already exists
+        '500':
+          description: Error adding category
+
+    put:
+      summary: Update an existing blog category
+      operationId: UpdateBlogCategory
+      tags:
+        - Blog
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                cat_id:
+                  type: integer
+                cat_name:
+                  type: string
+              required:
+                - cat_id
+      responses:
+        '200':
+          description: Category updated successfully
+        '400':
+          description: Bad request
+        '404':
+          description: Category not found
+        '500':
+          description: Error updating category
+
+    delete:
+      summary: Delete a blog category
+      operationId: DeleteBlogCategory
+      tags:
+        - Blog
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                cat_id:
+                  type: integer
+              required:
+                - cat_id
+      responses:
+        '200':
+          description: Category deleted
+        '500':
+          description: Error deleting category
