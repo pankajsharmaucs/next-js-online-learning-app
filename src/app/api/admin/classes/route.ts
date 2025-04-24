@@ -3,11 +3,7 @@ import type { NextRequest } from 'next/server';
 import { connectDB } from '@/lib/db';
 
 // Helper to validate superadmin token
-const validateSuperAdmin = (req: NextRequest) => {
-    const authHeader = req.headers.get('authorization');
-    const token = authHeader?.split(' ')[1]; // Expected format: Bearer <token>
-    return token === process.env.SUPERADMIN_TOKEN;
-};
+import { validateSuperAdmin } from '@/lib/apiValidator';
 
 // GET: Fetch all classes by Board ID
 export async function GET(req: NextRequest) {
@@ -27,11 +23,11 @@ export async function GET(req: NextRequest) {
 
 // POST: Add a new board
 export async function POST(req: NextRequest) {
-    if (!validateSuperAdmin(req)) {
-        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
+     try {
 
-    try {
+        if (!(await validateSuperAdmin(req))) {
+            return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+        }
         const { class_name, board_id } = await req.json();
         const db = await connectDB();
 
@@ -47,11 +43,11 @@ export async function POST(req: NextRequest) {
 
 // PUT: Update a board
 export async function PUT(req: NextRequest) {
-    if (!validateSuperAdmin(req)) {
-        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
+     try {
 
-    try {
+        if (!(await validateSuperAdmin(req))) {
+            return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+        }
         const { class_name, class_id  } = await req.json();
 
         if (!class_id) {
@@ -87,11 +83,11 @@ export async function PUT(req: NextRequest) {
 
 // DELETE: Delete a board
 export async function DELETE(req: NextRequest) {
-    if (!validateSuperAdmin(req)) {
-        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
+     try {
 
-    try {
+        if (!(await validateSuperAdmin(req))) {
+            return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+        }
         const { class_id } = await req.json();
         const db = await connectDB();
 

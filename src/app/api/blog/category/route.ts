@@ -3,11 +3,7 @@ import type { NextRequest } from 'next/server';
 import { connectDB } from '@/lib/db';
 
 // Helper to validate superadmin token
-const validateSuperAdmin = (req: NextRequest) => {
-    const authHeader = req.headers.get('authorization');
-    const token = authHeader?.split(' ')[1]; // Expected format: Bearer <token>
-    return token === process.env.SUPERADMIN_TOKEN;
-};
+import { validateSuperAdmin } from '@/lib/apiValidator';
 
 // GET: Fetch all education boards
 export async function GET(req: NextRequest) {

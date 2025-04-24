@@ -153,49 +153,31 @@ const Header = () => {
                                                     <Link href="/">Home</Link>
                                                 </li>
 
-                                                <li className="has-dropdown">
-                                                    <a href="course-grid.html">Courses</a>
-                                                    <ul className="submenu">
-                                                        <li>
-                                                            <a href="course-grid.html">Courses</a>
-                                                        </li>
-                                                        <li>
-                                                            <a href="course-list.html">Course List</a>
-                                                        </li>
-                                                        <li>
-                                                            <a href="course-sidebar.html">Course sidebar</a>
-                                                        </li>
-                                                        <li>
-                                                            <a href="course-details.html">Course Details</a>
-                                                        </li>
-                                                    </ul>
-                                                </li>
-
-                                                <li className="has-dropdown">
-                                                    <Link href="/blog">Blog</Link>
-                                                </li>
 
                                                 <li className="has-dropdown">
                                                     <Link href="classes">Classes</Link>
                                                     <ul className="submenu">
                                                         <li>
-                                                            <a href="/class/10">10th</a>
+                                                            <Link href="/class/10">10th</Link>
                                                         </li>
                                                     </ul>
                                                 </li>
 
                                                 <li className="has-dropdown">
-                                                    <Link href="subjects">Subject</Link>
+                                                    <Link href="/subjects">Subject</Link>
                                                     <ul className="submenu">
                                                         <li>
-                                                            <Link href="/subject/10">Event Details</Link>
+                                                            <Link href="/subject/mathematics">Mathematics</Link>
                                                         </li>
-                                                        
                                                     </ul>
                                                 </li>
 
                                                 <li>
-                                                    <Link href="contact">Contact</Link>
+                                                    <Link href="/blog">Blog</Link>
+                                                </li>
+
+                                                <li>
+                                                    <Link href="/contact">Contact</Link>
                                                 </li>
                                             </ul>
                                         </nav>

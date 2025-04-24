@@ -11,6 +11,514 @@ servers:
     description: Local development server
 
 paths:
+  /master/class:
+    get:
+      summary: Get all classes
+      operationId: getClasses
+      tags:
+        - Master - Class
+      responses:
+        '200':
+          description: List of all classes
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    class_name:
+                      type: string
+        '500':
+          description: Server error while fetching classes
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  details:
+                    type: string
+
+    post:
+      summary: Add a new class
+      operationId: addMasterClass
+      tags:
+        - Master - Class
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - class_name
+              properties:
+                class_name:
+                  type: string
+      responses:
+        '200':
+          description: Class added successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  insertId:
+                    type: integer
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+        '500':
+          description: Error adding class
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  details:
+                    type: string
+
+    put:
+      summary: Update an existing class
+      operationId: updateMasterClass
+      tags:
+        - Master - Class
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - id
+                - class_name
+              properties:
+                id:
+                  type: integer
+                class_name:
+                  type: string
+      responses:
+        '200':
+          description: Class updated successfully
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+        '500':
+          description: Error updating class
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  details:
+                    type: string
+
+    delete:
+      summary: Delete a class
+      operationId: deleteMasterClass
+      tags:
+        - Master - Class
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - id
+              properties:
+                id:
+                  type: integer
+      responses:
+        '200':
+          description: Class deleted successfully
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+        '500':
+          description: Error deleting class
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  details:
+                    type: string
+
+  /master/subject:
+    get:
+      summary: Get all subjects
+      operationId: getMasterSubjects
+      tags:
+        - Master - Subject
+      responses:
+        '200':
+          description: List of all subjects
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    subject_name:
+                      type: string
+        '500':
+          description: Server error while fetching subjects
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  details:
+                    type: string
+
+    post:
+      summary: Add a new subject
+      operationId: addMasterSubject
+      tags:
+        - Master - Subject
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - subject_name
+              properties:
+                subject_name:
+                  type: string
+      responses:
+        '200':
+          description: Subject added successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  insertId:
+                    type: integer
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+        '500':
+          description: Error adding subject
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  details:
+                    type: string
+
+    put:
+      summary: Update an existing subject
+      operationId: updateMasterSubject
+      tags:
+        - Master - Subject
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - id
+                - subject_name
+              properties:
+                id:
+                  type: integer
+                subject_name:
+                  type: string
+      responses:
+        '200':
+          description: Subject updated successfully
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+        '500':
+          description: Error updating subject
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  details:
+                    type: string
+
+    delete:
+      summary: Delete a subject
+      operationId: deleteMasterSubject
+      tags:
+        - Master - Subject
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - id
+              properties:
+                id:
+                  type: integer
+      responses:
+        '200':
+          description: Subject deleted successfully
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+        '500':
+          description: Error deleting subject
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  details:
+                    type: string
+
+  /master/price:
+    get:
+      summary: Get all pricing plans
+      operationId: getPricingPlans
+      tags:
+        - Master - Price
+      responses:
+        '200':
+          description: List of pricing plans
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    pricing_id:
+                      type: integer
+                    plan_name:
+                      type: string
+                    price:
+                      type: number
+                    duration:
+                      type: integer
+        '500':
+          description: Error fetching data
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  details:
+                    type: string
+
+    post:
+      summary: Add a new pricing plan
+      operationId: addPricingPlan
+      tags:
+        - Master - Price
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - plan_name
+                - price
+                - duration
+              properties:
+                plan_name:
+                  type: string
+                price:
+                  type: number
+                duration:
+                  type: integer
+      responses:
+        '200':
+          description: Pricing plan added
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  insertId:
+                    type: integer
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+        '500':
+          description: Error adding pricing plan
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  details:
+                    type: string
+
+    put:
+      summary: Update an existing pricing plan
+      operationId: updatePricingPlan
+      tags:
+        - Master - Price
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - pricing_id
+                - plan_name
+                - price
+                - duration
+              properties:
+                pricing_id:
+                  type: integer
+                plan_name:
+                  type: string
+                price:
+                  type: number
+                duration:
+                  type: integer
+      responses:
+        '200':
+          description: Pricing plan updated
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+        '500':
+          description: Error updating pricing plan
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  details:
+                    type: string
+
+    delete:
+      summary: Delete a pricing plan
+      operationId: deletePricingPlan
+      tags:
+        - Master - Price
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - pricing_id
+              properties:
+                pricing_id:
+                  type: integer
+      responses:
+        '200':
+          description: Pricing plan deleted
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+        '500':
+          description: Error deleting pricing plan
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  details:
+                    type: string
+
   /admin/create:
     post:
       summary: Create a new user or admin

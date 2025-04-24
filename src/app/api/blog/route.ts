@@ -5,11 +5,7 @@ import { writeFile, mkdir } from 'fs/promises';
 import path from 'path';
 
 // Helper to validate superadmin token
-const validateSuperAdmin = (req: NextRequest) => {
-    const authHeader = req.headers.get('authorization');
-    const token = authHeader?.split(' ')[1]; // Expected format: Bearer <token>
-    return token === process.env.SUPERADMIN_TOKEN;
-};
+import { validateSuperAdmin } from '@/lib/apiValidator';
 
 // GET: Fetch all education boards
 
@@ -218,11 +214,11 @@ export async function PUT(req: NextRequest) {
 
 // DELETE: Delete a board
 export async function DELETE(req: NextRequest) {
-    if (!validateSuperAdmin(req)) {
-        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
+     try {
 
-    try {
+        if (!(await validateSuperAdmin(req))) {
+            return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+        }
         const { blog_id } = await req.json();
         const db = await connectDB();
 
