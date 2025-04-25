@@ -49,7 +49,7 @@ export async function PUT(req: NextRequest) {
         const db = await connectDB();
 
         // Fetch the existing record
-        const [existingRows]: any = await db.query('SELECT * FROM pricing_master WHERE id = ?', [pricing_id]);
+        const [existingRows]: any = await db.query('SELECT * FROM pricing_master WHERE pricing_id = ?', [pricing_id]);
 
         if (existingRows.length === 0) {
             return NextResponse.json({ error: 'class not found' }, { status: 404 });
