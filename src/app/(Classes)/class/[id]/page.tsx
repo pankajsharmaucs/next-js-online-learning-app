@@ -1,4 +1,5 @@
 import TabButton from '@/components/button/TabButton';
+import Link from 'next/link';
 
 
 export default async function Page({ params, }: { params: Promise<{ id: string }> }) {
@@ -35,10 +36,10 @@ export default async function Page({ params, }: { params: Promise<{ id: string }
                     <nav aria-label="breadcrumb">
                       <ol className="breadcrumb">
                         <li className="breadcrumb-item">
-                          <a href="index.html">Home {id}</a>
+                          <Link href="/">Home {id}</Link>
                         </li>
                         <li className="breadcrumb-item">
-                          <a href="course-grid.html">Courses</a>
+                          <Link href="course-grid.html">Courses</Link>
                         </li>
                         <li className="breadcrumb-item active" aria-current="page">
                           The business Intelligence analyst Course 2022
@@ -59,7 +60,7 @@ export default async function Page({ params, }: { params: Promise<{ id: string }
                     <div className="course__teacher-info-3">
                       <h5>Teacher</h5>
                       <p>
-                        <a href="#">Elon Gated</a>
+                        <Link href="#">Elon Gated</Link>
                       </p>
                     </div>
                   </div>
@@ -72,34 +73,34 @@ export default async function Page({ params, }: { params: Promise<{ id: string }
                     <div className="course__rating-inner d-flex align-items-center">
                       <ul>
                         <li>
-                          <a href="#">
+                          <Link href="#">
                             {" "}
                             <i className="icon_star" />{" "}
-                          </a>
+                          </Link>
                         </li>
                         <li>
-                          <a href="#">
+                          <Link href="#">
                             {" "}
                             <i className="icon_star" />{" "}
-                          </a>
+                          </Link>
                         </li>
                         <li>
-                          <a href="#">
+                          <Link href="#">
                             {" "}
                             <i className="icon_star" />{" "}
-                          </a>
+                          </Link>
                         </li>
                         <li>
-                          <a href="#">
+                          <Link href="#">
                             {" "}
                             <i className="icon_star" />{" "}
-                          </a>
+                          </Link>
                         </li>
                         <li>
-                          <a href="#">
+                          <Link href="#">
                             {" "}
                             <i className="icon_star" />{" "}
-                          </a>
+                          </Link>
                         </li>
                       </ul>
                       <p>4.5</p>
@@ -165,9 +166,9 @@ export default async function Page({ params, }: { params: Promise<{ id: string }
                         </p>
                         <div className="course__tag-2 mb-35 mt-35">
                           <i className="fal fa-tag" />
-                          <a href="#">Big data,</a>
-                          <a href="#">Data analysis,</a>
-                          <a href="#">Data modeling</a>
+                          <Link href="#">Big data,</Link>
+                          <Link href="#">Data analysis,</Link>
+                          <Link href="#">Data modeling</Link>
                         </div>
                         <div className="course__description-list mb-45">
                           <h4>What is the Target Audience?</h4>
@@ -582,34 +583,34 @@ export default async function Page({ params, }: { params: Promise<{ id: string }
                                 <h5>5</h5>
                                 <ul>
                                   <li>
-                                    <a href="#">
+                                    <Link href="#">
                                       {" "}
                                       <i className="icon_star" />{" "}
-                                    </a>
+                                    </Link>
                                   </li>
                                   <li>
-                                    <a href="#">
+                                    <Link href="#">
                                       {" "}
                                       <i className="icon_star" />{" "}
-                                    </a>
+                                    </Link>
                                   </li>
                                   <li>
-                                    <a href="#">
+                                    <Link href="#">
                                       {" "}
                                       <i className="icon_star" />{" "}
-                                    </a>
+                                    </Link>
                                   </li>
                                   <li>
-                                    <a href="#">
+                                    <Link href="#">
                                       {" "}
                                       <i className="icon_star" />{" "}
-                                    </a>
+                                    </Link>
                                   </li>
                                   <li>
-                                    <a href="#">
+                                    <Link href="#">
                                       {" "}
                                       <i className="icon_star" />{" "}
-                                    </a>
+                                    </Link>
                                   </li>
                                 </ul>
                                 <p>4 Ratings</p>
@@ -714,34 +715,34 @@ export default async function Page({ params, }: { params: Promise<{ id: string }
                                     <div className="course__comment-rating float-start float-sm-end">
                                       <ul>
                                         <li>
-                                          <a href="#">
+                                          <Link href="#">
                                             {" "}
                                             <i className="icon_star" />{" "}
-                                          </a>
+                                          </Link>
                                         </li>
                                         <li>
-                                          <a href="#">
+                                          <Link href="#">
                                             {" "}
                                             <i className="icon_star" />{" "}
-                                          </a>
+                                          </Link>
                                         </li>
                                         <li>
-                                          <a href="#">
+                                          <Link href="#">
                                             {" "}
                                             <i className="icon_star" />{" "}
-                                          </a>
+                                          </Link>
                                         </li>
                                         <li>
-                                          <a href="#">
+                                          <Link href="#">
                                             {" "}
                                             <i className="icon_star" />{" "}
-                                          </a>
+                                          </Link>
                                         </li>
                                         <li>
-                                          <a href="#">
+                                          <Link href="#">
                                             {" "}
                                             <i className="icon_star" />{" "}
-                                          </a>
+                                          </Link>
                                         </li>
                                       </ul>
                                     </div>
@@ -774,34 +775,34 @@ export default async function Page({ params, }: { params: Promise<{ id: string }
                                     <div className="course__comment-rating float-start float-sm-end">
                                       <ul>
                                         <li>
-                                          <a href="#">
+                                          <Link href="#">
                                             {" "}
                                             <i className="icon_star" />{" "}
-                                          </a>
+                                          </Link>
                                         </li>
                                         <li>
-                                          <a href="#">
+                                          <Link href="#">
                                             {" "}
                                             <i className="icon_star" />{" "}
-                                          </a>
+                                          </Link>
                                         </li>
                                         <li>
-                                          <a href="#">
+                                          <Link href="#">
                                             {" "}
                                             <i className="icon_star" />{" "}
-                                          </a>
+                                          </Link>
                                         </li>
                                         <li>
-                                          <a href="#">
+                                          <Link href="#">
                                             {" "}
                                             <i className="icon_star" />{" "}
-                                          </a>
+                                          </Link>
                                         </li>
                                         <li>
-                                          <a href="#" className="no-rating">
+                                          <Link href="#" className="no-rating">
                                             {" "}
                                             <i className="icon_star" />{" "}
-                                          </a>
+                                          </Link>
                                         </li>
                                       </ul>
                                     </div>
@@ -843,34 +844,34 @@ export default async function Page({ params, }: { params: Promise<{ id: string }
                                       <span>Rating : </span>
                                       <ul>
                                         <li>
-                                          <a href="#">
+                                          <Link href="#">
                                             {" "}
                                             <i className="icon_star" />{" "}
-                                          </a>
+                                          </Link>
                                         </li>
                                         <li>
-                                          <a href="#">
+                                          <Link href="#">
                                             {" "}
                                             <i className="icon_star" />{" "}
-                                          </a>
+                                          </Link>
                                         </li>
                                         <li>
-                                          <a href="#">
+                                          <Link href="#">
                                             {" "}
                                             <i className="icon_star" />{" "}
-                                          </a>
+                                          </Link>
                                         </li>
                                         <li>
-                                          <a href="#" className="no-rating">
+                                          <Link href="#" className="no-rating">
                                             {" "}
                                             <i className="icon_star" />{" "}
-                                          </a>
+                                          </Link>
                                         </li>
                                         <li>
-                                          <a href="#" className="no-rating">
+                                          <Link href="#" className="no-rating">
                                             {" "}
                                             <i className="icon_star" />{" "}
-                                          </a>
+                                          </Link>
                                         </li>
                                       </ul>
                                     </div>
@@ -1012,19 +1013,19 @@ export default async function Page({ params, }: { params: Promise<{ id: string }
                       <h3>Share :</h3>
                       <ul className="">
                         <li>
-                          <a href="#" className="fb">
+                          <Link href="#" className="fb">
                             <i className="social_facebook" />
-                          </a>
+                          </Link>
                         </li>
                         <li>
-                          <a href="#" className="tw">
+                          <Link href="#" className="tw">
                             <i className="social_twitter" />
-                          </a>
+                          </Link>
                         </li>
                         <li>
-                          <a href="#" className="pin">
+                          <Link href="#" className="pin">
                             <i className="social_pinterest" />
-                          </a>
+                          </Link>
                         </li>
                       </ul>
                     </div>
@@ -1054,11 +1055,11 @@ export default async function Page({ params, }: { params: Promise<{ id: string }
                         <div className="swiper-wrapper">
                           <div className="course__item course__item-3 swiper-slide white-bg mb-30 fix">
                             <div className="course__thumb w-img p-relative fix">
-                              <a href="course-details.html">
+                              <Link href="course-details.html">
                                 <img src="/img/course/course-1.jpg" alt="" />
-                              </a>
+                              </Link>
                               <div className="course__tag">
-                                <a href="#">Art &amp; Design</a>
+                                <Link href="#">Art &amp; Design</Link>
                               </div>
                             </div>
                             <div className="course__content">
@@ -1077,10 +1078,10 @@ export default async function Page({ params, }: { params: Promise<{ id: string }
                                 </div>
                               </div>
                               <h3 className="course__title">
-                                <a href="course-details.html">
+                                <Link href="course-details.html">
                                   Become a product Manager learn the skills &amp;
                                   job.
-                                </a>
+                                </Link>
                               </h3>
                               <div className="course__teacher d-flex align-items-center">
                                 <div className="course__teacher-thumb mr-15">
@@ -1090,7 +1091,7 @@ export default async function Page({ params, }: { params: Promise<{ id: string }
                                   />
                                 </div>
                                 <h6>
-                                  <a href="instructor-details.html">Jim Séchen</a>
+                                  <Link href="instructor-details.html">Jim Séchen</Link>
                                 </h6>
                               </div>
                             </div>
@@ -1099,23 +1100,23 @@ export default async function Page({ params, }: { params: Promise<{ id: string }
                                 <span>Free</span>
                               </div>
                               <div className="course__btn">
-                                <a href="course-details.html" className="link-btn">
+                                <Link href="course-details.html" className="link-btn">
                                   Know Details
                                   <i className="far fa-arrow-right" />
                                   <i className="far fa-arrow-right" />
-                                </a>
+                                </Link>
                               </div>
                             </div>
                           </div>
                           <div className="course__item course__item-3 swiper-slide white-bg mb-30 fix">
                             <div className="course__thumb w-img p-relative fix">
-                              <a href="course-details.html">
+                              <Link href="course-details.html">
                                 <img src="/img/course/course-2.jpg" alt="" />
-                              </a>
+                              </Link>
                               <div className="course__tag">
-                                <a href="#" className="sky-blue">
+                                <Link href="#" className="sky-blue">
                                   Mechanical
-                                </a>
+                                </Link>
                               </div>
                             </div>
                             <div className="course__content">
@@ -1134,9 +1135,9 @@ export default async function Page({ params, }: { params: Promise<{ id: string }
                                 </div>
                               </div>
                               <h3 className="course__title">
-                                <a href="course-details.html">
+                                <Link href="course-details.html">
                                   Fundamentals of music theory Learn new
-                                </a>
+                                </Link>
                               </h3>
                               <div className="course__teacher d-flex align-items-center">
                                 <div className="course__teacher-thumb mr-15">
@@ -1146,7 +1147,7 @@ export default async function Page({ params, }: { params: Promise<{ id: string }
                                   />
                                 </div>
                                 <h6>
-                                  <a href="instructor-details.html">Barry Tone</a>
+                                  <Link href="instructor-details.html">Barry Tone</Link>
                                 </h6>
                               </div>
                             </div>
@@ -1156,23 +1157,23 @@ export default async function Page({ params, }: { params: Promise<{ id: string }
                                 <span className="old-price">$68.00</span>
                               </div>
                               <div className="course__btn">
-                                <a href="course-details.html" className="link-btn">
+                                <Link href="course-details.html" className="link-btn">
                                   Know Details
                                   <i className="far fa-arrow-right" />
                                   <i className="far fa-arrow-right" />
-                                </a>
+                                </Link>
                               </div>
                             </div>
                           </div>
                           <div className="course__item course__item-3 swiper-slide white-bg mb-30 fix">
                             <div className="course__thumb w-img p-relative fix">
-                              <a href="course-details.html">
+                              <Link href="course-details.html">
                                 <img src="/img/course/course-3.jpg" alt="" />
-                              </a>
+                              </Link>
                               <div className="course__tag">
-                                <a href="#" className="green">
+                                <Link href="#" className="green">
                                   Development
-                                </a>
+                                </Link>
                               </div>
                             </div>
                             <div className="course__content">
@@ -1191,9 +1192,9 @@ export default async function Page({ params, }: { params: Promise<{ id: string }
                                 </div>
                               </div>
                               <h3 className="course__title">
-                                <a href="course-details.html">
+                                <Link href="course-details.html">
                                   Strategy law and organization Foundation
-                                </a>
+                                </Link>
                               </h3>
                               <div className="course__teacher d-flex align-items-center">
                                 <div className="course__teacher-thumb mr-15">
@@ -1203,7 +1204,7 @@ export default async function Page({ params, }: { params: Promise<{ id: string }
                                   />
                                 </div>
                                 <h6>
-                                  <a href="instructor-details.html">Elon Gated</a>
+                                  <Link href="instructor-details.html">Elon Gated</Link>
                                 </h6>
                               </div>
                             </div>
@@ -1213,23 +1214,23 @@ export default async function Page({ params, }: { params: Promise<{ id: string }
                                 <span className="old-price">$68.00</span>
                               </div>
                               <div className="course__btn">
-                                <a href="course-details.html" className="link-btn">
+                                <Link href="course-details.html" className="link-btn">
                                   Know Details
                                   <i className="far fa-arrow-right" />
                                   <i className="far fa-arrow-right" />
-                                </a>
+                                </Link>
                               </div>
                             </div>
                           </div>
                           <div className="course__item course__item-3 swiper-slide white-bg mb-30 fix">
                             <div className="course__thumb w-img p-relative fix">
-                              <a href="course-details.html">
+                              <Link href="course-details.html">
                                 <img src="/img/course/course-4.jpg" alt="" />
-                              </a>
+                              </Link>
                               <div className="course__tag">
-                                <a href="#" className="blue">
+                                <Link href="#" className="blue">
                                   Marketing
-                                </a>
+                                </Link>
                               </div>
                             </div>
                             <div className="course__content">
@@ -1248,9 +1249,9 @@ export default async function Page({ params, }: { params: Promise<{ id: string }
                                 </div>
                               </div>
                               <h3 className="course__title">
-                                <a href="course-details.html">
+                                <Link href="course-details.html">
                                   The business Intelligence analyst Course 2022
-                                </a>
+                                </Link>
                               </h3>
                               <div className="course__teacher d-flex align-items-center">
                                 <div className="course__teacher-thumb mr-15">
@@ -1260,7 +1261,7 @@ export default async function Page({ params, }: { params: Promise<{ id: string }
                                   />
                                 </div>
                                 <h6>
-                                  <a href="instructor-details.html">Eleanor Fant</a>
+                                  <Link href="instructor-details.html">Eleanor Fant</Link>
                                 </h6>
                               </div>
                             </div>
@@ -1270,11 +1271,11 @@ export default async function Page({ params, }: { params: Promise<{ id: string }
                                 <span className="old-price">$97.00</span>
                               </div>
                               <div className="course__btn">
-                                <a href="course-details.html" className="link-btn">
+                                <Link href="course-details.html" className="link-btn">
                                   Know Details
                                   <i className="far fa-arrow-right" />
                                   <i className="far fa-arrow-right" />
-                                </a>
+                                </Link>
                               </div>
                             </div>
                           </div>
@@ -1301,14 +1302,14 @@ export default async function Page({ params, }: { params: Promise<{ id: string }
                     <div className="course__video-thumb w-img mb-25">
                       <img src="/img/course/video/course-video.jpg" alt="" />
                       <div className="course__video-play">
-                        <a
+                        <Link
                           href="https://youtu.be/yJg-Y5byMMw"
                           data-fancybox=""
                           className="play-btn"
                         >
                           {" "}
                           <i className="fas fa-play" />{" "}
-                        </a>
+                        </Link>
                       </div>
                     </div>
                     <div className="course__video-meta mb-25 d-flex align-items-center justify-content-between">
@@ -1448,14 +1449,14 @@ export default async function Page({ params, }: { params: Promise<{ id: string }
                     </div>
                     <div className="course__payment mb-35">
                       <h3>Payment:</h3>
-                      <a href="#">
+                      <Link href="#">
                         <img src="/img/course/payment/payment-1.png" alt="" />
-                      </a>
+                      </Link>
                     </div>
                     <div className="course__enroll-btn">
-                      <a href="contact.html" className="e-btn e-btn-7 w-100">
+                      <Link href="contact.html" className="e-btn e-btn-7 w-100">
                         Enroll <i className="far fa-arrow-right" />
-                      </a>
+                      </Link>
                     </div>
                   </div>
                 </div>
@@ -1466,50 +1467,50 @@ export default async function Page({ params, }: { params: Promise<{ id: string }
                       <li>
                         <div className="course__sm d-flex align-items-center mb-30">
                           <div className="course__sm-thumb mr-20">
-                            <a href="#">
+                            <Link href="#">
                               <img
                                 src="/img/course/sm/course-sm-1.jpg"
                                 alt=""
                               />
-                            </a>
+                            </Link>
                           </div>
                           <div className="course__sm-content">
                             <div className="course__sm-rating">
                               <ul>
                                 <li>
-                                  <a href="#">
+                                  <Link href="#">
                                     {" "}
                                     <i className="icon_star" />{" "}
-                                  </a>
+                                  </Link>
                                 </li>
                                 <li>
-                                  <a href="#">
+                                  <Link href="#">
                                     {" "}
                                     <i className="icon_star" />{" "}
-                                  </a>
+                                  </Link>
                                 </li>
                                 <li>
-                                  <a href="#">
+                                  <Link href="#">
                                     {" "}
                                     <i className="icon_star" />{" "}
-                                  </a>
+                                  </Link>
                                 </li>
                                 <li>
-                                  <a href="#">
+                                  <Link href="#">
                                     {" "}
                                     <i className="icon_star" />{" "}
-                                  </a>
+                                  </Link>
                                 </li>
                                 <li>
-                                  <a href="#">
+                                  <Link href="#">
                                     {" "}
                                     <i className="icon_star" />{" "}
-                                  </a>
+                                  </Link>
                                 </li>
                               </ul>
                             </div>
                             <h5>
-                              <a href="#">Development</a>
+                              <Link href="#">Development</Link>
                             </h5>
                             <div className="course__sm-price">
                               <span>$54.00</span>
@@ -1520,50 +1521,50 @@ export default async function Page({ params, }: { params: Promise<{ id: string }
                       <li>
                         <div className="course__sm d-flex align-items-center mb-30">
                           <div className="course__sm-thumb mr-20">
-                            <a href="#">
+                            <Link href="#">
                               <img
                                 src="/img/course/sm/course-sm-2.jpg"
                                 alt=""
                               />
-                            </a>
+                            </Link>
                           </div>
                           <div className="course__sm-content">
                             <div className="course__sm-rating">
                               <ul>
                                 <li>
-                                  <a href="#">
+                                  <Link href="#">
                                     {" "}
                                     <i className="icon_star" />{" "}
-                                  </a>
+                                  </Link>
                                 </li>
                                 <li>
-                                  <a href="#">
+                                  <Link href="#">
                                     {" "}
                                     <i className="icon_star" />{" "}
-                                  </a>
+                                  </Link>
                                 </li>
                                 <li>
-                                  <a href="#">
+                                  <Link href="#">
                                     {" "}
                                     <i className="icon_star" />{" "}
-                                  </a>
+                                  </Link>
                                 </li>
                                 <li>
-                                  <a href="#">
+                                  <Link href="#">
                                     {" "}
                                     <i className="icon_star" />{" "}
-                                  </a>
+                                  </Link>
                                 </li>
                                 <li>
-                                  <a href="#">
+                                  <Link href="#">
                                     {" "}
                                     <i className="icon_star" />{" "}
-                                  </a>
+                                  </Link>
                                 </li>
                               </ul>
                             </div>
                             <h5>
-                              <a href="#">Data Science</a>
+                              <Link href="#">Data Science</Link>
                             </h5>
                             <div className="course__sm-price">
                               <span>$72.00</span>
@@ -1574,50 +1575,50 @@ export default async function Page({ params, }: { params: Promise<{ id: string }
                       <li>
                         <div className="course__sm d-flex align-items-center mb-10">
                           <div className="course__sm-thumb mr-20">
-                            <a href="#">
+                            <Link href="#">
                               <img
                                 src="/img/course/sm/course-sm-3.jpg"
                                 alt=""
                               />
-                            </a>
+                            </Link>
                           </div>
                           <div className="course__sm-content">
                             <div className="course__sm-rating">
                               <ul>
                                 <li>
-                                  <a href="#">
+                                  <Link href="#">
                                     {" "}
                                     <i className="icon_star" />{" "}
-                                  </a>
+                                  </Link>
                                 </li>
                                 <li>
-                                  <a href="#">
+                                  <Link href="#">
                                     {" "}
                                     <i className="icon_star" />{" "}
-                                  </a>
+                                  </Link>
                                 </li>
                                 <li>
-                                  <a href="#">
+                                  <Link href="#">
                                     {" "}
                                     <i className="icon_star" />{" "}
-                                  </a>
+                                  </Link>
                                 </li>
                                 <li>
-                                  <a href="#">
+                                  <Link href="#">
                                     {" "}
                                     <i className="icon_star" />{" "}
-                                  </a>
+                                  </Link>
                                 </li>
                                 <li>
-                                  <a href="#">
+                                  <Link href="#">
                                     {" "}
                                     <i className="icon_star" />{" "}
-                                  </a>
+                                  </Link>
                                 </li>
                               </ul>
                             </div>
                             <h5>
-                              <a href="#">UX Design</a>
+                              <Link href="#">UX Design</Link>
                             </h5>
                             <div className="course__sm-price">
                               <span>Free</span>
@@ -1651,9 +1652,9 @@ export default async function Page({ params, }: { params: Promise<{ id: string }
               </div>
               <div className="col-xxl-5 col-xl-5 col-lg-4 col-md-4">
                 <div className="cta__more d-md-flex justify-content-end p-relative z-index-1">
-                  <a href="contact.html" className="e-btn e-btn-white">
+                  <Link href="contact.html" className="e-btn e-btn-white">
                     Get Started
-                  </a>
+                  </Link>
                 </div>
               </div>
             </div>

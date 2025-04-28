@@ -16,7 +16,7 @@ const Footer = () => {
                                         <div className="footer__widget-head mb-22">
                                             <div className="footer__logo">
                                                 <a href="index.html">
-                                                    {/* <img src="/img/logo/logo-2.png" alt="" /> */}
+                                                    <img src="/img/logo/logo-2.png" alt="" />
                                                 </a>
                                             </div>
                                         </div>

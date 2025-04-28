@@ -37,9 +37,25 @@ export async function POST(req: NextRequest) {
     // Save token to DB
     await db.query('UPDATE users SET token = ? WHERE email = ?', [token, admin.email]);
 
-    return NextResponse.json({ message: 'Login successful', token });
+    // Set both token and email in cookies
+    const response = NextResponse.json({ message: 'Login successful', email: admin.email });
+
+    response.cookies.set('adminToken', token, {
+      httpOnly: true,  // Ensures the cookie can't be accessed via JavaScript
+      secure: process.env.NODE_ENV === 'production', // Set secure flag only in production
+      sameSite: 'strict',  // Ensures the cookie is sent only to the same site (lowercase)
+      maxAge: 3600 * 1000  // Cookie expires in 1 hour
+    });
+
+    response.cookies.set('adminEmail', admin.email, {
+      httpOnly: true,  // Ensures the cookie can't be accessed via JavaScript
+      secure: process.env.NODE_ENV === 'production', // Set secure flag only in production
+      sameSite: 'strict',  // Ensures the cookie is sent only to the same site (lowercase)
+      maxAge: 3600 * 1000  // Cookie expires in 1 hour
+    });
+
+    return response;
   } catch (error) {
     return NextResponse.json({ error: 'Login failed', details: error }, { status: 500 });
   }
-  
 }

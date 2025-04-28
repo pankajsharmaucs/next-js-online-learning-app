@@ -1,3 +1,4 @@
+
 // app/layout.tsx
 import './globals.css'
 import './styles/css/style.css';
@@ -14,25 +15,34 @@ import './styles/css/jquery.fancybox.min.css';
 import './styles/css/elegantFont.css';
 
 
-import { Inter } from 'next/font/google'
+import { Inter } from 'next/font/google';
 import Header from '../components/header/Header';
 import Footer from '../components/footer/page';
+import AdminHeader from '@/components/admin/AdminHeader';
+import AdminFooter from '@/components/admin/AdminFooter';
 
-const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })
+import LayoutClient from '../components/LayoutClient';
+import {ClientHeader, ClientFooter} from '@/components/admin/ClientHeader';  // Import the client-side header component
+
+const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
 
 export const metadata = {
   title: 'Edusm',
   description: 'Online Learning platform',
-}
+};
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function GlobalLayout({ children }: { children: React.ReactNode }) {
+
+
   return (
     <html lang="en">
-      <body className={` font-sans bg-background text-foreground`}>
-        <Header />
-        {children}
-        <Footer />
+      <body className="font-sans bg-background text-foreground">
+        <ClientHeader />
+        <LayoutClient>
+          {children}
+        </LayoutClient>
+        {<ClientFooter />}
       </body>
     </html>
-  )
+  );
 }

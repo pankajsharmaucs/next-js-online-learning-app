@@ -2987,6 +2987,7 @@ p {
 .course__tab-btn .nav-tabs .nav-item .nav-link svg {
   width: 14px;
   height: 14px !important;
+  margin: 7px;
 }
 .course__tab-btn .nav-tabs .nav-item .nav-link svg.grid .st0 {
   fill: none;
