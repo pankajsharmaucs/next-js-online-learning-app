@@ -10,7 +10,6 @@ export const checkAdminHomeLogin = async (router: Router) => {
     const Url = `${baseUrl}${Path}`;
 
     const response = await axios.get(Url, { withCredentials: true });
-    // console.log(response);
 
     if (response.status !== 200) {
       router.push("/admin/login");
