@@ -29,7 +29,8 @@ const AdminDashboard = () => {
                             <div className="flex flex-col items-center justify-center bg-white border
                                      border-gray-200 rounded-2xl shadow-md hover:shadow-xl hover:border-gray-400 transition-all duration-300 text-center"
                             >
-                                <FaRegUser className="text-4xl text-gray-600 mb-2  " />
+                                <FaRegUser className="text-4xl text-gray-600 mb-2  " 
+                                style={{padding:"10px 5px"}} />
                                 <h3 className="text-lg font-medium">User</h3>
                             </div>
                         </div>

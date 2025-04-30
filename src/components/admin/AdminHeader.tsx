@@ -71,10 +71,9 @@ const AdminHeader = () => {
                                 <div className="header__left d-flex">
                                     <div className="logo">
                                         <Link href="/">
-                                            {/* <img src="/img/logo/logo.png" alt="logo" /> */}
+                                            <img src="/img/logo/logo.png" alt="logo" />
                                         </Link>
                                     </div>
-
                                 </div>
                             </div>
 
