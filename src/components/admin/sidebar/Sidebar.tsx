@@ -58,16 +58,8 @@ const Sidebar = ({ openCloseTrigger, setsidebarOpened }: OpenCloseType) => {
                             </Link>
                         </div>
                         <div className="mobile-menu fix" />
-                        <div className="sidebar__search p-relative mt-2 ">
-                            <form action="#">
-                                <input type="text" placeholder="Search..." />
-                                <button type="submit">
-                                    <i className="fad fa-search" />
-                                </button>
-                            </form>
-                        </div>
 
-                        <div className="sidebar__content  py-3">
+                        <div className="sidebar__content  ">
                             <SidebarMenu setsidebarOpened={setsidebarOpened} />
                         </div>
 

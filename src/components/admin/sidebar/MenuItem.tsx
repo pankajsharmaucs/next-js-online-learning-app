@@ -26,7 +26,7 @@ const MenuItem = ({ title, links, href, onClick }: MenuItemProps) => {
                     {open ? <ChevronUp className="h-5 w-5" /> : <ChevronDown className="h-5 w-5" />}
                 </button>
             ) : (
-                <Link href={href || "/"} className="block py-3 font-medium" onClick={onClick}>
+                <Link href={href || "/"} className="block py-2 font-medium" onClick={onClick}>
                     {title}
                 </Link>
             )}

@@ -39,7 +39,7 @@ const AdminDashboard = () => {
 
     return (
         <main>
-            <section className="dashboard__area pt-200 pb-145">
+            <section className="dashboard__area pt-100 md:pt-[200px] pb-145">
                 <div className="container">
                     <div className="row">
                         <div className="col-xxl-12">
@@ -57,19 +57,7 @@ const AdminDashboard = () => {
                         </div>
                     </div>
 
-                    {/* Centered logout button */}
-                    <div className="row justify-content-center mt-5">
-                        <div className="col-auto">
-
-                            <button className="btn btn-danger" onClick={logout} >
-                                {loading ? (
-                                    <span>Loading...</span>
-                                ) : 'Logout'}
-                            </button>
-
-
-                        </div>
-                    </div>
+                     
                 </div>
             </section>
         </main>

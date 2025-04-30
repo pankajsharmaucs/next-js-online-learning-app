@@ -3,7 +3,8 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { checkAdminLogin } from "@/utlis/checkAdminLogin";
-import { FaRegUser } from "react-icons/fa"; // or any icon from react-icons
+import Card1 from "@/components/admin/card/Card1";
+
 
 const AdminDashboard = () => {
     const [loading, setLoading] = useState(false); // State to track loading status
@@ -15,7 +16,7 @@ const AdminDashboard = () => {
 
     return (
         <main>
-            <section className="dashboard__area pt-200 pb-145">
+            <section className="dashboard__area pt-100 md:pt-[200px] pb-145">
                 <div className="container">
                     <div className="row">
                         <div className="col-xxl-12">
@@ -25,14 +26,12 @@ const AdminDashboard = () => {
                         </div>
                     </div>
                     <div className="row">
-                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 p-2 ">
-                            <div className="flex flex-col items-center justify-center bg-white border
-                                     border-gray-200 rounded-2xl shadow-md hover:shadow-xl hover:border-gray-400 transition-all duration-300 text-center"
-                            >
-                                <FaRegUser className="text-4xl text-gray-600 mb-2  " 
-                                style={{padding:"10px 5px"}} />
-                                <h3 className="text-lg font-medium">User</h3>
-                            </div>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-2 ">
+                        <Card1 title={"User"}  link={"/admin/users"} icon={'FaUser'}  />
+                        <Card1 title={"Add"}  link={"/admin/add"} icon={'FaPlus'}  />
+                        <Card1 title={"Classes"}  link={"/admin/classes"} icon={'FaChalkboardTeacher'}  />
+                        <Card1 title={"Subjects"}  link={"/admin/subjects"} icon={'FaBookOpen'}  />
+                        <Card1 title={"Settings"}  link={"/admin/settings"} icon={'FaCog'}  />
                         </div>
                     </div>
                 </div>

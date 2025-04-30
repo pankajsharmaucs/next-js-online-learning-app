@@ -59,7 +59,7 @@ const Page = () => {
   return (
     <main>
       {/* sign up area start */}
-      <section className="signup__area po-rel-z1 pt-200 pb-145">
+      <section className="signup__area po-rel-z1 pt-100 md:pt-[200px] pb-145">
         <div className="sign__shape">
           <img className="man-1" src="/img/icon/sign/man-1.png" alt="" />
           <img className="man-2" src="/img/icon/sign/man-2.png" alt="" />

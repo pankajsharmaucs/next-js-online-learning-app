@@ -1,5 +1,9 @@
 /* app/admin/adminLayout.css */
 
+.dashboard__area h2 {
+  font-size: 4.5vw;
+}
+
 /* Admin Header */
 .admin-header {
   display: flex;
@@ -56,7 +60,8 @@
 /* Admin Content Section */
 .admin-content {
   display: flex;
-  margin-left: 220px; /* Sidebar width */
+  margin-left: 220px;
+  /* Sidebar width */
 }
 
 .main-content {
@@ -64,4 +69,10 @@
   padding: 20px;
 }
 
+@media only screen and (max-width: 600px) {
 
+  .dashboard__area h2 {
+    font-size: 20px;
+  }
+
+}
