@@ -1,8 +1,10 @@
 'use client'
 
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import SidebarMenu from './SidebarMenu';
 import Link from 'next/link';
+import axios from 'axios';
+import { useRouter } from "next/navigation";
 
 interface OpenCloseType {
     openCloseTrigger: boolean;
@@ -10,6 +12,32 @@ interface OpenCloseType {
 }
 
 const Sidebar = ({ openCloseTrigger, setsidebarOpened }: OpenCloseType) => {
+    const [loading, setLoading] = useState(false); // State to track loading status
+    const router = useRouter();
+
+
+    // Logout function to invalidate the session/token
+    const logout = async () => {
+
+        setLoading(true); // Show loader
+
+        try {
+            const baseUrl = window.location.origin;
+            const Path = process.env.NEXT_PUBLIC_ADMIN_LOGOUT; // Make sure to set the logout endpoint in the environment variable
+            const Url = `${baseUrl}${Path}`;
+
+            await axios.post(Url, {}, { withCredentials: true });
+
+            // Redirect to login page after logout
+            router.push("/admin/login");
+        } catch (error) {
+            console.error("Error logging out:", error);
+            // Handle errors if needed
+        } finally {
+            setLoading(false);
+        }
+    };
+
     return (
         <>
             {/* sidebar area start */}
@@ -42,6 +70,11 @@ const Sidebar = ({ openCloseTrigger, setsidebarOpened }: OpenCloseType) => {
                         <div className="sidebar__content  py-3">
                             <SidebarMenu setsidebarOpened={setsidebarOpened} />
                         </div>
+
+                        <button onClick={logout} className="px-4 py-2 bg-red-700 text-white rounded-xl hover:bg-red-700 
+                        transition-colors duration-200 shadow-md"
+                        >{loading ? (<span>Loading...</span>) : 'Logout'}</button>
+
                     </div>
                 </div>
             </div>
