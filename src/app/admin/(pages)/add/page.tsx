@@ -14,28 +14,7 @@ const AdminDashboard = () => {
         checkAdminLogin(router);
     }, [router]);
 
-
-    // Logout function to invalidate the session/token
-    const logout = async () => {
-
-        setLoading(true); // Show loader
-
-        try {
-            const baseUrl = window.location.origin;
-            const Path = process.env.NEXT_PUBLIC_ADMIN_LOGOUT; // Make sure to set the logout endpoint in the environment variable
-            const Url = `${baseUrl}${Path}`;
-
-            await axios.post(Url, {}, { withCredentials: true });
-
-            // Redirect to login page after logout
-            router.push("/admin/login");
-        } catch (error) {
-            console.error("Error logging out:", error);
-            // Handle errors if needed
-        } finally {
-            setLoading(false);
-        }
-    };
+ 
 
     return (
         <main>

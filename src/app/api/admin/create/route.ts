@@ -4,9 +4,30 @@ import { connectDB } from '@/lib/db';
 import { hashPassword } from '@/lib/crypto';
 import crypto from 'crypto';
 
+
+// GET all users
+export async function GET(req: NextRequest) {
+  try {
+    const db = await connectDB();
+
+    const [users]: any = await db.query(
+      'SELECT user_id, email, role, created_by, created_at FROM users'
+    );
+
+    return NextResponse.json({
+      message: 'Users fetched successfully',
+      users
+    });
+
+  } catch (error) {
+    console.error('Error fetching users:', error);
+    return NextResponse.json({ error: 'Failed to fetch users', details: error }, { status: 500 });
+  }
+}
+
 export async function POST(req: NextRequest) {
   try {
-    const { email, password, role, token, superadmin_email } = await req.json();
+    const { email, password, role = 'user', token, superadmin_email } = await req.json();
 
     if (!email || !password) {
       return NextResponse.json({ error: 'Email and password are required' }, { status: 400 });
@@ -37,13 +58,12 @@ export async function POST(req: NextRequest) {
       }
 
     }
-    
+
     createdBy = superadmin_email;
-    
+
     // Check if the user already exists
     const [existing]: any = await db.query(
-      'SELECT user_id FROM users WHERE email = ?',
-      [email]
+      'SELECT user_id FROM users WHERE email = ? and role = ?', [email, role]
     );
 
     if (existing.length > 0) {
@@ -59,13 +79,14 @@ export async function POST(req: NextRequest) {
     // Insert the user
     await db.query(
       'INSERT INTO users (email, password, role, token, created_by) VALUES (?, ?, ?, ?, ?)',
-      [email, hashedPassword, role || 'user', newUserToken, createdBy]
+      [email, hashedPassword, role, newUserToken, createdBy]
     );
 
     return NextResponse.json({
       message: 'User created successfully',
       token: newUserToken
     });
+
   } catch (error) {
     console.error('Error creating user:', error);
     return NextResponse.json({ error: 'Failed to create user', details: error }, { status: 500 });

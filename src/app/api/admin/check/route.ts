@@ -30,7 +30,7 @@ export async function GET() {
     const admin = rows[0];
 
     // You could optionally check for other properties, like roles, if needed
-    return NextResponse.json({ message: 'Authenticated', email: admin.email }, { status: 200 });
+    return NextResponse.json({ message: 'Authenticated', user_data: admin }, { status: 200 });
 
   } catch (error) {
     console.error('Error in /admin/check route:', error);

@@ -34,6 +34,7 @@ const Sidebar = ({ openCloseTrigger, setsidebarOpened }: OpenCloseType) => {
             console.error("Error logging out:", error);
             // Handle errors if needed
         } finally {
+            router.push("/admin/login");
             setLoading(false);
         }
     };

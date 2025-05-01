@@ -40,6 +40,24 @@ export const checkAdminLogin = async (router: Router) => {
   }
 };
 
+export const getLogginedUser = async () => {
+  try {
+    const baseUrl = window.location.origin;
+    const Path = process.env.NEXT_PUBLIC_ADMIN_LOGIN_CHECK;
+    const Url = `${baseUrl}${Path}`;
+
+    const response = await axios.get(Url, { withCredentials: true });
+    // console.log(response);
+
+    if (response.status === 200) {
+      return response;
+    }
+  } catch (error) {
+    console.error("Error checking authentication:", error);
+    return false
+  }
+};
+
 
 export const checkAdminLoginStatus = async () => {
   try {
