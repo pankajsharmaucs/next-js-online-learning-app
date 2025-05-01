@@ -27,14 +27,11 @@ const Sidebar = ({ openCloseTrigger, setsidebarOpened }: OpenCloseType) => {
             const Url = `${baseUrl}${Path}`;
 
             await axios.post(Url, {}, { withCredentials: true });
-
-            // Redirect to login page after logout
-            router.push("/admin/login");
         } catch (error) {
             console.error("Error logging out:", error);
-            // Handle errors if needed
         } finally {
-            router.push("/admin/login");
+            setsidebarOpened(false); // Close the sidebar
+            router.push("/admin/login"); // Redirect to login
             setLoading(false);
         }
     };
