@@ -18,6 +18,7 @@ interface User {
 
 function Page() {
   const [users, setUsers] = useState<User[]>([]);
+  const [UserLoader, setUserLoader] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
   const [editMode, setEditMode] = useState(false);
@@ -43,6 +44,7 @@ function Page() {
 
       const response = await axios.get(Url);
       setUsers(response.data.users);
+      setUserLoader(true);
 
     } catch (error) {
       showErrorToast('Something went wrong');
@@ -183,41 +185,47 @@ function Page() {
                   </tr>
                 </thead>
                 <tbody>
-                  {users.map((user, index) => (
-                    <tr key={index} className="odd:bg-gray-50 ">
-                      <td className="border p-2  text-[13px]">{index + 1}</td>
-                      <td className="border p-2  text-[13px]">{user.email}</td>
-                      <td className="border p-2  text-[13px]">{user.role}</td>
-                      <td className="border p-2  text-[13px]">
-                        <span
-                          className={
-                            user.active_status === 1
-                              ? 'text-green-600 font-medium'
-                              : 'text-red-600 font-medium'
-                          }
-                        >
-                          {user.active_status === 1 ? 'Active' : 'Inactive'}
-                        </span>
-                      </td>
-                      <td className="border p-2">
-                        <button
-                          className="btn btn-warning py-1"
-                          onClick={() => {
-                            setEditMode(true);
-                            setEditingUserIndex(index);
-                            setFormData(users[index]);
-                            setModalOpen(true);
-                          }}
-                        >
-                          Edit
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                  {users.length === 0 && (
+
+                  {users && users.length > 0 ? (
+                    users.map((user, index) => (
+                      <tr key={user.user_id || index} className="odd:bg-gray-50">
+                        <td className="border p-2 text-[13px]">{index + 1}</td>
+                        <td className="border p-2 text-[13px]">{user.email}</td>
+                        <td className="border p-2 text-[13px]">{user.role}</td>
+                        <td className="border p-2 text-[13px]">
+                          <span
+                            className={
+                              user.active_status === 1
+                                ? 'text-green-600 font-medium'
+                                : 'text-red-600 font-medium'
+                            }
+                          >
+                            {user.active_status === 1 ? 'Active' : 'Inactive'}
+                          </span>
+                        </td>
+                        <td className="border p-2">
+                          <button
+                            className="btn btn-warning py-1"
+                            onClick={() => {
+                              setEditMode(true);
+                              setEditingUserIndex(index);
+                              setFormData(user);
+                              setModalOpen(true);
+                            }}
+                          >
+                            Edit
+                          </button>
+                        </td>
+                      </tr>
+                    ))
+                  ) : (
                     <tr>
                       <td colSpan={5} className="text-center p-4">
-                        No users available.
+                        <div>
+                          {
+                            UserLoader ? 'No users available.' : 'Loading...'
+                          }
+                        </div>
                       </td>
                     </tr>
                   )}

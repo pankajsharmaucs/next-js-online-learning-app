@@ -16,7 +16,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   return (
     <div className={`flex h-screen ${roboto.className}`}>
       <Sidebar />
-      <ClientLayoutWrapper>{children}</ClientLayoutWrapper>
+      <ClientLayoutWrapper>
+        {children}
+      </ClientLayoutWrapper>
     </div>
   );
 }

@@ -7,8 +7,9 @@ const pool = mysql.createPool({
   password: process.env.DB_PASSWORD || 'Asdf@333###',
   database: process.env.DB_NAME || 'elfedxvv_edusm',
   waitForConnections: true,
-  connectionLimit: 10, // Change based on your expected load
-  queueLimit: 0
+  connectionLimit: 10000, // Change based on your expected load
+  queueLimit: 0,
+  connectTimeout: 10000,  // Timeout for initial connection
 });
 
 export const connectDB = async () => {

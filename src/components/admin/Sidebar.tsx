@@ -4,22 +4,20 @@ import React, { useEffect, useState } from 'react'
 import SidebarButton from "@/components/admin/SidebarButton";
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
-
 import { usePathname } from 'next/navigation';
 
 const Sidebar = () => {
-    const [showPreloader, setShowPreloader] = useState(false);
+    const [showSideBar, setshowSideBar] = useState(true); // Set to true initially for preloading
     const [loading, setLoading] = useState(false); // State to track loading status
+    const [adminPath, setadminPath] = useState('');
     const router = useRouter();
     const pathname = usePathname();
-    const [adminPath, setadminPath] = useState('');
 
+    // Update adminPath based on pathname
     useEffect(() => {
-        setadminPath(pathname)
-        setTimeout(() => {
-            setShowPreloader(false)
-        }, 500)
-    }, [pathname])
+        setadminPath(pathname);
+        setshowSideBar(false); // Hide preloader after some delay
+    }, [pathname]);
 
     // Logout function to invalidate the session/token
     const logout = async () => {
@@ -39,13 +37,18 @@ const Sidebar = () => {
         }
     };
 
+    // Only render sidebar if not on login or home page
+    if (adminPath === '/admin/login' || adminPath === '/admin') {
+        return null; // Do not render sidebar on these pages
+    }
+
     return (
         <>
-
-            {
-                adminPath !== '/admin/login' && adminPath !== '/admin' &&
+            {showSideBar ? (
+                <></>
+            ) : (
                 <aside id="sidebar" className="lg:flex w-49 bg-gray-900 text-white flex-col items-center py-8 fixed left-0 top-0 h-full shadow-lg z-50">
-                    <h6 className="font-bold mb-10 mt-4  w-100 p-2 text-gray-950 text-center">Admin Panel</h6>
+                    <h6 className="font-bold mb-10 mt-4 w-100 p-2 text-gray-950 text-center">Admin Panel</h6>
                     <nav className="flex flex-col gap-1 w-full py-4 ps-2 ">
                         <SidebarButton label="Dashboard" icon="FaTachometerAlt" link="/admin/dashboard" />
                         <SidebarButton label="Users" icon="FaUser" link="/admin/users" />
@@ -54,23 +57,20 @@ const Sidebar = () => {
                         <SidebarButton label="Subjects" icon="FaBookOpen" link="/admin/subjects" />
                         <SidebarButton label="Settings" icon="FaCog" link="/admin/settings" />
                     </nav>
-
-
-                    <div className='px-4 mt-40'>
+                    <div className='px-2 w-100 mt-20'>
                         <button
                             onClick={logout}
-                            className="px-4 py-1 bg-red-700 text-white rounded-xl hover:bg-red-700 
-                        transition-colors duration-200 shadow-md"
+                            className="px-4 py-1 border border-red-500 text-white rounded-xl hover:bg-red-600 
+                            transition-colors duration-200 shadow-md hover:shadow-lg 
+                            focus:outline-none focus:ring-2 focus:ring-red-700"
                         >
                             {loading ? (<span>Loading...</span>) : 'Logout'}
                         </button>
                     </div>
-
                 </aside>
-            }
-
+            )}
         </>
-    )
-}
+    );
+};
 
-export default Sidebar
+export default Sidebar;
