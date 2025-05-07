@@ -16,11 +16,7 @@ import './styles/css/elegantFont.css';
 
 
 import { Inter } from 'next/font/google';
-import Header from '../components/header/Header';
-import Footer from '../components/footer/page';
-import AdminHeader from '@/components/admin/AdminHeader';
-import AdminFooter from '@/components/admin/AdminFooter';
-
+ 
 import LayoutClient from '../components/LayoutClient';
 import {ClientHeader, ClientFooter} from '@/components/admin/ClientHeader';  // Import the client-side header component
 
@@ -33,7 +29,6 @@ export const metadata = {
 
 export default function GlobalLayout({ children }: { children: React.ReactNode }) {
 
-
   return (
     <html lang="en">
       <body className="font-sans bg-background text-foreground">
@@ -45,4 +40,5 @@ export default function GlobalLayout({ children }: { children: React.ReactNode }
       </body>
     </html>
   );
+  
 }

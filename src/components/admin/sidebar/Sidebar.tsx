@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import SidebarMenu from './SidebarMenu';
 import Link from 'next/link';
 import axios from 'axios';
@@ -14,11 +14,10 @@ interface OpenCloseType {
 const Sidebar = ({ openCloseTrigger, setsidebarOpened }: OpenCloseType) => {
     const [loading, setLoading] = useState(false); // State to track loading status
     const router = useRouter();
-
+    const sidebarRef = useRef<HTMLDivElement | null>(null); // Create ref for the sidebar container
 
     // Logout function to invalidate the session/token
     const logout = async () => {
-
         setLoading(true); // Show loader
 
         try {
@@ -36,10 +35,26 @@ const Sidebar = ({ openCloseTrigger, setsidebarOpened }: OpenCloseType) => {
         }
     };
 
+    // Close the sidebar when clicking outside of it
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (sidebarRef.current && !sidebarRef.current.contains(event.target as Node)) {
+                setsidebarOpened(false); // Close the sidebar if click is outside
+            }
+        };
+
+        document.addEventListener('mousedown', handleClickOutside);
+
+        // Cleanup the event listener on component unmount
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [setsidebarOpened]);
+
     return (
         <>
             {/* sidebar area start */}
-            <div className={`sidebar__area p-2 ${openCloseTrigger && "sidebar-opened"}`} >
+            <div className={`sidebar__area p-2 ${openCloseTrigger && "sidebar-opened"}`} ref={sidebarRef}>
                 <div className="sidebar__wrapper">
                     <div className="sidebar__close" onClick={() => setsidebarOpened(false)}>
                         <button className="sidebar__close-btn" id="sidebar__close-btn">
@@ -57,24 +72,26 @@ const Sidebar = ({ openCloseTrigger, setsidebarOpened }: OpenCloseType) => {
                         </div>
                         <div className="mobile-menu fix" />
 
-                        <div className="sidebar__content  ">
+                        <div className="sidebar__content">
                             <SidebarMenu setsidebarOpened={setsidebarOpened} />
                         </div>
 
-                        <button onClick={logout} className="px-4 py-2 bg-red-700 text-white rounded-xl hover:bg-red-700 
+                        <button
+                            onClick={logout}
+                            className="px-4 py-2 bg-red-700 text-white rounded-xl hover:bg-red-700 
                         transition-colors duration-200 shadow-md"
-                        >{loading ? (<span>Loading...</span>) : 'Logout'}</button>
-
+                        >
+                            {loading ? (<span>Loading...</span>) : 'Logout'}
+                        </button>
                     </div>
                 </div>
             </div>
 
-
             {/* sidebar area end */}
-            <div className="body-overlay " />
+            <div className="body-overlay" />
             {/* sidebar area end */}
         </>
-    )
-}
+    );
+};
 
-export default Sidebar
+export default Sidebar;

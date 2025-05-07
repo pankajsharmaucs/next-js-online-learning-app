@@ -26,6 +26,10 @@ export async function POST(req: NextRequest) {
 
     const admin = rows[0];
 
+    if (admin.active_status !== 1) {
+      return NextResponse.json({ error: 'User Inactive ' }, { status: 403 });
+    }
+
     const isMatch = await comparePassword(password, admin.password);
     if (!isMatch) {
       return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 });

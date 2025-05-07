@@ -29,22 +29,39 @@ const Page = () => {
         { withCredentials: true } // Important to accept cookies
       );
 
-      // Check if login was successful (status 200)
       if (response.status === 200) {
         showSuccessToast('Logged in successfully!');
         router.push('/admin/dashboard');
       } else {
-        // setErrorMessage('Access  Denied');
+        // This is rare, since other statuses will likely go to catch
         showErrorToast('Access Denied!');
       }
-      
+
     } catch (error: any) {
-      console.error('Login failed:', error.response?.data?.message || error.message);
       setIsLoading(false);
-      showWarningToast('Access Denied!');
-    }finally{
+
+      if (error.response) {
+        const status = error.response.status;
+
+        if (status === 401) {
+          showWarningToast('Unauthorized: Please check your credentials.');
+        } else if (status === 403) {
+          showWarningToast('Account is inactive.');
+        } else {
+          showErrorToast(`Login failed: ${error.response.data?.message || 'Unexpected error'}`);
+        }
+      } else {
+        // No response from server
+        showErrorToast(`Login failed: ${error.message}`);
+      }
+
+      console.error('Login error:', error);
+
+    } finally {
       setIsLoading(false);
     }
+
+
   }
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -57,71 +74,67 @@ const Page = () => {
   };
 
   return (
-    <main>
-      {/* sign up area start */}
-      <section className="signup__area po-rel-z1 pt-100 md:pt-[200px] pb-145">
-        <div className="sign__shape">
-          <img className="man-1" src="/img/icon/sign/man-1.png" alt="" />
-          <img className="man-2" src="/img/icon/sign/man-2.png" alt="" />
-          <img className="circle" src="/img/icon/sign/circle.png" alt="" />
-          <img className="zigzag" src="/img/icon/sign/zigzag.png" alt="" />
-          <img className="dot" src="/img/icon/sign/dot.png" alt="" />
-          <img className="bg" src="/img/icon/sign/sign-up.png" alt="" />
-        </div>
-        <div className="container">
-          <div className="row">
-            <div className="col-xxl-8 offset-xxl-2 col-xl-8 offset-xl-2">
-              <div className="section__title-wrapper text-center mb-55">
-                <h2 className="section__title">
-                  Admin Login <br /> to dashboard.
-                </h2>
-              </div>
+    <>
+      <div className="sign__shape">
+        <img className="man-1" src="/img/icon/sign/man-1.png" alt="" />
+        <img className="man-2" src="/img/icon/sign/man-2.png" alt="" />
+        <img className="circle" src="/img/icon/sign/circle.png" alt="" />
+        <img className="zigzag" src="/img/icon/sign/zigzag.png" alt="" />
+        <img className="dot" src="/img/icon/sign/dot.png" alt="" />
+        <img className="bg" src="/img/icon/sign/sign-up.png" alt="" />
+      </div>
+      <div className="container">
+        <div className="row">
+          <div className="col-xxl-8 offset-xxl-2 col-xl-8 offset-xl-2">
+            <div className="section__title-wrapper text-center mb-55">
+              <h2 className="section__title">
+                Admin Login <br /> to dashboard.
+              </h2>
             </div>
           </div>
-          <div className="row">
-            <div className="col-xxl-6 offset-xxl-3 col-xl-6 offset-xl-3 col-lg-8 offset-lg-2">
-              <div className="sign__wrapper white-bg">
-                <div className="sign__form">
-                  <form onSubmit={handleSubmit}>
-                    <div className="sign__input-wrapper mb-25">
-                      <h5>Admin email</h5>
-                      <div className="sign__input">
-                        <input
-                          type="email"
-                          placeholder="e-mail address"
-                          value={email}
-                          onChange={(e) => setEmail(e.target.value)}
-                        />
-                        <i className="fal fa-envelope" />
-                      </div>
+        </div>
+        <div className="row">
+          <div className="col-xxl-6 offset-xxl-3 col-xl-6 offset-xl-3 col-lg-8 offset-lg-2">
+            <div className="sign__wrapper white-bg">
+              <div className="sign__form">
+                <form onSubmit={handleSubmit}>
+                  <div className="sign__input-wrapper mb-25">
+                    <h5>Admin email</h5>
+                    <div className="sign__input">
+                      <input
+                        type="email"
+                        placeholder="e-mail address"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                      />
+                      <i className="fal fa-envelope" />
                     </div>
-                    <div className="sign__input-wrapper mb-10">
-                      <h5>Password</h5>
-                      <div className="sign__input">
-                        <input
-                          type="password"
-                          placeholder="Password"
-                          value={password}
-                          onChange={(e) => setPassword(e.target.value)}
-                        />
-                        <i className="fal fa-lock" />
-                      </div>
+                  </div>
+                  <div className="sign__input-wrapper mb-10">
+                    <h5>Password</h5>
+                    <div className="sign__input">
+                      <input
+                        type="password"
+                        placeholder="Password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                      />
+                      <i className="fal fa-lock" />
                     </div>
+                  </div>
 
-                    {errorMessage && <div className="error-message">{errorMessage}</div>}
+                  {errorMessage && <div className="error-message">{errorMessage}</div>}
 
-                    <button type="submit" className="e-btn w-100" disabled={isLoading}>
-                      {isLoading ? 'Logging in...' : 'Sign In'}
-                    </button>
-                  </form>
-                </div>
+                  <button type="submit" className="e-btn w-100" disabled={isLoading}>
+                    {isLoading ? 'Logging in...' : 'Sign In'}
+                  </button>
+                </form>
               </div>
             </div>
           </div>
         </div>
-      </section>
-      {/* sign up area end */}
-    </main>
+      </div>
+    </>
   );
 };
 
