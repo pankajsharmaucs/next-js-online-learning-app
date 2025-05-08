@@ -59,8 +59,8 @@ const Sidebar = () => {
                         <SidebarButton label="Dashboard" icon="FaTachometerAlt" link="/admin/dashboard" />
                         <SidebarButton label="Users" icon="FaUser" link="/admin/users" />
                         <SidebarButton label="Add Board" icon="FaPlus" link="/admin/add" />
-                        <SidebarButton label="Classes" icon="FaChalkboardTeacher" link="/admin/classes" />
-                        <SidebarButton label="Subjects" icon="FaBookOpen" link="/admin/subjects" />
+                        <SidebarButton label="Add Classes" icon="FaChalkboardTeacher" link="/admin/classes" />
+                        <SidebarButton label="Add Subjects" icon="FaBookOpen" link="/admin/subjects" />
                         <SidebarButton label="Settings" icon="FaCog" link="/admin/settings" />
                     </nav>
 
