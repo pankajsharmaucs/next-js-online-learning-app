@@ -93,7 +93,6 @@ export async function POST(req: NextRequest) {
   }
 }
 
-
 // UPDATE user
 export async function PUT(req: NextRequest) {
   try {

@@ -16,6 +16,6 @@ export const ClientHeader = () => {
 export const ClientFooter = () => {
   const isAdminRoute = useAdminRoute();  // Check if the route is for the admin section
 
-  return isAdminRoute ? <AdminFooter /> : <Footer />;
+  return isAdminRoute ? <></> : <Footer />;
 };
 

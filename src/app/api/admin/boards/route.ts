@@ -9,7 +9,7 @@ import { validateSuperAdmin } from '@/lib/apiValidator';
 export async function GET(req: NextRequest) {
     try {
         const db = await connectDB();
-        const [rows] = await db.query('SELECT * FROM education_boards');
+        const [rows] = await db.query('SELECT * FROM education_boards where is_visible = 1');
         return NextResponse.json(rows);
     } catch (error) {
         return NextResponse.json({ error: 'Error fetching data', details: error }, { status: 500 });
@@ -18,17 +18,27 @@ export async function GET(req: NextRequest) {
 
 // POST: Add a new board
 export async function POST(req: NextRequest) {
-     try {
+    try {
 
         if (!(await validateSuperAdmin(req))) {
             return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
         }
-        const { board_name, image, linkTo } = await req.json();
+        const { board_name, image } = await req.json();
         const db = await connectDB();
 
+        // Fetch existing record
+        const [existingRows]: any = await db.query(
+            'SELECT * FROM education_boards WHERE board_name = ?',
+            [board_name]
+        );
+
+        if (existingRows.length > 0) {
+            return NextResponse.json({ error: 'Board Already Exist' }, { status: 409 });
+        }
+
         const [result] = await db.query(
-            'INSERT INTO education_boards (board_name, image, linkTo) VALUES (?, ?, ?)',
-            [board_name, image, linkTo]
+            'INSERT INTO education_boards (board_name, image) VALUES (?, ?)',
+            [board_name, image]
         );
 
         return NextResponse.json({ message: 'Board added', id: (result as any).insertId });
@@ -39,7 +49,7 @@ export async function POST(req: NextRequest) {
 
 // PUT: Update a board
 export async function PUT(req: NextRequest) {
-     try {
+    try {
 
         if (!(await validateSuperAdmin(req))) {
             return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
@@ -82,7 +92,7 @@ export async function PUT(req: NextRequest) {
 
 // DELETE: Delete a board
 export async function DELETE(req: NextRequest) {
-     try {
+    try {
 
         if (!(await validateSuperAdmin(req))) {
             return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
@@ -90,10 +100,10 @@ export async function DELETE(req: NextRequest) {
         const { board_id } = await req.json();
         const db = await connectDB();
 
-        await db.query('DELETE FROM education_boards WHERE board_id = ?', [board_id]);
+        await db.query('UPDATE education_boards SET is_visible = ? WHERE board_id = ?', [0, board_id]);
 
-        return NextResponse.json({ message: 'Board deleted' });
+        return NextResponse.json({ message: 'Board Disabled' });
     } catch (error) {
-        return NextResponse.json({ error: 'Error deleting board', details: error }, { status: 500 });
+        return NextResponse.json({ error: 'Error Disabled board', details: error }, { status: 500 });
     }
 }

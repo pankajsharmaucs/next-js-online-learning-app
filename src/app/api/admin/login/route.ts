@@ -58,6 +58,13 @@ export async function POST(req: NextRequest) {
       maxAge: 3600 * 1000  // Cookie expires in 1 hour
     });
 
+    response.cookies.set('adminRole', admin.role, {
+      httpOnly: true,  // Ensures the cookie can't be accessed via JavaScript
+      secure: process.env.NODE_ENV === 'production', // Set secure flag only in production
+      sameSite: 'strict',  // Ensures the cookie is sent only to the same site (lowercase)
+      maxAge: 3600 * 1000  // Cookie expires in 1 hour
+    });
+
     return response;
   } catch (error) {
     return NextResponse.json({ error: 'Login failed', details: error }, { status: 500 });

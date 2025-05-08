@@ -520,10 +520,59 @@ paths:
                     type: string
 
   /admin/create:
+    get:
+      summary: Get all users
+      operationId: GetCreateUser
+      tags:
+        - Admin - User Management
+      description: Fetches a list of all users.
+      responses:
+        '200':
+          description: Successfully fetched users
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Users fetched successfully"
+                  users:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        user_id:
+                          type: integer
+                          example: 1
+                        email:
+                          type: string
+                          example: "user@example.com"
+                        role:
+                          type: string
+                          example: "user"
+                        active_status:
+                          type: boolean
+                          example: true
+        '500':
+          description: Failed to fetch users
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Failed to fetch users"
+                  details:
+                    type: string
+                    example: "Database connection error"
+
     post:
       summary: Create a new user or admin
+      operationId: PostCreateUser
       tags:
-        - Admin
+        - Admin - User Management
       requestBody:
         required: true
         content:
@@ -564,11 +613,107 @@ paths:
         '409':
           description: Conflict (email already exists)
 
+    put:
+      summary: Update user details
+      operationId: UpdatePutUser
+      tags:
+        - Admin - User Management
+      description: Updates the email, password, role, or active status of a specific user.
+      parameters:
+        - in: path
+          name: user_id
+          required: true
+          schema:
+            type: integer
+            example: 1
+          description: The ID of the user to update.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: "updateduser@example.com"
+                password:
+                  type: string
+                  example: "newpassword"
+                role:
+                  type: string
+                  example: "admin"
+                active_status:
+                  type: boolean
+                  example: true
+                token:
+                  type: string
+                  description: "Token for superadmin verification"
+                  example: "superadmintoken"
+                superadmin_email:
+                  type: string
+                  description: "Email of the superadmin"
+                  example: "superadmin@example.com"
+      responses:
+        '200':
+          description: User updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "User updated successfully"
+        '400':
+          description: Missing required fields or no fields to update
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Email and password are required"
+        '403':
+          description: Invalid token or superadmin email
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Invalid or expired token for superadmin"
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "User not found"
+        '500':
+          description: Failed to update user
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Failed to update user"
+                  details:
+                    type: string
+                    example: "Database query error"
+
   /admin/login:
     post:
       summary: Login admin with email and password
       tags:
-        - Admin
+        - Admin - User Management
       requestBody:
         required: true
         content:

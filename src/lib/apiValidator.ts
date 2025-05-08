@@ -2,11 +2,9 @@ import type { NextRequest } from 'next/server';
 import { connectDB } from '@/lib/db';
 
 export const validateSuperAdmin = async (req: NextRequest): Promise<boolean> => {
-    const token = req.headers.get('x-superadmin-token');
-    const email = req.headers.get('x-superadmin-email');
-    const role = req.headers.get('x-superadmin-role');
-
-    return true;
+    const token = req.cookies.get('adminToken')?.value;
+    const email = req.cookies.get('adminEmail')?.value;
+    const role = req.cookies.get('adminRole')?.value;
 
     if (!token || !email || !role) {
         return false;
@@ -20,15 +18,7 @@ export const validateSuperAdmin = async (req: NextRequest): Promise<boolean> => 
         );
 
         return rows.length > 0;
-
-    } catch (error: unknown) {
+    } catch (error) {
         return false;
     }
-};
-
-export const validateUser = (req: NextRequest) => {
-    const authHeader = req.headers.get('authorization');
-    const token = authHeader?.split(' ')[1]; // Expected format: Bearer <token>
-    // return token === process.env.SUPERADMIN_TOKEN;
-    return true;
 };

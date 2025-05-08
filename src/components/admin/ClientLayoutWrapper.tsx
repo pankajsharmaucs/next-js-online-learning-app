@@ -10,7 +10,7 @@ export default function ClientLayoutWrapper({ children }: { children: React.Reac
   return (
     <main
       className={`transition-all duration-300 overflow-y-auto bg-gray-50 p-8 ${
-        isFullWidthPage ? 'w-full' : 'flex-1 ml-200 lg:ml-55'
+        isFullWidthPage ? 'w-full' : 'flex-1 ml-0 lg:ml-55'
       }`}
     >
       <section className="dashboard__area pt-100 md:pt-[300px] pb-145">

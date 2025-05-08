@@ -28,8 +28,9 @@ function SidebarButton({ label, icon, link }: SidebarButtonProps) {
   return (
     <Link
       href={link}
-      className="flex items-center gap-3 p-2 rounded-md hover:bg-gray-700 transition text-white"
-    >
+      className="sidebarButtonLink flex items-center gap-3 p-2 
+                 rounded-md hover:bg-gray-700
+                 transition text-white" >
       <span className="text-sm">{iconMap[icon]}</span>
       <span className="text-sm">{label}</span>
     </Link>

@@ -46,3 +46,23 @@ export const showWarningToast = (message: string) => {
     color: '#333',
   });
 };
+
+
+export const showConfirmationDialog = async (
+  title = 'Are you sure?',
+  text = 'This action cannot be undone.'
+): Promise<boolean> => {
+  const result = await MySwal.fire({
+    title,
+    text,
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+    confirmButtonText: 'Yes, delete it!',
+    background: '#ffffff',
+    color: '#333',
+  });
+
+  return result.isConfirmed;
+};

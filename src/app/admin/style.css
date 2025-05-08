@@ -1,4 +1,14 @@
 /* app/admin/adminLayout.css */
+.sidebarButtonLink span{
+  font-weight: 300;
+  font-size: 16px;
+  letter-spacing: 2px;
+ }
+ .sidebarButtonLink{
+  font-weight: 300;
+  font-size: 16px;
+  letter-spacing: 2px;
+ }
 
 .dashboard__area h2 {
   font-size: 28px;
