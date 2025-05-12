@@ -751,7 +751,7 @@ paths:
     get:
       summary: Get all education boards
       tags:
-        - Boards
+        - Admin - Boards
       responses:
         '200':
           description: List of boards
@@ -774,7 +774,7 @@ paths:
     post:
       summary: Create a new education board (superadmin token required)
       tags:
-        - Boards
+        - Admin - Boards
       requestBody:
         required: true
         content:
@@ -804,7 +804,7 @@ paths:
     put:
       summary: Update an education board (superadmin token required)
       tags:
-        - Boards
+        - Admin - Boards
       requestBody:
         required: true
         content:
@@ -836,7 +836,7 @@ paths:
     delete:
       summary: Delete a board by ID (superadmin token required)
       tags:
-        - Boards
+        - Admin - Boards
       parameters:
         - in: query
           name: board_id
@@ -860,7 +860,7 @@ paths:
     get:
       summary: Fetch all classes by Board ID
       tags:
-        - Class
+        - Admin - Class
       parameters:
         - name: board_id
           in: query
@@ -892,7 +892,7 @@ paths:
     post:
       summary: Add a new class
       tags:
-        - Class
+        - Admin - Class
       requestBody:
         required: true
         content:
@@ -929,7 +929,7 @@ paths:
     put:
       summary: Update an existing class
       tags:
-        - Class
+        - Admin - Class
       parameters:
         - name: class_id
           in: path
@@ -964,7 +964,7 @@ paths:
     delete:
       summary: Delete a class
       tags:
-        - Class
+        - Admin - Class
       parameters:
         - name: class_id
           in: path
@@ -986,7 +986,7 @@ paths:
     get:
       summary: Get all subjects by class_id
       tags:
-        - Subject
+        - Admin - Subject
       parameters:
         - name: class_id
           in: query
@@ -1009,7 +1009,7 @@ paths:
     post:
       summary: Add a new subject
       tags:
-        - Subject
+        - Admin - Subject
       security:
         - bearerAuth: []
       requestBody:
@@ -1046,7 +1046,7 @@ paths:
     put:
       summary: Update a subject
       tags:
-        - Subject
+        - Admin - Subject
       security:
         - bearerAuth: []
       requestBody:
@@ -1077,7 +1077,7 @@ paths:
     delete:
       summary: Delete a subject
       tags:
-        - Subject
+        - Admin - Subject
       security:
         - bearerAuth: []
       requestBody:
@@ -1103,7 +1103,7 @@ paths:
     get:
       summary: Get all chapters by subject_id
       tags:
-        - Chapter
+        - Admin - Chapter
       parameters:
         - name: subject_id
           in: query
@@ -1126,7 +1126,7 @@ paths:
     post:
       summary: Add a new chapter
       tags:
-        - Chapter
+        - Admin - Chapter
       security:
         - bearerAuth: []
       requestBody:
@@ -1169,7 +1169,7 @@ paths:
     put:
       summary: Update a chapter
       tags:
-        - Chapter
+        - Admin - Chapter
       security:
         - bearerAuth: []
       requestBody:
@@ -1206,7 +1206,7 @@ paths:
     delete:
       summary: Delete a chapter
       tags:
-        - Chapter
+        - Admin - Chapter
       security:
         - bearerAuth: []
       requestBody:
@@ -1233,7 +1233,7 @@ paths:
       summary: Add or update or deactivate chapter
       operationId: addOrUpdateDeactiveChapter
       tags:
-        - Buy
+        - Admin - Buy
       requestBody:
         required: true
         content:
@@ -1297,7 +1297,7 @@ paths:
       summary: Add or update or deactivate Subject
       operationId: addOrUpdateDeactiveSubject
       tags:
-        - Buy
+        - Admin - Buy
       requestBody:
         required: true
         content:
@@ -1361,7 +1361,7 @@ paths:
       summary: Add or update or deactivate Class
       operationId: addOrUpdateDeactiveClass
       tags:
-        - Buy
+        - Admin - Buy
       requestBody:
         required: true
         content:

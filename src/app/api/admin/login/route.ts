@@ -1,8 +1,11 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
-import { connectDB } from '@/lib/db';
+import { connectDB } from '@/lib/mongo_db';
 import { comparePassword } from '@/lib/crypto';
-import crypto from 'crypto';
+import jwt from 'jsonwebtoken';
+import  User  from '@/lib/models/user/User';
+
+const JWT_SECRET = process.env.JWT_SECRET!; // Store securely in .env.local
 
 export async function POST(req: NextRequest) {
   try {
@@ -12,22 +15,17 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Email and password are required' }, { status: 400 });
     }
 
-    const db = await connectDB();
+    await connectDB(); // Connect to MongoDB
 
-    // Get admin from DB
-    const [rows]: any = await db.query(
-      'SELECT * FROM users WHERE email = ? AND role = ?',
-      [email, 'super_admin']
-    );
+    // Find user by email and role 'super_admin'
+    const admin = await User.findOne({ email, role: 'super_admin' });
 
-    if (rows.length === 0) {
+    if (!admin) {
       return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 });
     }
 
-    const admin = rows[0];
-
     if (admin.active_status !== 1) {
-      return NextResponse.json({ error: 'User Inactive ' }, { status: 403 });
+      return NextResponse.json({ error: 'User Inactive' }, { status: 403 });
     }
 
     const isMatch = await comparePassword(password, admin.password);
@@ -35,38 +33,29 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 });
     }
 
-    // Generate token
-    const token = crypto.randomBytes(32).toString('hex');
+    // Create JWT payload
+    const payload = {
+      email: admin.email,
+      role: admin.role,
+      id: admin._id,
+    };
 
-    // Save token to DB
-    await db.query('UPDATE users SET token = ? WHERE email = ?', [token, admin.email]);
+    // Sign JWT token
+    const token = jwt.sign(payload, JWT_SECRET, { expiresIn: '1h' });
 
-    // Set both token and email in cookies
-    const response = NextResponse.json({ message: 'Login successful', email: admin.email });
+    // Set token in cookie
+    const response = NextResponse.json({ message: 'Login successful' });
 
     response.cookies.set('adminToken', token, {
-      httpOnly: true,  // Ensures the cookie can't be accessed via JavaScript
-      secure: process.env.NODE_ENV === 'production', // Set secure flag only in production
-      sameSite: 'strict',  // Ensures the cookie is sent only to the same site (lowercase)
-      maxAge: 3600 * 1000  // Cookie expires in 1 hour
-    });
-
-    response.cookies.set('adminEmail', admin.email, {
-      httpOnly: true,  // Ensures the cookie can't be accessed via JavaScript
-      secure: process.env.NODE_ENV === 'production', // Set secure flag only in production
-      sameSite: 'strict',  // Ensures the cookie is sent only to the same site (lowercase)
-      maxAge: 3600 * 1000  // Cookie expires in 1 hour
-    });
-
-    response.cookies.set('adminRole', admin.role, {
-      httpOnly: true,  // Ensures the cookie can't be accessed via JavaScript
-      secure: process.env.NODE_ENV === 'production', // Set secure flag only in production
-      sameSite: 'strict',  // Ensures the cookie is sent only to the same site (lowercase)
-      maxAge: 3600 * 1000  // Cookie expires in 1 hour
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+      maxAge: 3600,
     });
 
     return response;
   } catch (error) {
+    console.error('Login error:', error);
     return NextResponse.json({ error: 'Login failed', details: error }, { status: 500 });
   }
 }

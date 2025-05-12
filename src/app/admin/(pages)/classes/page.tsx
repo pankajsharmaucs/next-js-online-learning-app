@@ -8,7 +8,7 @@ import { showConfirmationDialog } from '@/components/alert/AlertToast';
 import { FaTrash } from 'react-icons/fa';
 
 interface ClassItem {
-    id?: string;
+    _id?: string;
     class_name: string;
 }
 
@@ -86,7 +86,7 @@ function Page() {
                 Authorization: `Bearer ${token}`,
             };
 
-            if (editMode && editingClassIndex !== null && formData.id) {
+            if (editMode && editingClassIndex !== null && formData._id) {
                 await axios.put(`${baseUrl}${API_URL}`, formData, { headers });
                 showSuccessToast('Class updated successfully');
             } else {
@@ -161,7 +161,7 @@ function Page() {
                             <tbody>
                                 {classes.length > 0 ? (
                                     classes.map((item, index) => (
-                                        <tr key={item.id || index} className="odd:bg-gray-50">
+                                        <tr key={item._id || index} className="odd:bg-gray-50">
                                             <td className="border p-2 text-sm">{index + 1}</td>
                                             <td className="border p-2 text-sm">{item.class_name}</td>
                                             <td className="border p-2">
@@ -178,7 +178,7 @@ function Page() {
                                                 </button>
                                                 <button
                                                     className="btn btn-danger py-2 flex items-center gap-1"
-                                                    onClick={() => handleDelete(item.id)}
+                                                    onClick={() => handleDelete(item._id)}
                                                     title="Delete"
                                                 >
                                                     <FaTrash className="text-white" />
@@ -216,7 +216,7 @@ function Page() {
                         <h4 className="text-lg font-semibold mb-4">{editMode ? 'Edit Class' : 'Add New Class'}</h4>
                         <form onSubmit={handleSubmit} className="space-y-4">
                             {editMode && (
-                                <input hidden name="id" value={formData.id} readOnly />
+                                <input hidden name="id" value={formData._id} readOnly />
                             )}
                             <input
                                 type="text"

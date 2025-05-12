@@ -1,104 +1,103 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
-import { connectDB } from '@/lib/db';
+import { connectDB } from '@/lib/mongo_db';
+import BlogCategory from '@/lib/models/blog/BlogCategory';
+// import { validateSuperAdmin } from '@/lib/apiValidator';
 
-// Helper to validate superadmin token
-import { validateSuperAdmin } from '@/lib/apiValidator';
-
-// GET: Fetch all education boards
+// GET: Fetch all categories
 export async function GET(req: NextRequest) {
     try {
-        const db = await connectDB();
-        const [rows] = await db.query('SELECT * FROM blog_category');
-        return NextResponse.json(rows);
+        await connectDB();
+        const categories = await BlogCategory.find({});
+        return NextResponse.json(categories);
     } catch (error) {
-        return NextResponse.json({ error: 'Error fetching blog category', details: error }, { status: 500 });
+        return NextResponse.json(
+            { error: 'Error fetching blog categories', details: (error as Error).message },
+            { status: 500 }
+        );
     }
 }
 
-// POST: Add a new board
+// POST: Add a new category
 export async function POST(req: NextRequest) {
-    // if (!validateSuperAdmin(req)) {
+    // if (!(await validateSuperAdmin(req))) {
     //     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     // }
 
     try {
-        const { cat_name } = await req.json();
-        const db = await connectDB();
-
-        // Fetch existing record
-        const [existingRows]: any = await db.query(
-            'SELECT * FROM blog_category WHERE cat_name = ?', [cat_name]
-        );
-
-        if (existingRows.length > 0) {
-            return NextResponse.json({ error: 'cat_name Already exist' }, { status: 400 });
+        const { name } = await req.json();
+        if (!name) {
+            return NextResponse.json({ error: 'Category name is required' }, { status: 400 });
         }
 
-        const [result] = await db.query(
-            'INSERT INTO blog_category (cat_name) VALUES (?)', [cat_name]
-        );
+        await connectDB();
+        const existing = await BlogCategory.findOne({ name });
+        if (existing) {
+            return NextResponse.json({ error: 'Category already exists' }, { status: 400 });
+        }
 
-        return NextResponse.json({ message: 'category added', id: (result as any).insertId });
+        const newCategory = new BlogCategory({ name });
+        await newCategory.save();
+
+        return NextResponse.json({ message: 'Category added', id: newCategory._id });
     } catch (error) {
-        return NextResponse.json({ error: 'Error adding category', details: error }, { status: 500 });
+        return NextResponse.json(
+            { error: 'Error adding category', details: (error as Error).message },
+            { status: 500 }
+        );
     }
 }
 
-// PUT: Update a board
+// PUT: Update a category
 export async function PUT(req: NextRequest) {
-    // if (!validateSuperAdmin(req)) {
+    // if (!(await validateSuperAdmin(req))) {
     //     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     // }
 
     try {
-        const { cat_id, cat_name } = await req.json();
-
-        if (!cat_id && !cat_name) {
-            return NextResponse.json({ error: 'cat_id and cat_name are required' }, { status: 400 });
+        const { cat_id, name } = await req.json();
+        if (!cat_id || !name) {
+            return NextResponse.json({ error: 'cat_id and name are required' }, { status: 400 });
         }
 
-        const db = await connectDB();
-
-        // Fetch existing record
-        const [existingRows]: any = await db.query(
-            'SELECT * FROM blog_category WHERE cat_id = ?', [cat_id]
-        );
-
-        if (existingRows.length === 0) {
-            return NextResponse.json({ error: 'cat_id not found' }, { status: 404 });
+        await connectDB();
+        const category = await BlogCategory.findById(cat_id);
+        if (!category) {
+            return NextResponse.json({ error: 'Category not found' }, { status: 404 });
         }
 
-        const existing = existingRows[0];
+        category.name = name.trim();
+        await category.save();
 
-        // Use existing values if fields are missing or empty
-        const updatedcat_name = cat_name?.trim() || existing.cat_name;
-
-        await db.query(
-            'UPDATE blog_category SET cat_name = ?  WHERE cat_id = ?', [updatedcat_name, cat_id]
-        );
-
-        return NextResponse.json({ message: 'category updated successfully' });
+        return NextResponse.json({ message: 'Category updated successfully' });
     } catch (error) {
-        return NextResponse.json({ error: 'Error updating category', details: error }, { status: 500 });
+        return NextResponse.json(
+            { error: 'Error updating category', details: (error as Error).message },
+            { status: 500 }
+        );
     }
 }
 
-// DELETE: Delete a board
+// DELETE: Delete a category
 export async function DELETE(req: NextRequest) {
-    // if (!validateSuperAdmin(req)) {
+    // if (!(await validateSuperAdmin(req))) {
     //     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     // }
 
     try {
         const { cat_id } = await req.json();
-        const db = await connectDB();
+        if (!cat_id) {
+            return NextResponse.json({ error: 'cat_id is required' }, { status: 400 });
+        }
 
-        await db.query('DELETE FROM blog_category WHERE cat_id = ?', [cat_id]);
+        await connectDB();
+        await BlogCategory.findByIdAndDelete(cat_id);
 
-        return NextResponse.json({ message: 'category deleted' });
+        return NextResponse.json({ message: 'Category deleted' });
     } catch (error) {
-        return NextResponse.json({ error: 'Error deleting category', details: error }, { status: 500 });
+        return NextResponse.json(
+            { error: 'Error deleting category', details: (error as Error).message },
+            { status: 500 }
+        );
     }
 }
-

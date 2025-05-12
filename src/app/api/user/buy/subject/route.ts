@@ -1,63 +1,71 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
-import { connectDB } from '@/lib/db';
+import { connectDB } from '@/lib/mongo_db'; // Your Mongoose connect function
+import User from '@/lib/models/user/User';
+import SoldSubject from '@/lib/models/user/SoldSubject';
 
 export async function POST(req: NextRequest) {
-    try {
-        const { subject_id, class_id, user_id, purchase_date, validity, token, email, user_type, task_type = null } = await req.json();
+  try {
+    await connectDB(); // Connect to MongoDB
 
-        if (!token || !email) {
-            return NextResponse.json({ error: 'Invalid User' }, { status: 400 });
-        }
+    const {
+      subject_id,
+      class_id,
+      user_id,
+      purchase_date,
+      validity,
+      token,
+      email,
+      user_type,
+      task_type = null
+    } = await req.json();
 
-        const db = await connectDB();
-
-        // If token and email are provided, verify both
-        if (token && email) {
-            const [userToken]: any = await db.query(
-                'SELECT user_id FROM users WHERE email = ? AND  token = ? AND role = ?', [email, token, user_type]
-            );
-
-            if (userToken.length === 0) {
-                return NextResponse.json({ error: 'Invalid or expired token for superadmin' }, { status: 403 });
-            }
-        }
-
-        // Check if the user already exists
-        const [existingRows]: any = await db.query(
-            'SELECT * FROM sold_subjects WHERE subject_id = ? and user_id = ?', [subject_id, user_id]
-        );
-
-        if (existingRows.length > 0) {
-
-            if (task_type == "update") {
-
-                const existing = existingRows[0];
-                const ExistingID = existing.id;
-
-                await db.query(
-                    'UPDATE sold_subjects SET purchase_date = ?, validity = ?, update_date = ?, activeStatus = ?  WHERE id = ? and subject_id = ? ',
-                    [purchase_date, validity, purchase_date, 1, ExistingID, subject_id]
-                );
-                return NextResponse.json({ message: 'Subject validity Updated' }, { status: 200 });
-            } else {
-                return NextResponse.json({ message: 'Subject Already purchased' }, { status: 400 });
-            }
-
-        } else {
-
-            // Insert the user
-            await db.query(
-                'INSERT INTO sold_subjects (subject_id,class_id, user_id, purchase_date, validity, update_date) VALUES (?, ?, ?, ?, ?, ?)',
-                [subject_id, class_id, user_id, purchase_date, validity, purchase_date]
-            );
-            return NextResponse.json({ message: 'Subject Added successfully' }, { status: 409 });
-
-        }
-
-
-    } catch (error) {
-        console.error('Error creating subject:', error);
-        return NextResponse.json({ error: 'Failed to Add subject', details: error }, { status: 500 });
+    if (!token || !email) {
+      return NextResponse.json({ error: 'Invalid User' }, { status: 400 });
     }
+
+    // Validate token and email
+    const userToken = await User.findOne({
+      email,
+      token,
+      role: user_type
+    });
+
+    if (!userToken) {
+      return NextResponse.json({ error: 'Invalid or expired token for superadmin' }, { status: 403 });
+    }
+
+    // Check if the subject was already sold
+    const existing = await SoldSubject.findOne({ subject_id, user_id });
+
+    if (existing) {
+      if (task_type === 'update') {
+        existing.purchase_date = purchase_date;
+        existing.validity = validity;
+        existing.update_date = purchase_date;
+        existing.activeStatus = 1;
+
+        await existing.save();
+        return NextResponse.json({ message: 'Subject validity Updated' }, { status: 200 });
+      } else {
+        return NextResponse.json({ message: 'Subject Already purchased' }, { status: 400 });
+      }
+    } else {
+      // Create a new record
+      await SoldSubject.create({
+        subject_id,
+        class_id,
+        user_id,
+        purchase_date,
+        validity,
+        update_date: purchase_date
+      });
+
+      return NextResponse.json({ message: 'Subject Added successfully' }, { status: 409 });
+    }
+
+  } catch (error) {
+    console.error('Error creating subject:', error);
+    return NextResponse.json({ error: 'Failed to Add subject', details: error }, { status: 500 });
+  }
 }

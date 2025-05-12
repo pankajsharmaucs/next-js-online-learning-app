@@ -7,7 +7,7 @@ import axios from 'axios';
 import { showErrorToast, showSuccessToast } from '@/components/alert/AlertToast';
 
 interface User {
-  user_id: string;
+  _id: string;
   email: string;
   password: string;
   role: 'user' | 'sub_admin' | 'super_admin';
@@ -27,17 +27,18 @@ function Page() {
   const modalRef = useRef<HTMLDivElement>(null);
 
   const [formData, setFormData] = useState<User>({
-    user_id: '',
+    _id: '',
     email: '',
     password: '',
     role: 'user',
     token: '',
     superadmin_email: '',
-    active_status: 0,
+    active_status: 1,
   });
 
   const getuserdata = async () => {
     try {
+      
       const baseUrl = window.location.origin;
       const createUrl = process.env.NEXT_PUBLIC_ADMIN_CREATE_USER;
       const Url = `${baseUrl}${createUrl}`;
@@ -54,11 +55,12 @@ function Page() {
 
   async function getadmindata() {
     const user_data = await getLogginedUser();
-    if (user_data && typeof user_data.data.user_data.email === 'string') {
+
+    if (user_data && typeof user_data.email === 'string') {
       setFormData(prev => ({
         ...prev,
-        token: user_data.data.user_data.token,
-        superadmin_email: user_data.data.user_data.email,
+        superadmin_email: user_data.email,
+        token: '', // token is in the cookie, not accessible in JS
       }));
     } else {
       setFormData(prev => ({ ...prev, superadmin_email: '' }));
@@ -100,8 +102,8 @@ function Page() {
     setIsLoading(true);
 
     try {
-      const { user_id, email, password, role, token, superadmin_email, active_status } = formData;
-
+      const { _id, email, password, role, token, superadmin_email, active_status } = formData;
+      
       if (!email.trim() || !password.trim()) {
         showErrorToast('All fields are mandatory');
         return;
@@ -113,7 +115,7 @@ function Page() {
       if (editMode && editingUserIndex !== null) {
         const updateUrl = `${baseUrl}${process.env.NEXT_PUBLIC_ADMIN_CREATE_USER}`; // Define this API in backend
         await axios.put(updateUrl, {
-          user_id, email, password, role, token, superadmin_email, active_status
+          user_id:_id, email, password, role, token, superadmin_email, active_status
         });
 
         const updatedUsers = [...users];
@@ -131,7 +133,6 @@ function Page() {
         showSuccessToast('User Added Successfully');
       }
 
-      setFormData({ user_id: '', email: '', password: '', role: 'user', token: '', superadmin_email: '', active_status: 1 });
       setModalOpen(false);
       setEditMode(false);
       setEditingUserIndex(null);
@@ -165,7 +166,7 @@ function Page() {
               onClick={() => {
                 setModalOpen(true);
                 setEditMode(false);
-                setFormData({ user_id: '', email: '', password: '', role: 'user', token: '', superadmin_email: '' });
+                setFormData({ _id: '', email: '', password: '', role: 'user', token: '', superadmin_email: '' , active_status: 1 });
               }}
             >
               + Add User
@@ -188,14 +189,14 @@ function Page() {
 
                   {users && users.length > 0 ? (
                     users.map((user, index) => (
-                      <tr key={user.user_id || index} className="odd:bg-gray-50">
+                      <tr key={user?._id || index} className="odd:bg-gray-50">
                         <td className="border p-2 text-[13px]">{index + 1}</td>
                         <td className="border p-2 text-[13px]">{user.email}</td>
                         <td className="border p-2 text-[13px]">{user.role}</td>
                         <td className="border p-2 text-[13px]">
                           <span
                             className={
-                              user.active_status === 1
+                              user.active_status == 1
                                 ? 'text-green-600 font-medium'
                                 : 'text-red-600 font-medium'
                             }
@@ -261,7 +262,7 @@ function Page() {
                 hidden
                 type="text"
                 name="user_id"
-                value={formData.user_id}
+                value={formData._id}
                 onChange={handleChange}
                 placeholder="User ID"
                 className="w-full border p-2 rounded mb-2"

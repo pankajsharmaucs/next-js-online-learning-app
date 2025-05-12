@@ -1,44 +1,52 @@
-import { NextResponse } from 'next/server';
-import type { NextRequest } from 'next/server';
-import { connectDB } from '@/lib/db';
-import { comparePassword } from '@/lib/crypto';
-import crypto from 'crypto';
+// src/app/api/auth/login/route.ts
+
+import { NextRequest, NextResponse } from 'next/server';
+import jwt from 'jsonwebtoken';
+import bcrypt from 'bcryptjs';
+import { connectDB } from '@/lib/mongo_db';
+import User from '@/lib/models/user/User';
+
+const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret_key'; // Store in .env
 
 export async function POST(req: NextRequest) {
   try {
-    const { email, password, role } = await req.json();
+    await connectDB();
+    const { email, password } = await req.json();
 
     if (!email || !password) {
       return NextResponse.json({ error: 'Email and password are required' }, { status: 400 });
     }
 
-    const db = await connectDB();
+    const user = await User.findOne({ email, role: 'user' });
 
-    // Get admin from DB
-    const [rows]: any = await db.query(
-      'SELECT * FROM users WHERE email = ? AND role = ?', [email, role]
+    if (!user) {
+      return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 });
+    }
+
+    const passwordMatch = await bcrypt.compare(password, user.password);
+
+    if (!passwordMatch) {
+      return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 });
+    }
+
+    const token = jwt.sign(
+      { id: user._id, email: user.email, role: user.role },
+      JWT_SECRET,
+      { expiresIn: '7d' }
     );
 
-    if (rows.length === 0) {
-      return NextResponse.json({ error: 'Invalid User credentials' }, { status: 401 });
-    }
-
-    const admin = rows[0];
-
-    const isMatch = await comparePassword(password, admin.password);
-    if (!isMatch) {
-      return NextResponse.json({ error: 'Invalid User credentials' }, { status: 401 });
-    }
-
-    // Generate token
-    const token = crypto.randomBytes(32).toString('hex');
-
-    // Save token to DB
-    await db.query('UPDATE users SET token = ? WHERE email = ?', [token, admin.email]);
-
-    return NextResponse.json({ message: 'User Login successful', token });
-  } catch (error) {
-    return NextResponse.json({ error: 'User Login failed', details: error }, { status: 500 });
+    return NextResponse.json({
+      msg: 'Login successful',
+      token,
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+      },
+    });
+  } catch (error: any) {
+    console.error('Login Error:', error);
+    return NextResponse.json({ error: 'Server error', details: error.message }, { status: 500 });
   }
-  
 }

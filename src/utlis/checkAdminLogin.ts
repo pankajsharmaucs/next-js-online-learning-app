@@ -3,33 +3,28 @@ import { useRouter } from "next/navigation";
 
 type Router = ReturnType<typeof useRouter>;
 
+const getLoginCheckUrl = (): string => {
+  const baseUrl = window.location.origin;
+  const path = process.env.NEXT_PUBLIC_ADMIN_LOGIN_CHECK || '/api/admin/check'; // fallback path
+  return `${baseUrl}${path}`;
+};
+
+// ✅ 1. Check login and redirect accordingly (home page)
 export const checkAdminHomeLogin = async (router: Router) => {
   try {
-    const baseUrl = window.location.origin;
-    const Path = process.env.NEXT_PUBLIC_ADMIN_LOGIN_CHECK;
-    const Url = `${baseUrl}${Path}`;
+    const response = await axios.get(getLoginCheckUrl(), { withCredentials: true });
 
-    const response = await axios.get(Url, { withCredentials: true });
-
-    if (response.status !== 200) {
-      router.push("/admin/login");
-    } else {
-      router.push("/admin/dashboard");
-    }
+    router.push(response.status === 200 ? "/admin/dashboard" : "/admin/login");
   } catch (error) {
     console.error("Error checking authentication:", error);
     router.push("/admin/login");
   }
 };
 
+// ✅ 2. Check login for protected admin pages (no dashboard redirect)
 export const checkAdminLogin = async (router: Router) => {
   try {
-    const baseUrl = window.location.origin;
-    const Path = process.env.NEXT_PUBLIC_ADMIN_LOGIN_CHECK;
-    const Url = `${baseUrl}${Path}`;
-
-    const response = await axios.get(Url, { withCredentials: true });
-    // console.log(response);
+    const response = await axios.get(getLoginCheckUrl(), { withCredentials: true });
 
     if (response.status !== 200) {
       router.push("/admin/login");
@@ -40,40 +35,28 @@ export const checkAdminLogin = async (router: Router) => {
   }
 };
 
+// ✅ 3. Get logged-in user data (JWT decoded payload)
 export const getLogginedUser = async () => {
   try {
-    const baseUrl = window.location.origin;
-    const Path = process.env.NEXT_PUBLIC_ADMIN_LOGIN_CHECK;
-    const Url = `${baseUrl}${Path}`;
-
-    const response = await axios.get(Url, { withCredentials: true });
-    // console.log(response);
+    const response = await axios.get(getLoginCheckUrl(), { withCredentials: true });
 
     if (response.status === 200) {
-      return response;
+      return response.data.user_data; // return decoded token data
     }
+
+    return null;
   } catch (error) {
-    console.error("Error checking authentication:", error);
-    return false
+    console.error("Error fetching user:", error);
+    return null;
   }
 };
 
-
-export const checkAdminLoginStatus = async () => {
+// ✅ 4. Return boolean auth status
+export const checkAdminLoginStatus = async (): Promise<boolean> => {
   try {
-    const baseUrl = window.location.origin;
-    const Path = process.env.NEXT_PUBLIC_ADMIN_LOGIN_CHECK;
-    const Url = `${baseUrl}${Path}`;
-
-    const response = await axios.get(Url, { withCredentials: true });
-
-    if (response.status === 200) {
-      return true;
-    } else {
-      return false;
-    }
+    const response = await axios.get(getLoginCheckUrl(), { withCredentials: true });
+    return response.status === 200;
   } catch (error) {
-    console.error("Error checking authentication:", error);
     return false;
   }
 };

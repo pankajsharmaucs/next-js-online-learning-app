@@ -1,79 +1,56 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
-import { connectDB } from '@/lib/db';
-
-// Helper to validate superadmin token
+import { connectDB } from '@/lib/mongo_db';
+import Class from '@/lib/models/api/Class';
 import { validateSuperAdmin } from '@/lib/apiValidator';
 
-// GET: Fetch all classes by Board ID
 export async function GET(req: NextRequest) {
     try {
-
+        await connectDB();
         const board_id = req.nextUrl.searchParams.get('board_id');
-
-        const db = await connectDB();
-        const [rows] = await db.query(
-            'SELECT * FROM classes WHERE board_id = ?', [board_id]
-        );
-        return NextResponse.json(rows);
+        const classes = await Class.find({ board_id });
+        return NextResponse.json(classes);
     } catch (error) {
         return NextResponse.json({ error: 'Error fetching data', details: error }, { status: 500 });
     }
 }
 
-// POST: Add a new board
 export async function POST(req: NextRequest) {
-     try {
-
+    try {
         if (!(await validateSuperAdmin(req))) {
             return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
         }
+
         const { class_name, board_id } = await req.json();
-        const db = await connectDB();
+        await connectDB();
 
-        const [result] = await db.query(
-            'INSERT INTO classes (class_name, board_id) VALUES (?, ?)', [class_name, board_id]
-        );
-
-        return NextResponse.json({ message: 'class added', id: (result as any).insertId });
+        const newClass = await Class.create({ class_name, board_id });
+        return NextResponse.json({ message: 'Class added', id: newClass._id });
     } catch (error) {
         return NextResponse.json({ error: 'Error adding class', details: error }, { status: 500 });
     }
 }
 
-// PUT: Update a board
 export async function PUT(req: NextRequest) {
-     try {
-
+    try {
         if (!(await validateSuperAdmin(req))) {
             return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
         }
-        const { class_name, class_id  } = await req.json();
 
-        if (!class_id) {
-            return NextResponse.json({ error: 'class_id is required' }, { status: 400 });
-        }
+        const { class_id, class_name } = await req.json();
+        if (!class_id) return NextResponse.json({ error: 'class_id is required' }, { status: 400 });
 
-        const db = await connectDB();
+        await connectDB();
 
-        // Fetch existing record
-        const [existingRows]: any = await db.query(
-            'SELECT * FROM classes WHERE class_id = ?', [class_id]
+        const updated = await Class.findByIdAndUpdate(
+            class_id,
+            { class_name },
+            { new: true }
         );
 
-        if (existingRows.length === 0) {
+        if (!updated) {
             return NextResponse.json({ error: 'Class not found' }, { status: 404 });
         }
-
-        const existing = existingRows[0];
-
-        // Use existing values if fields are missing or empty
-        const updatedClass_name = class_name?.trim() || existing.class_name;
-
-        await db.query(
-            'UPDATE classes SET class_name = ?,  WHERE class_id = ?',
-            [updatedClass_name, class_id]
-        );
 
         return NextResponse.json({ message: 'Class updated successfully' });
     } catch (error) {
@@ -81,18 +58,16 @@ export async function PUT(req: NextRequest) {
     }
 }
 
-// DELETE: Delete a board
 export async function DELETE(req: NextRequest) {
-     try {
-
+    try {
         if (!(await validateSuperAdmin(req))) {
             return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
         }
+
         const { class_id } = await req.json();
-        const db = await connectDB();
+        await connectDB();
 
-        await db.query('DELETE FROM classes WHERE class_id = ?', [class_id]);
-
+        await Class.findByIdAndDelete(class_id);
         return NextResponse.json({ message: 'Class deleted' });
     } catch (error) {
         return NextResponse.json({ error: 'Error deleting class', details: error }, { status: 500 });

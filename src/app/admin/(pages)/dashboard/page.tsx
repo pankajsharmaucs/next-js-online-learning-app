@@ -1,19 +1,12 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import { checkAdminLogin } from "@/utlis/checkAdminLogin";
+import React  from "react";
 import Card1 from "@/components/admin/card/Card1";
 
 
 const AdminDashboard = () => {
-    const [loading, setLoading] = useState(false); // State to track loading status
-    const router = useRouter();
 
-    useEffect(() => {
-        checkAdminLogin(router);
-    }, [router]);
-
+    
     return (
         <>
             <div className="text-center mb-50">

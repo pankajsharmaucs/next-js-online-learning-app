@@ -1,103 +1,99 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
-import { connectDB } from '@/lib/db';
-
-// Helper to validate superadmin token
+import ChapterModel from '@/lib/models/api/Chapter'; // MongoDB model
 import { validateSuperAdmin } from '@/lib/apiValidator';
 
-// GET: Fetch all chapters by Board ID
+// GET: Fetch all chapters by subject_id
 export async function GET(req: NextRequest) {
     try {
-
         const subject_id = req.nextUrl.searchParams.get('subject_id');
 
-        const db = await connectDB();
-        const [rows] = await db.query( 
-            'SELECT * FROM chapters WHERE subject_id = ?', [subject_id]
-        );
-        return NextResponse.json(rows);
+        if (!subject_id) {
+            return NextResponse.json({ error: 'subject_id is required' }, { status: 400 });
+        }
+
+        const chapters = await ChapterModel.find({ subject_id, is_visible: true });
+        return NextResponse.json(chapters);
     } catch (error) {
-        return NextResponse.json({ error: 'Error fetching data', details: error }, { status: 500 });
+        return NextResponse.json({ error: 'Error fetching chapters', details: error }, { status: 500 });
     }
 }
 
-// POST: Add a new board
+// POST: Add a new chapter
 export async function POST(req: NextRequest) {
-     try {
-
+    try {
         if (!(await validateSuperAdmin(req))) {
             return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
         }
+
         const { subject_id, chapter_name, summary, video_url, pdf } = await req.json();
-        const db = await connectDB();
 
-        const [result] = await db.query(
-            'INSERT INTO chapters (subject_id , chapter_name,summary,video_url,pdf ) VALUES (?, ?)', [subject_id, chapter_name, summary, video_url, pdf]
-        );
+        const newChapter = new ChapterModel({
+            subject_id,
+            chapter_name,
+            summary,
+            video_url,
+            pdf,
+        });
 
-        return NextResponse.json({ message: 'chapter added', id: (result as any).insertId });
+        await newChapter.save();
+
+        return NextResponse.json({ message: 'Chapter added', id: newChapter._id });
     } catch (error) {
         return NextResponse.json({ error: 'Error adding chapter', details: error }, { status: 500 });
     }
 }
 
-// PUT: Update a board
+// PUT: Update a chapter
 export async function PUT(req: NextRequest) {
-     try {
-
+    try {
         if (!(await validateSuperAdmin(req))) {
             return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
         }
-        const { chapter_id, chapter_name, summary, video_url, pdf } = await req.json();
 
-        if (!chapter_id) {
-            return NextResponse.json({ error: 'subject_id is required' }, { status: 400 });
+        const { _id, chapter_name, summary, video_url, pdf } = await req.json();
+
+        if (!_id) {
+            return NextResponse.json({ error: 'chapter_id is required' }, { status: 400 });
         }
 
-        const db = await connectDB();
-
-        // Fetch existing record
-        const [existingRows]: any = await db.query(
-            'SELECT * FROM chapters WHERE chapter_id  = ?', [chapter_id]
-        );
-
-        if (existingRows.length === 0) {
+        const chapter = await ChapterModel.findById(_id);
+        if (!chapter) {
             return NextResponse.json({ error: 'Chapter not found' }, { status: 404 });
         }
 
-        const existing = existingRows[0];
+        chapter.chapter_name = chapter_name?.trim() || chapter.chapter_name;
+        chapter.summary = summary?.trim() || chapter.summary;
+        chapter.video_url = video_url?.trim() || chapter.video_url;
+        chapter.pdf = pdf?.trim() || chapter.pdf;
 
-        // Use existing values if fields are missing or empty
-        const updatedchapter_name = chapter_name?.trim() || existing.chapter_name;
-        const updatedsummary = summary?.trim() || existing.summary;
-        const updatedvideo_url = video_url?.trim() || existing.video_url;
-        const updatedpdf = pdf?.trim() || existing.pdf;
-
-        await db.query(
-            'UPDATE chapters SET chapter_name = ?, summary = ?, video_url = ?, pdf = ?  WHERE  chapter_id = ?',
-            [updatedchapter_name, updatedsummary, updatedvideo_url, updatedpdf, chapter_id]
-        );
+        await chapter.save();
 
         return NextResponse.json({ message: 'Chapter updated successfully' });
     } catch (error) {
-        return NextResponse.json({ error: 'Error updating Chapter', details: error }, { status: 500 });
+        return NextResponse.json({ error: 'Error updating chapter', details: error }, { status: 500 });
     }
 }
 
-// DELETE: Delete a board
+// DELETE: Soft-delete a chapter (mark invisible)
 export async function DELETE(req: NextRequest) {
-     try {
-
+    try {
         if (!(await validateSuperAdmin(req))) {
             return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
         }
-        const { chapter_id } = await req.json();
-        const db = await connectDB();
 
-        await db.query('DELETE FROM chapters WHERE chapter_id = ?', [chapter_id]);
+        const { _id } = await req.json();
 
-        return NextResponse.json({ message: 'Chapter deleted' });
+        const chapter = await ChapterModel.findById(_id);
+        if (!chapter) {
+            return NextResponse.json({ error: 'Chapter not found' }, { status: 404 });
+        }
+
+        chapter.is_visible = false;
+        await chapter.save();
+
+        return NextResponse.json({ message: 'Chapter disabled' });
     } catch (error) {
-        return NextResponse.json({ error: 'Error deleting Chapter', details: error }, { status: 500 });
+        return NextResponse.json({ error: 'Error deleting chapter', details: error }, { status: 500 });
     }
 }

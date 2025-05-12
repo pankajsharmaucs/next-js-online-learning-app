@@ -77,7 +77,7 @@ const Sidebar = () => {
                         </div>
                     </div>
 
-                    <div className="absolute bottom-14 flex justify-center w-full pointer-events-auto">
+                    <div className="mt-100 ms-3 justify-center w-full pointer-events-auto">
                         <a href="tel:+918800637982"
                             className="bg-gradient-to-br from-yellow-500 to-orange-600 text-white font-semibold py-2 px-4 rounded-xl shadow-lg hover:shadow-xl active:translate-y-1 active:shadow-none transition-all duration-150"
                         >
@@ -85,6 +85,7 @@ const Sidebar = () => {
                         </a>
                     </div>
 
+                    
                 </aside>
             )}
         </>

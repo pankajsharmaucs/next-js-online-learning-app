@@ -1,43 +1,49 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
-import { connectDB } from '@/lib/db';
+import { connectDB } from '@/lib/mongo_db';
 import { hashPassword } from '@/lib/crypto';
 import crypto from 'crypto';
+import User from '@/lib/models/user/User';
 
 export async function POST(req: NextRequest) {
   try {
-    const { email, password, role, } = await req.json();
+    await connectDB();
+
+    const { email, password, role } = await req.json();
 
     if (!email || !password) {
       return NextResponse.json({ error: 'Email and password are required' }, { status: 400 });
     }
 
-    const db = await connectDB();
-    
     // Check if the user already exists
-    const [existing]: any = await db.query(
-      'SELECT user_id FROM users WHERE email = ?', [email]
-    );
-
-    if (existing.length > 0) {
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
       return NextResponse.json({ error: 'User already exists' }, { status: 409 });
     }
 
-    // Hash password
     const hashedPassword = await hashPassword(password);
+    const token = crypto.randomBytes(32).toString('hex');
+    const otp = Math.floor(100000 + Math.random() * 900000); // 6-digit OTP
+    const otpExpires = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes from now
 
-    // Generate token for the new user
-    const newUserToken = crypto.randomBytes(32).toString('hex');
+    // Create new user (not yet verified)
+    const newUser = await User.create({
+      email,
+      password: hashedPassword,
+      role: role || 'user',
+      token,
+      created_by: email,
+      otp,
+      otpVerified: false,
+      otpExpires
+    });
 
-    // Insert the user
-    await db.query(
-      'INSERT INTO users (email, password, role, token, created_by) VALUES (?, ?, ?, ?, ?)',
-      [email, hashedPassword, role || 'user', newUserToken, email]
-    );
+    // TODO: Send OTP via email (placeholder)
+    console.log(`OTP for ${email}: ${otp}`);
 
     return NextResponse.json({
-      message: 'User created successfully',
-      token: newUserToken
+      message: 'User created. OTP sent to email.',
+      token
     });
   } catch (error) {
     console.error('Error creating user:', error);

@@ -1,24 +1,23 @@
 import type { NextRequest } from 'next/server';
-import { connectDB } from '@/lib/db';
+import jwt from 'jsonwebtoken';
+
+const JWT_SECRET = process.env.JWT_SECRET!;
 
 export const validateSuperAdmin = async (req: NextRequest): Promise<boolean> => {
     const token = req.cookies.get('adminToken')?.value;
-    const email = req.cookies.get('adminEmail')?.value;
-    const role = req.cookies.get('adminRole')?.value;
 
-    if (!token || !email || !role) {
+    if (!token) {
         return false;
     }
 
     try {
-        const db = await connectDB();
-        const [rows]: any = await db.query(
-            'SELECT * FROM users WHERE email = ? AND token = ? AND role = ? LIMIT 1',
-            [email, token, role]
-        );
+        // Verify and decode the token
+        const decoded = jwt.verify(token, JWT_SECRET) as { role: string };
 
-        return rows.length > 0;
+        // Check if the role is super_admin
+        return decoded.role === 'super_admin';
     } catch (error) {
+        console.error('JWT verification failed:', error);
         return false;
     }
 };

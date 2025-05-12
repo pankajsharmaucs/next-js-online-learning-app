@@ -1,39 +1,31 @@
 import { NextResponse } from 'next/server';
-import { cookies } from 'next/headers';  // Use cookies from Next.js server
-import { connectDB } from '@/lib/db';  // Make sure you have the database connection helper
+import { cookies } from 'next/headers';
+import jwt from 'jsonwebtoken';
+
+const JWT_SECRET = process.env.JWT_SECRET!;
 
 export async function GET() {
   try {
-    // Await the promise returned by cookies() to get the cookies
-    const cookieStore = await cookies();
-    const adminToken = cookieStore.get('adminToken');
-    const adminEmail = cookieStore.get('adminEmail');
+    const cookieStore = cookies(); // ✅ No await needed
+    const token = (await cookieStore).get('adminToken')?.value;
 
-    // Check if the adminToken or adminEmail cookie exists
-    if (!adminToken || !adminEmail) {
+    if (!token) {
       return NextResponse.json({ error: 'Not authenticated' }, { status: 401 });
     }
 
-    // Connect to the database
-    const db = await connectDB();
+    const decoded = jwt.verify(token, JWT_SECRET) as { email: string; role: string; id: number };
 
-    // Query the database for the user with the provided token and email
-    const [rows]: any = await db.query(
-      'SELECT * FROM users WHERE token = ? AND email = ? AND role = ?',[adminToken.value, adminEmail.value,'super_admin']
-    );
-
-    // Check if the user exists and if the token and email match
-    if (rows.length === 0) {
-      return NextResponse.json({ error: 'Invalid or expired token/email' }, { status: 401 });
+    if (decoded.role !== 'super_admin') {
+      return NextResponse.json({ error: 'Unauthorized role' }, { status: 403 });
     }
 
-    const admin = rows[0];
-
-    // You could optionally check for other properties, like roles, if needed
-    return NextResponse.json({ message: 'Authenticated', user_data: admin }, { status: 200 });
+    return NextResponse.json({
+      message: 'Authenticated',
+      user_data: decoded,
+    }, { status: 200 });
 
   } catch (error) {
-    console.error('Error in /admin/check route:', error);
-    return NextResponse.json({ error: 'Server error', details: error }, { status: 500 });
+    console.error('JWT verification error:', error);
+    return NextResponse.json({ error: 'Invalid or expired token' }, { status: 401 });
   }
 }

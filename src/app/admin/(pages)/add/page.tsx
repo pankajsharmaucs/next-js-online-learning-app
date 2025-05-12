@@ -8,7 +8,7 @@ import { showConfirmationDialog } from '@/components/alert/AlertToast'; // adjus
 import { FaTrash } from 'react-icons/fa';
 
 interface Board {
-    board_id?: string;
+    _id?: string;
     board_name: string;
     image: string;
 }
@@ -23,6 +23,7 @@ function Page() {
     const [token, setToken] = useState<string | null>(null);
     const modalRef = useRef<HTMLDivElement>(null);
 
+    
     const fetchBoards = async () => {
         try {
             const baseUrl = window.location.origin;
@@ -108,8 +109,8 @@ function Page() {
         }
     };
 
-    const handleDelete = async (board_id?: string) => {
-        if (!board_id) return;
+    const handleDelete = async (_id?: string) => {
+        if (!_id) return;
 
         const isConfirmed = await showConfirmationDialog(
             'Are you sure you want to delete this board?',
@@ -122,7 +123,7 @@ function Page() {
 
         try {
             await axios.delete(url, {
-                data: { board_id },
+                data: { _id },
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
@@ -168,7 +169,7 @@ function Page() {
                             <tbody>
                                 {boards.length > 0 ? (
                                     boards.map((board, index) => (
-                                        <tr key={board.board_id || index} className="odd:bg-gray-50">
+                                        <tr key={board._id || index} className="odd:bg-gray-50">
                                             <td className="border p-2 text-sm">{index + 1}</td>
                                             <td className="border p-2 text-sm">{board.board_name}</td>
                                             <td className="border p-2 text-sm">{board.image}</td>
@@ -186,7 +187,7 @@ function Page() {
                                                 </button>
                                                 <button
                                                     className="btn btn-danger py-2 flex items-center gap-1"
-                                                    onClick={() => handleDelete(board.board_id)}
+                                                    onClick={() => handleDelete(board._id)}
                                                     title="Delete"
                                                 >
                                                     <FaTrash className="text-white" />
@@ -228,7 +229,7 @@ function Page() {
                                     hidden
                                     type="text"
                                     name="board_id"
-                                    value={formData.board_id}
+                                    value={formData._id}
                                     readOnly
                                 />
                             )}
@@ -238,7 +239,7 @@ function Page() {
                                 value={formData.board_name}
                                 onChange={handleChange}
                                 placeholder="Board Name"
-                                className="w-full border p-2 rounded"
+                                className="w-full border p-2 rounded mb-2"
                             />
                             <input
                                 type="text"
@@ -246,7 +247,7 @@ function Page() {
                                 value={formData.image}
                                 onChange={handleChange}
                                 placeholder="Image URL"
-                                className="w-full border p-2 rounded"
+                                className="w-full border p-2 rounded mb-2"
                             />
                             <button
                                 type="submit"

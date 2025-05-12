@@ -3,12 +3,19 @@
 import React, { useEffect, useState } from 'react'
 import Preloader from '../preloader/Preloader'
 import Link from 'next/link'
+import { checkAdminLogin } from '@/utlis/checkAdminLogin'
+import { useRouter } from 'next/navigation'
 
 
 const AdminHeader = () => {
     const [showPreloader, setShowPreloader] = useState(false);
     const [sidebarOpened, setsidebarOpened] = useState(false);
     const [isSticky, setIsSticky] = useState(false);
+    const router = useRouter();
+
+    useEffect(() => {
+        checkAdminLogin(router);
+    }, [router]);
 
     useEffect(() => {
         const handleScroll = () => {
@@ -59,14 +66,14 @@ const AdminHeader = () => {
                                     </div>
                                 </div>
                             </div>
-                            
+
                         </div>
                     </div>
                 </div>
             </header>
             {/* header area end */}
 
-             
+
         </>
     )
 }

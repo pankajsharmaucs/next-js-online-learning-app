@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
-import { connectDB } from '@/lib/db';
+import { connectDB } from '@/lib/mongo_db';
+import User from '@/lib/models/user/User'; // MongoDB User model
+import SoldSubject from '@/lib/models/buy/SoldSubject'; // MongoDB SoldSubject model
 
 export async function POST(req: NextRequest) {
     try {
@@ -10,26 +12,21 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ error: 'Invalid User' }, { status: 400 });
         }
 
-        const db = await connectDB();
+        // Connect to MongoDB
+        await connectDB();
 
-        // If token and email are provided, verify both
-        if (token && email) {
-            const [userToken]: any = await db.query(
-                'SELECT user_id FROM users WHERE email = ? AND  token = ?', [email, token]
-            );
+        // Verify token and email by querying the User model
+        const user = await User.findOne({ email, token });
 
-            if (userToken.length === 0) {
-                return NextResponse.json({ error: 'Invalid or expired token for superadmin' }, { status: 403 });
-            }
+        if (!user) {
+            return NextResponse.json({ error: 'Invalid or expired token for user' }, { status: 403 });
         }
 
-        // Check if the user already exists
-        const [existingRows]: any = await db.query(
-            'SELECT * FROM sold_subjects WHERE subject_id = ? and user_id = ?', [subject_id, user_id]
-        );
+        // Check if the user already has this subject in the SoldSubject collection
+        const existingSubject = await SoldSubject.findOne({ subject_id, user_id });
 
-        if (existingRows.length > 0) {
-            return NextResponse.json({ message: 'success', data: existingRows }, { status: 200 });
+        if (existingSubject) {
+            return NextResponse.json({ message: 'success', data: existingSubject }, { status: 200 });
         } else {
             return NextResponse.json({ message: 'New' }, { status: 404 });
         }
