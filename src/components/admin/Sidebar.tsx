@@ -58,9 +58,8 @@ const Sidebar = () => {
                     <nav className="flex flex-col gap-1 w-full pt-4 pb-1 ps-2 ">
                         <SidebarButton label="Dashboard" icon="FaTachometerAlt" link="/admin/dashboard" />
                         <SidebarButton label="Users" icon="FaUser" link="/admin/users" />
-                        <SidebarButton label="Add Board" icon="FaPlus" link="/admin/add" />
-                        <SidebarButton label="Add Classes" icon="FaChalkboardTeacher" link="/admin/classes" />
-                        <SidebarButton label="Add Subjects" icon="FaBookOpen" link="/admin/subjects" />
+                        <SidebarButton label="Add Master" icon="FaPlus" link="/admin/add" />
+                        <SidebarButton label="Add Chapter" icon="FaBookOpen" link="/admin/chapter" />
                         <SidebarButton label="Settings" icon="FaCog" link="/admin/settings" />
                     </nav>
 

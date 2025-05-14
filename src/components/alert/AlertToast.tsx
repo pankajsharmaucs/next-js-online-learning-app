@@ -40,7 +40,7 @@ export const showWarningToast = (message: string) => {
     icon: 'warning',
     title: message,
     showConfirmButton: false,
-    timer: 3000,
+    timer: 5000,
     timerProgressBar: true,
     background: '#ffffff',
     color: '#333',

@@ -1,17 +1,25 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { connectDB } from '@/lib/mongo_db';
-import Class from '@/lib/models/api/Class';
 import { validateSuperAdmin } from '@/lib/apiValidator';
+
+import Class from '@/lib/models/api/Class';
+import subject from '@/lib/models/api/subject';
 
 export async function GET(req: NextRequest) {
     try {
         await connectDB();
+
         const board_id = req.nextUrl.searchParams.get('board_id');
-        const classes = await Class.find({ board_id });
+        const filter = board_id ? { board_id } : {};
+
+        const classes = await Class.find(filter);
         return NextResponse.json(classes);
     } catch (error) {
-        return NextResponse.json({ error: 'Error fetching data', details: error }, { status: 500 });
+        return NextResponse.json(
+            { error: 'Error fetching data', details: error },
+            { status: 500 }
+        );
     }
 }
 
@@ -37,16 +45,12 @@ export async function PUT(req: NextRequest) {
             return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
         }
 
-        const { class_id, class_name } = await req.json();
-        if (!class_id) return NextResponse.json({ error: 'class_id is required' }, { status: 400 });
+        const { _id, class_name } = await req.json();
+        if (!_id) return NextResponse.json({ error: 'class_id is required' }, { status: 400 });
 
         await connectDB();
 
-        const updated = await Class.findByIdAndUpdate(
-            class_id,
-            { class_name },
-            { new: true }
-        );
+        const updated = await Class.findByIdAndUpdate(_id, { class_name }, { new: true });
 
         if (!updated) {
             return NextResponse.json({ error: 'Class not found' }, { status: 404 });
@@ -64,12 +68,24 @@ export async function DELETE(req: NextRequest) {
             return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
         }
 
-        const { class_id } = await req.json();
+        const { id } = await req.json();
         await connectDB();
 
-        await Class.findByIdAndDelete(class_id);
+        // Check for existing subjects linked to this class
+        const relatedSubjects = await subject.findOne({ class_id: id });
+        if (relatedSubjects) {
+            return NextResponse.json(
+                { error: 'Cannot delete class. There are subjects associated with this class.' },
+                { status: 400 }
+            );
+        }
+
+        await Class.findByIdAndDelete(id);
         return NextResponse.json({ message: 'Class deleted' });
     } catch (error) {
-        return NextResponse.json({ error: 'Error deleting class', details: error }, { status: 500 });
+        return NextResponse.json(
+            { error: 'Error deleting class', details: error instanceof Error ? error.message : error },
+            { status: 500 }
+        );
     }
 }

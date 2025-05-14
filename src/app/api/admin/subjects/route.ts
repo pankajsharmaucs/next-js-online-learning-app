@@ -10,7 +10,9 @@ export async function GET(req: NextRequest) {
         const class_id = req.nextUrl.searchParams.get('class_id');
         await connectDB();
 
-        const subjects = await Subject.find({ class_id });
+        const filter = class_id ? { class_id } : {};
+        const subjects = await Subject.find(filter);
+
         return NextResponse.json(subjects);
     } catch (error) {
         return NextResponse.json({ error: 'Error fetching data', details: error }, { status: 500 });
@@ -41,13 +43,13 @@ export async function PUT(req: NextRequest) {
             return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
         }
 
-        const { subject_id, subject_name } = await req.json();
-        if (!subject_id) {
-            return NextResponse.json({ error: 'subject_id is required' }, { status: 400 });
+        const { _id	, subject_name } = await req.json();
+        if (!_id	) {
+            return NextResponse.json({ error: 'ID is required' }, { status: 400 });
         }
 
         await connectDB();
-        const subject = await Subject.findById(subject_id);
+        const subject = await Subject.findById(_id	);
         if (!subject) {
             return NextResponse.json({ error: 'subject not found' }, { status: 404 });
         }
@@ -68,9 +70,9 @@ export async function DELETE(req: NextRequest) {
             return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
         }
 
-        const { subject_id } = await req.json();
+        const { id } = await req.json();
         await connectDB();
-        await Subject.findByIdAndDelete(subject_id);
+        await Subject.findByIdAndDelete(id);
 
         return NextResponse.json({ message: 'subject deleted' });
     } catch (error) {

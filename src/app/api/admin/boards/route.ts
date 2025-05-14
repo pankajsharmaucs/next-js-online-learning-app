@@ -78,9 +78,9 @@ export async function DELETE(req: NextRequest) {
             return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
         }
 
-        const { _id } = await req.json();
+        const { id } = await req.json();
 
-        const board = await EducationBoardModel.findById(_id);
+        const board = await EducationBoardModel.findById(id);
         if (!board) {
             return NextResponse.json({ error: 'Board not found' }, { status: 404 });
         }
@@ -89,7 +89,7 @@ export async function DELETE(req: NextRequest) {
         board.is_visible = false;
         await board.save(); // Save the changes to MongoDB
 
-        return NextResponse.json({ message: 'Board Disabled' });
+        return NextResponse.json({ message: 'Board has Disabled' });
     } catch (error) {
         return NextResponse.json({ error: 'Error disabling board', details: error }, { status: 500 });
     }

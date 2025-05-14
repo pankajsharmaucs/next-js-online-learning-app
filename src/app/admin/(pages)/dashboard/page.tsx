@@ -15,8 +15,6 @@ const AdminDashboard = () => {
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                 <Card1 title="User" link="/admin/users" icon="FaUser" />
                 <Card1 title="Add" link="/admin/add" icon="FaPlus" />
-                <Card1 title="Classes" link="/admin/classes" icon="FaChalkboardTeacher" />
-                <Card1 title="Subjects" link="/admin/subjects" icon="FaBookOpen" />
                 <Card1 title="Settings" link="/admin/settings" icon="FaCog" />
             </div>
         </>

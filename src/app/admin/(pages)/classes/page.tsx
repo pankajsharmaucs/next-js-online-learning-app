@@ -123,8 +123,8 @@ function Page() {
                 headers: { Authorization: `Bearer ${token}` },
             });
 
-            showSuccessToast('Class deleted successfully');
             fetchClasses();
+            showSuccessToast('Class deleted successfully');
         } catch (error: any) {
             console.error('Delete error:', error);
             showErrorToast(error?.response?.data?.error || 'Failed to delete class');
