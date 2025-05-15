@@ -12,9 +12,13 @@ interface ChapterForm {
     subject_id: string;
     class_id: string;
     chapter_name: string;
+    introduction?: string;
     summary?: string;
+    moral?: string;
     video_url?: string;
-    pdf?: File | string; // Change to handle file input
+    video_access?: 'free' | 'paid';
+    assignment_access?: 'free' | 'paid';
+    pdf?: File | string;
 }
 
 interface Subject {
@@ -27,33 +31,30 @@ interface ClassItem {
     class_name: string;
 }
 
-interface ClassType {
-    _id: string;
-    class_name: string;
-}
 
-interface SubjectType {
-    _id: string;
-    subject_name: string;
-}
 
 function Page() {
     const searchParams = useSearchParams();
     const classIdFromUrl = searchParams.get('class_id') || '';
     const subjectIdFromUrl = searchParams.get('subject_id') || '';
 
-    const [ClassName, setClassName] = useState<ClassType[]>([]);
-    const [SubjectName, setSubjectName] = useState<SubjectType[]>([]);
+    const [ClassID, setClassID] = useState<string>('');
+    const [subjectID, setsubjectID] = useState<string>('');
 
     const [chapters, setChapters] = useState<any[]>([]);
     const [subjects, setSubjects] = useState<Subject[]>([]);
     const [classes, setClasses] = useState<ClassItem[]>([]);
     const [formData, setFormData] = useState<ChapterForm>({
+        _id: '',
         subject_id: '',
         class_id: '',
         chapter_name: '',
+        introduction: '',
         summary: '',
+        moral: '',
         video_url: '',
+        video_access: 'free',
+        assignment_access: 'free',
         pdf: '',
     });
 
@@ -66,7 +67,7 @@ function Page() {
     const CHAPTER_API = process.env.NEXT_PUBLIC_ADMIN_GET_ALL_CHAPTER;
     const ALL_CLASS = process.env.NEXT_PUBLIC_ADMIN_GET_ALL_CLASS;
     const ALL_SUBJECT = process.env.NEXT_PUBLIC_ADMIN_GET_ALL_SUBJECT;
-    
+
     const fetchClasses = async () => {
         try {
             const baseUrl = window.location.origin;
@@ -98,7 +99,7 @@ function Page() {
 
     const getSubjectName = (id: string) => {
         const found = subjects.find(sub => sub._id === id);
-        console.log(found);
+        // console.log(found);
         return found?.subject_name || 'Unknown Subject';
     };
 
@@ -128,6 +129,14 @@ function Page() {
         fetchClasses();
         fetchAdminToken();
         fetchChapters();
+
+        // Set class ID and subject ID from URL
+        setClassID(classIdFromUrl);
+        setsubjectID(subjectIdFromUrl);
+
+        // console.log(formData);
+
+
     }, []);
 
 
@@ -154,18 +163,22 @@ function Page() {
         try {
             const headers = { Authorization: `Bearer ${token}` };
 
-            if (!formData.chapter_name || !formData.subject_id || !formData.class_id) {
+            if (!formData.chapter_name || !subjectID || !ClassID) {
                 showErrorToast('All fields are required');
                 return;
             }
 
             const formDataToSubmit = new FormData();
 
-            formDataToSubmit.append('subject_id', formData.subject_id);
-            formDataToSubmit.append('class_id', formData.class_id);
+            formDataToSubmit.append('subject_id', subjectID);
+            formDataToSubmit.append('class_id', ClassID);
             formDataToSubmit.append('chapter_name', formData.chapter_name);
+            formDataToSubmit.append('introduction', formData.introduction || '');
             formDataToSubmit.append('summary', formData.summary || '');
+            formDataToSubmit.append('moral', formData.moral || '');
             formDataToSubmit.append('video_url', formData.video_url || '');
+            formDataToSubmit.append('video_access', formData.video_access || 'free');
+            formDataToSubmit.append('assignment_access', formData.assignment_access || 'free');
 
             // If a file is selected, append it to the form data
             if (formData.pdf && formData.pdf instanceof File) {
@@ -173,6 +186,7 @@ function Page() {
             }
 
             if (editMode && formData._id) {
+                formDataToSubmit.append('_id', formData._id); // ✅ Append the _id explicitly
                 await axios.put(`${baseUrl}${CHAPTER_API}`, formDataToSubmit, { headers });
                 showSuccessToast('Chapter updated successfully');
             } else {
@@ -181,7 +195,10 @@ function Page() {
             }
 
             setModalOpen(false);
-            setFormData({ subject_id: '', class_id: '', chapter_name: '', summary: '', video_url: '', pdf: '' });
+            setFormData({
+                _id: '', subject_id: '', class_id: '', chapter_name: '', introduction: '', summary: '', moral: '', video_url: '',
+                video_access: 'free', assignment_access: 'free', pdf: ''
+            });
             setEditMode(false);
             fetchChapters();
         } catch (error: any) {
@@ -233,7 +250,10 @@ function Page() {
                         onClick={() => {
                             setModalOpen(true);
                             setEditMode(false);
-                            setFormData({ subject_id: '', class_id: '', chapter_name: '', summary: '', video_url: '', pdf: '' });
+                            setFormData({
+                                _id: '', subject_id: '', class_id: '', chapter_name: '', introduction: '', summary: '', moral: '', video_url: '',
+                                video_access: 'free', assignment_access: 'free', pdf: ''
+                            });
                         }}
                     >
                         + Add Chapter
@@ -247,8 +267,12 @@ function Page() {
                                 <tr className="bg-gray-100 text-left">
                                     <th className="border p-2 text-sm">S.No.</th>
                                     <th className="border p-2 text-sm">Chapter Name</th>
+                                    <th className="border p-2 text-sm">Intro</th>
                                     <th className="border p-2 text-sm">Summary</th>
+                                    <th className="border p-2 text-sm">Moral</th>
                                     <th className="border p-2 text-sm">Video Url</th>
+                                    <th className="border p-2 text-sm">Is Free Video</th>
+                                    <th className="border p-2 text-sm">Is Free Assesments</th>
                                     <th className="border p-2 text-sm">Pdf</th>
                                     <th className="border p-2 text-sm">Action</th>
                                 </tr>
@@ -259,8 +283,12 @@ function Page() {
                                         <tr key={item._id} className="odd:bg-gray-50">
                                             <td className="border p-2 text-sm">{index + 1}</td>
                                             <td className="border p-2 text-sm">{item.chapter_name}</td>
+                                            <td className="border p-2 text-sm">{item.introduction}</td>
                                             <td className="border p-2 text-sm">{item.summary}</td>
+                                            <td className="border p-2 text-sm">{item.moral}</td>
                                             <td className="border p-2 text-sm">{item.video_url}</td>
+                                            <td className="border p-2 text-sm">{item.video_access}</td>
+                                            <td className="border p-2 text-sm">{item.assignment_access}</td>
                                             <td className="border p-2 text-sm">
                                                 {item.pdf ? (
                                                     <a
@@ -279,9 +307,9 @@ function Page() {
                                                 <button
                                                     className="btn btn-warning py-1 me-2"
                                                     onClick={() => {
+                                                        setFormData(item);
                                                         setEditMode(true);
                                                         setModalOpen(true);
-                                                        setFormData(item);
                                                     }}
                                                 >
                                                     Edit
@@ -299,7 +327,7 @@ function Page() {
                                 ) : (
                                     <tr>
                                         <td colSpan={8} className="text-center p-4">
-                                            No chapters available.
+                                            Loading chapters...
                                         </td>
                                     </tr>
                                 )}
@@ -311,10 +339,10 @@ function Page() {
 
             {/* Modal */}
             {modalOpen && (
-                <div className="fixed inset-0 bg-white bg-opacity-50 flex items-center justify-center z-50">
-                    <div ref={modalRef} className="bg-white w-full max-w-md p-3 rounded-lg shadow-lg relative">
+                <div className="fixed inset-0 bg-white z-50 flex items-center justify-center px-4 py-8 overflow-y-auto">
+                    <div ref={modalRef} className="w-full max-w-6xl border bg-white rounded-lg shadow-xl relative" style={{ padding: "20px" }}>
                         <button
-                            className="absolute top-2 right-2 text-gray-600 hover:text-red-500 text-xl"
+                            className="absolute top-4 right-4 text-gray-600 hover:text-red-500 text-2xl"
                             onClick={() => {
                                 setModalOpen(false);
                                 setEditMode(false);
@@ -322,29 +350,14 @@ function Page() {
                         >
                             ✕
                         </button>
-                        <h4 className="text-lg font-semibold mb-4">{editMode ? 'Edit Chapter' : 'Add New Chapter'}</h4>
+
+                        <h4 className="text-2xl font-bold text-center mb-6">
+                            {editMode ? 'Edit Chapter' : 'Add New Chapter'}
+                        </h4>
+
                         <form onSubmit={handleSubmit} className="space-y-4">
-
-                            
-                            <input
-                                type="text"
-                                name="class_id"
-                                value={formData.class_id}
-                                onChange={handleChange}
-                                placeholder="Chapter Name"
-                                className="w-full border p-2 rounded mb-2"
-                                required
-                            />
-
-                            <input
-                                type="text"
-                                name="subject_id"
-                                value={formData.subject_id}
-                                onChange={handleChange}
-                                placeholder="subject Name"
-                                className="w-full border p-2 rounded mb-2"
-                                required
-                            />
+                            <input type="hidden" name="class_id" value={ClassID} />
+                            <input type="hidden" name="subject_id" value={subjectID} />
 
                             <input
                                 type="text"
@@ -357,11 +370,27 @@ function Page() {
                             />
 
                             <textarea
+                                name="introduction"
+                                value={formData.introduction}
+                                onChange={handleChange}
+                                placeholder="Introduction"
+                                className="w-full border p-2 rounded mb-2 h-32"
+                            />
+
+                            <textarea
                                 name="summary"
                                 value={formData.summary}
                                 onChange={handleChange}
                                 placeholder="Summary"
-                                className="w-full border p-2 rounded mb-2"
+                                className="w-full border p-2 rounded mb-2 h-32"
+                            />
+
+                            <textarea
+                                name="moral"
+                                value={formData.moral}
+                                onChange={handleChange}
+                                placeholder="Moral"
+                                className="w-full border p-2 rounded mb-2 h-32"
                             />
 
                             <input
@@ -373,12 +402,38 @@ function Page() {
                                 className="w-full border p-2 rounded mb-2"
                             />
 
-                            <input
-                                type="file"
-                                name="pdf"
-                                onChange={handleChange}
-                                className="w-full border p-2 rounded mb-2"
-                            />
+                            <div className="flex flex-col md:flex-row gap-4 mb-2">
+                                <select
+                                    name="video_access"
+                                    value={formData.video_access}
+                                    onChange={handleChange}
+                                    className="w-full md:w-1/2 border p-2 rounded"
+                                >
+                                    <option value="free">Free Video</option>
+                                    <option value="paid">Paid Video</option>
+                                </select>
+
+                                <select
+                                    name="assignment_access"
+                                    value={formData.assignment_access}
+                                    onChange={handleChange}
+                                    className="w-full md:w-1/2 border p-2 rounded"
+                                >
+                                    <option value="free">Free Assignment</option>
+                                    <option value="paid">Paid Assignment</option>
+                                </select>
+                            </div>
+
+                            <div className="flex-col gap-4 my-4">
+                                <label htmlFor="" className='font-bold '>Select PDF</label>
+                                <input
+                                    type="file"
+                                    name="pdf"
+                                    onChange={handleChange}
+                                    className="w-full border p-2 rounded mb-2"
+                                />
+                            </div>
+
 
                             <button
                                 type="submit"
@@ -389,6 +444,7 @@ function Page() {
                         </form>
                     </div>
                 </div>
+
             )}
         </div>
     );

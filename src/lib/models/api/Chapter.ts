@@ -1,5 +1,3 @@
-// models/Chapter.ts
-
 import mongoose from 'mongoose';
 
 const chapterSchema = new mongoose.Schema(
@@ -18,14 +16,30 @@ const chapterSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    introduction: {
+      type: String,  
+    },
     summary: {
-      type: String,
+      type: String, 
+    },
+    moral: {
+      type: String,  
     },
     video_url: {
       type: String,
     },
+    video_access: {
+      type: String,
+      enum: ['free', 'paid'], // 🆕 Free/Paid option for video
+      default: 'free',
+    },
+    assignment_access: {
+      type: String,
+      enum: ['free', 'paid'], // 🆕 Free/Paid option for assignment
+      default: 'free',
+    },
     pdf: {
-      type: String, // ✅ URL or file path to the uploaded PDF
+      type: String, // ✅ File path or URL
     },
   },
   { timestamps: true }
