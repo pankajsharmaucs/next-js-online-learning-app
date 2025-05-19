@@ -36,8 +36,17 @@ export function MasterModal({
 }: Props) {
   if (!show) return null;
 
+  const handleBackdropClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (e.target === e.currentTarget) {
+      onClose();
+    }
+  };
+
+
   return (
-    <div className="fixed inset-0 bg-white bg-opacity-50 flex items-center justify-center z-50">
+    <div className="fixed inset-0 flex items-center justify-center z-50" onClick={handleBackdropClick}
+      style={{ backgroundColor: 'rgba(255, 255, 255, 0.95)' }}
+    >
       <div className="bg-white border rounded shadow-md w-full max-w-md relative p-4">
         <button
           className="absolute top-2 right-2 text-gray-600 hover:text-red-500 text-xl"
@@ -62,7 +71,8 @@ export function MasterModal({
           )}
           {type === 'class' && classForm && setClassForm && (
             <>
-              {/* <select
+              <select
+                disabled={isEdit}
                 value={classForm.board_id}
                 onChange={(e) =>
                   setClassForm({ ...classForm, board_id: e.target.value })
@@ -75,17 +85,17 @@ export function MasterModal({
                     {b.board_name}
                   </option>
                 ))}
-              </select> */}
+              </select>
 
-              {/* <input
-                type="text"
-                placeholder="Class Name"
-                value={classForm.class_name}
+              <input
+                type="hidden"
+                placeholder="Board ID"
+                value={classForm.board_id}
                 onChange={(e) =>
-                  setClassForm({ ...classForm, class_name: e.target.value })
+                  setClassForm({ ...classForm, board_id: e.target.value })
                 }
                 className="w-full border p-2 rounded mb-2"
-              /> */}
+              />
 
               <label htmlFor="classForm">Class Name </label>
               <input
@@ -102,6 +112,7 @@ export function MasterModal({
           {type === 'subject' && subjectForm && setSubjectForm && (
             <>
               <select
+                disabled={isEdit}
                 value={subjectForm.class_id}
                 onChange={(e) =>
                   setSubjectForm({ ...subjectForm, class_id: e.target.value })

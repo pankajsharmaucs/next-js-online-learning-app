@@ -1,0 +1,19 @@
+.chapter-editor-layout {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.editor-block {
+  width: 100%;
+}
+
+@media (min-width: 1200px) {
+  .chapter-editor-layout {
+    flex-wrap: nowrap;
+  }
+
+  .editor-block {
+    width: 50%;
+  }
+}

@@ -9,7 +9,7 @@ export default function ClientLayoutWrapper({ children }: { children: React.Reac
 
   return (
     <main
-      className={`transition-all duration-300 overflow-y-auto bg-gray-50 p-8 ${
+      className={`transition-all duration-300 overflow-y-auto bg-gray-100 p-8 ${
         isFullWidthPage ? 'w-full' : 'flex-1 ml-0 lg:ml-55'
       }`}
     >

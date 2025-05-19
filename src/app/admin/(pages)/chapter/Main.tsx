@@ -6,6 +6,11 @@ import { showErrorToast, showSuccessToast, showConfirmationDialog } from '@/comp
 import { getLogginedUser } from '@/utlis/checkAdminLogin';
 import { FaTrash } from 'react-icons/fa';
 import { useSearchParams } from 'next/navigation';
+import './chapter.css';
+
+import dynamic from 'next/dynamic';
+const TiptapEditor = dynamic(() => import('@/components/editor/Editor'), { ssr: false });
+
 
 interface ChapterForm {
     _id?: string;
@@ -133,7 +138,6 @@ function Page() {
         // Set class ID and subject ID from URL
         setClassID(classIdFromUrl);
         setsubjectID(subjectIdFromUrl);
-
         // console.log(formData);
 
 
@@ -179,6 +183,9 @@ function Page() {
             formDataToSubmit.append('video_url', formData.video_url || '');
             formDataToSubmit.append('video_access', formData.video_access || 'free');
             formDataToSubmit.append('assignment_access', formData.assignment_access || 'free');
+
+            // console.log(formData);return
+
 
             // If a file is selected, append it to the form data
             if (formData.pdf && formData.pdf instanceof File) {
@@ -233,6 +240,15 @@ function Page() {
         }
     };
 
+
+    const handleBackdropClick = (e: React.MouseEvent<HTMLDivElement>) => {
+        if (e.target === e.currentTarget) {
+            setModalOpen(false);
+            setEditMode(false);
+        }
+    };
+
+
     return (
         <div className="container">
             <div className="row">
@@ -256,7 +272,7 @@ function Page() {
                             });
                         }}
                     >
-                        + Add Chapter
+                        + Add
                     </button>
                 </div>
 
@@ -267,9 +283,6 @@ function Page() {
                                 <tr className="bg-gray-100 text-left">
                                     <th className="border p-2 text-sm">S.No.</th>
                                     <th className="border p-2 text-sm">Chapter Name</th>
-                                    <th className="border p-2 text-sm">Intro</th>
-                                    <th className="border p-2 text-sm">Summary</th>
-                                    <th className="border p-2 text-sm">Moral</th>
                                     <th className="border p-2 text-sm">Video Url</th>
                                     <th className="border p-2 text-sm">Is Free Video</th>
                                     <th className="border p-2 text-sm">Is Free Assesments</th>
@@ -283,9 +296,6 @@ function Page() {
                                         <tr key={item._id} className="odd:bg-gray-50">
                                             <td className="border p-2 text-sm">{index + 1}</td>
                                             <td className="border p-2 text-sm">{item.chapter_name}</td>
-                                            <td className="border p-2 text-sm">{item.introduction}</td>
-                                            <td className="border p-2 text-sm">{item.summary}</td>
-                                            <td className="border p-2 text-sm">{item.moral}</td>
                                             <td className="border p-2 text-sm">{item.video_url}</td>
                                             <td className="border p-2 text-sm">{item.video_access}</td>
                                             <td className="border p-2 text-sm">{item.assignment_access}</td>
@@ -326,8 +336,8 @@ function Page() {
                                     ))
                                 ) : (
                                     <tr>
-                                        <td colSpan={8} className="text-center p-4">
-                                            Loading chapters...
+                                        <td colSpan={8} className="text-center p-4 text-gray-500">
+                                            {chapters.length === 0 ? 'No chapters found.' : 'Loading...'}
                                         </td>
                                     </tr>
                                 )}
@@ -339,112 +349,129 @@ function Page() {
 
             {/* Modal */}
             {modalOpen && (
-                <div className="fixed inset-0 bg-white z-50 flex items-center justify-center px-4 py-8 overflow-y-auto">
-                    <div ref={modalRef} className="w-full max-w-6xl border bg-white rounded-lg shadow-xl relative" style={{ padding: "20px" }}>
-                        <button
-                            className="absolute top-4 right-4 text-gray-600 hover:text-red-500 text-2xl"
-                            onClick={() => {
-                                setModalOpen(false);
-                                setEditMode(false);
-                            }}
-                        >
-                            ✕
-                        </button>
+                <div className="fixed inset-0 z-50 flex items-center justify-center px-4 py-8"
+                    onClick={handleBackdropClick}
+                    style={{ backgroundColor: 'rgba(255, 255, 255, 0.95)' }} >
+                    <div className="bg-white rounded shadow-lg max-h-[90vh] overflow-y-auto  max-w-8xl p-6">
+                        <div ref={modalRef} className="w-full border bg-white rounded-lg shadow-xl relative" style={{ padding: "20px" }}>
+                            <button className="absolute top-4 right-4 text-gray-600 hover:text-red-500 text-2xl"
+                                onClick={() => {
+                                    setModalOpen(false);
+                                    setEditMode(false);
+                                }} > ✕ </button>
 
-                        <h4 className="text-2xl font-bold text-center mb-6">
-                            {editMode ? 'Edit Chapter' : 'Add New Chapter'}
-                        </h4>
+                            <h4 className="text-2xl font-bold text-center mb-6">
+                                {editMode ? 'Edit Chapter' : 'Add New Chapter'}
+                            </h4>
 
-                        <form onSubmit={handleSubmit} className="space-y-4">
-                            <input type="hidden" name="class_id" value={ClassID} />
-                            <input type="hidden" name="subject_id" value={subjectID} />
+                            <form onSubmit={handleSubmit} className="space-y-4">
+                                <input type="hidden" name="class_id" value={ClassID} />
+                                <input type="hidden" name="subject_id" value={subjectID} />
 
-                            <input
-                                type="text"
-                                name="chapter_name"
-                                value={formData.chapter_name}
-                                onChange={handleChange}
-                                placeholder="Chapter Name"
-                                className="w-full border p-2 rounded mb-2"
-                                required
-                            />
-
-                            <textarea
-                                name="introduction"
-                                value={formData.introduction}
-                                onChange={handleChange}
-                                placeholder="Introduction"
-                                className="w-full border p-2 rounded mb-2 h-32"
-                            />
-
-                            <textarea
-                                name="summary"
-                                value={formData.summary}
-                                onChange={handleChange}
-                                placeholder="Summary"
-                                className="w-full border p-2 rounded mb-2 h-32"
-                            />
-
-                            <textarea
-                                name="moral"
-                                value={formData.moral}
-                                onChange={handleChange}
-                                placeholder="Moral"
-                                className="w-full border p-2 rounded mb-2 h-32"
-                            />
-
-                            <input
-                                type="text"
-                                name="video_url"
-                                value={formData.video_url}
-                                onChange={handleChange}
-                                placeholder="Video URL"
-                                className="w-full border p-2 rounded mb-2"
-                            />
-
-                            <div className="flex flex-col md:flex-row gap-4 mb-2">
-                                <select
-                                    name="video_access"
-                                    value={formData.video_access}
-                                    onChange={handleChange}
-                                    className="w-full md:w-1/2 border p-2 rounded"
-                                >
-                                    <option value="free">Free Video</option>
-                                    <option value="paid">Paid Video</option>
-                                </select>
-
-                                <select
-                                    name="assignment_access"
-                                    value={formData.assignment_access}
-                                    onChange={handleChange}
-                                    className="w-full md:w-1/2 border p-2 rounded"
-                                >
-                                    <option value="free">Free Assignment</option>
-                                    <option value="paid">Paid Assignment</option>
-                                </select>
-                            </div>
-
-                            <div className="flex-col gap-4 my-4">
-                                <label htmlFor="" className='font-bold '>Select PDF</label>
                                 <input
-                                    type="file"
-                                    name="pdf"
+                                    type="text"
+                                    name="chapter_name"
+                                    value={formData.chapter_name}
                                     onChange={handleChange}
+                                    placeholder="Chapter Name"
                                     className="w-full border p-2 rounded mb-2"
+                                    required
                                 />
-                            </div>
+
+                                <div className="chapter-editor-layout">
+                                    <div className="editor-block">
+                                        <label className="font-bold">Introduction</label>
+                                        <TiptapEditor
+                                            content={formData.introduction || ''}
+                                            onChange={(html) => setFormData((prev) => ({ ...prev, introduction: html }))}
+                                        />
+                                    </div>
+
+                                    <div className="editor-block">
+                                        <label className="font-bold">Summary</label>
+                                        <TiptapEditor
+                                            content={formData.summary || ''}
+                                            onChange={(html) => setFormData((prev) => ({ ...prev, summary: html }))}
+                                        />
+                                    </div>
+
+                                    <div className="editor-block">
+                                        <label className="font-bold ">Moral</label>
+                                        <TiptapEditor
+                                            content={formData.moral || ''}
+                                            onChange={(html) =>
+                                                setFormData((prev) => ({ ...prev, moral: html }))
+                                            }
+                                        />
+                                    </div>
+
+                                </div>
 
 
-                            <button
-                                type="submit"
-                                className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
-                            >
-                                {isLoading ? 'Processing...' : editMode ? 'Update Chapter' : 'Add Chapter'}
-                            </button>
-                        </form>
+                                <input
+                                    type="text"
+                                    name="video_url"
+                                    value={formData.video_url}
+                                    onChange={handleChange}
+                                    placeholder="Video URL"
+                                    className="w-full border p-2 rounded my-4"
+                                />
+
+                                <div className="flex flex-col md:flex-row gap-4 mb-2">
+                                    <select
+                                        name="video_access"
+                                        value={formData.video_access}
+                                        onChange={handleChange}
+                                        className="w-full md:w-1/2 border p-2 rounded"
+                                    >
+                                        <option value="free">Free Video</option>
+                                        <option value="paid">Paid Video</option>
+                                    </select>
+
+                                    <select
+                                        name="assignment_access"
+                                        value={formData.assignment_access}
+                                        onChange={handleChange}
+                                        className="w-full md:w-1/2 border p-2 rounded"
+                                    >
+                                        <option value="free">Free Assignment</option>
+                                        <option value="paid">Paid Assignment</option>
+                                    </select>
+                                </div>
+
+                                <div className="flex-col gap-4 my-4">
+                                    <label htmlFor="" className='font-bold '>Select PDF</label>
+                                    <input
+                                        type="file"
+                                        name="pdf"
+                                        onChange={handleChange}
+                                        className="w-full border p-2 rounded mb-2"
+                                    />
+                                    {editMode && formData.pdf && typeof formData.pdf === 'string' && (
+                                        <div className="mt-2 col-6 h-[300px] overflow-hidden">
+                                            <p className="font-semibold mb-1">Current PDF:</p>
+                                            <iframe
+                                                src={formData.pdf}
+                                                title="PDF Preview"
+                                                width="100%"
+                                                height="500px"
+                                                className="border rounded"
+                                            />
+                                        </div>
+                                    )}
+                                </div>
+
+
+                                <button
+                                    type="submit"
+                                    className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
+                                >
+                                    {isLoading ? 'Processing...' : editMode ? 'Update Chapter' : 'Add Chapter'}
+                                </button>
+                            </form>
+                        </div>
                     </div>
                 </div>
-
             )}
         </div>
     );

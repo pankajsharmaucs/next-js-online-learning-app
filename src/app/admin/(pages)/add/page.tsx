@@ -8,6 +8,7 @@ import { MasterModal } from '@/components/admin/dashboard/MasterModal';
 import { Board, Class, Subject } from '@/types/add_types';
 import axios from 'axios';
 import { showConfirmationDialog, showErrorToast, showSuccessToast, showWarningToast } from '@/components/alert/AlertToast';
+import './add.css'
 
 const MasterPage: React.FC = () => {
     const [boards, setBoards] = useState<Board[]>([]);
