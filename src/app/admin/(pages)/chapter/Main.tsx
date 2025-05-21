@@ -8,6 +8,7 @@ import { FaTrash } from 'react-icons/fa';
 import { useSearchParams } from 'next/navigation';
 import './chapter.css';
 import AddAssessmentForm from './AddAssessmentForm'; // adjust path as needed
+import ChapterQuestionAnswerForm from './ChapterQuestionAnswerForm';
 
 import dynamic from 'next/dynamic';
 const TiptapEditor = dynamic(() => import('@/components/editor/Editor'), { ssr: false });
@@ -69,11 +70,19 @@ function Page() {
     const modalRef = useRef<HTMLDivElement>(null);
 
     const [showAssessmentForm, setShowAssessmentForm] = useState(false);
+    const [showQuestionAnswerForm, setShowQuestionAnswerForm] = useState(false);
     const [selectedChapterId, setSelectedChapterId] = useState<string | null>(null);
 
     const addAssessments = (chapterId: string) => {
         setSelectedChapterId(chapterId);
+        setShowQuestionAnswerForm(false);
         setShowAssessmentForm(true);
+    };
+
+    const addQuestionAnswer = (chapterId: string) => {
+        setSelectedChapterId(chapterId);
+        setShowAssessmentForm(false);
+        setShowQuestionAnswerForm(true);
     };
 
     const handleCloseAssessmentForm = () => {
@@ -160,7 +169,6 @@ function Page() {
     const handleChange = (
         e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
     ) => {
-        
         const { name, value, type } = e.target;
 
         // Handle file input separately
@@ -338,6 +346,14 @@ function Page() {
                                                 </button>
 
 
+                                                <button
+                                                    className="btn btn-outline-success py-2 me-3  flex items-center gap-1"
+                                                    onClick={() => addQuestionAnswer(item._id)}
+                                                    title="Add_edit" >
+                                                    Add/Edit Q/A
+                                                </button>
+
+
                                             </td>
 
                                             <td className="border p-2">
@@ -478,14 +494,14 @@ function Page() {
                                         className="w-full border p-2 rounded mb-2"
                                     />
                                     {editMode && formData.pdf && typeof formData.pdf === 'string' && (
-                                        <div className="mt-2 col-6 h-[300px] overflow-hidden">
+                                        <div className="mt-2 col-md-6 overflow-hidden">
                                             <p className="font-semibold mb-1">Current PDF:</p>
                                             <iframe
                                                 src={formData.pdf}
                                                 title="PDF Preview"
                                                 width="100%"
                                                 height="500px"
-                                                className="border rounded"
+                                                className="border rounded mb-100"
                                             />
                                         </div>
                                     )}
@@ -514,6 +530,27 @@ function Page() {
                         </div>
 
                         <AddAssessmentForm
+                            selectedChapterId={selectedChapterId}
+                            token={token!}
+                            onClose={handleCloseAssessmentForm}
+                            showSuccessToast={showSuccessToast}
+                            showErrorToast={showErrorToast}
+                        />
+                    </div>
+                </div>
+            )}
+
+
+            {showQuestionAnswerForm && selectedChapterId && (
+                <div className="fixed inset-0 bg-white bg-opacity-40 flex justify-center items-center z-50 px-4">
+                    <div className="bg-white border rounded-lg w-full max-w-5xl overflow-y-auto max-h-[90vh] p-6 relative"
+                        style={{ padding: "16px" }} >
+                        <div className="flex justify-between items-center mb-4">
+                            <h2 className="text-xl font-semibold">Add/Edit Q/A</h2>
+                            <button onClick={handleCloseAssessmentForm} className="text-red-500 text-5xl" style={{ fontSize: "46px" }}>×</button>
+                        </div>
+
+                        <ChapterQuestionAnswerForm
                             selectedChapterId={selectedChapterId}
                             token={token!}
                             onClose={handleCloseAssessmentForm}

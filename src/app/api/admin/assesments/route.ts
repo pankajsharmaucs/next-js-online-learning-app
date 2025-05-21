@@ -94,3 +94,34 @@ export async function PUT(req: NextRequest) {
         return NextResponse.json({ error: 'Error updating assessment', details: error }, { status: 500 });
     }
 }
+
+
+export async function DELETE(req: NextRequest) {
+    try {
+        if (!(await validateSuperAdmin(req))) {
+            return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+        }
+
+        const assessmentId = req.nextUrl.searchParams.get('assessmentId');
+        const questionId = req.nextUrl.searchParams.get('questionId');
+
+        if (!assessmentId || !questionId) {
+            return NextResponse.json({ error: 'Missing assessmentId or questionId' }, { status: 400 });
+        }
+
+        const updated = await AssessmentModel.findByIdAndUpdate(
+            assessmentId,
+            { $pull: { questions: { _id: questionId } } },
+            { new: true }
+        );
+
+        if (!updated) {
+            return NextResponse.json({ error: 'Assessment not found or update failed' }, { status: 404 });
+        }
+
+        return NextResponse.json({ message: 'Question removed successfully' });
+    } catch (error) {
+        console.error('Error deleting question:', error);
+        return NextResponse.json({ error: 'Error deleting question', details: error }, { status: 500 });
+    }
+}

@@ -1,7 +1,9 @@
 import React, { useState, FormEvent, useEffect } from 'react';
 import axios from 'axios';
+import { showConfirmationDialog } from '@/components/alert/AlertToast';
 
 interface Question {
+    _id?: string;
     question: string;
     options: string[];
     answer: string;
@@ -79,11 +81,39 @@ function AddAssessmentForm(props: Props) {
         }));
     };
 
-    const removeQuestion = (index: number) => {
+    const removeQuestion = async (index: number) => {
+        const confirm = await showConfirmationDialog(
+            'Are you sure you want to delete this question?',
+            'This will permanently remove the question.'
+        );
+
+        if (!confirm) return;
+
+        const questionToRemove = assessmentData.questions[index];
+
         setAssessmentData((prev) => ({
             ...prev,
             questions: prev.questions.filter((_, i) => i !== index),
         }));
+
+        // If already saved assessment and question has some DB identifier, delete from backend
+        if (assessmentId && questionToRemove._id) {
+            try {
+                const base_url = window.origin;
+                const url = base_url + process.env.NEXT_PUBLIC_ADMIN_GET_ALL_ASSESMENT; // <-- set correct env variable
+
+                await axios.delete(`${url}?assessmentId=${assessmentId}&questionId=${questionToRemove._id}`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+
+                showSuccessToast('Question removed successfully from database');
+            } catch (error) {
+                console.error('Failed to remove question from DB:', error);
+                showErrorToast('Failed to remove question from database');
+            }
+        }
     };
 
 
@@ -149,7 +179,7 @@ function AddAssessmentForm(props: Props) {
 
     const submitAssessment = async (e: FormEvent) => {
         e.preventDefault();
-        
+
         if (!selectedChapterId) {
             showErrorToast('Chapter ID not selected');
             return;
