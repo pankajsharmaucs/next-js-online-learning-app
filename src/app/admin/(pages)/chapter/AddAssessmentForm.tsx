@@ -149,6 +149,7 @@ function AddAssessmentForm(props: Props) {
 
     const submitAssessment = async (e: FormEvent) => {
         e.preventDefault();
+        
         if (!selectedChapterId) {
             showErrorToast('Chapter ID not selected');
             return;

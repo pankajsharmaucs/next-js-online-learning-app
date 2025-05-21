@@ -65,7 +65,7 @@ export async function POST(req: NextRequest) {
     }
 }
 
-
+// ======PUT ====Update==
 export async function PUT(req: NextRequest) {
     try {
         if (!(await validateSuperAdmin(req))) {

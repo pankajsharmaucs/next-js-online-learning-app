@@ -160,6 +160,7 @@ function Page() {
     const handleChange = (
         e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
     ) => {
+        
         const { name, value, type } = e.target;
 
         // Handle file input separately
