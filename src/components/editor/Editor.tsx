@@ -5,9 +5,26 @@ import StarterKit from '@tiptap/starter-kit';
 import Underline from '@tiptap/extension-underline';
 import TextAlign from '@tiptap/extension-text-align';
 import Heading from '@tiptap/extension-heading';
+import Image from '@tiptap/extension-image';
+
 import { Editor } from '@tiptap/core';
 import { useEffect } from 'react';
-import { Undo2, Redo2, Bold, Italic, Underline as UnderlineIcon, Strikethrough, Quote, List, ListOrdered, Code, Heading1, Heading2, Heading3 } from 'lucide-react';
+import {
+  Undo2,
+  Redo2,
+  Bold,
+  Italic,
+  Underline as UnderlineIcon,
+  Strikethrough,
+  Quote,
+  List,
+  ListOrdered,
+  Code,
+  Heading1,
+  Heading2,
+  Heading3,
+  Image as ImageIcon,
+} from 'lucide-react';
 
 interface Props {
   content: string;
@@ -29,9 +46,11 @@ const TiptapEditor = ({ content, onChange }: Props) => {
       Heading.configure({
         levels: [1, 2, 3],
       }),
+      Image, // ✅ Enable image rendering
     ],
     content,
     onUpdate: ({ editor }) => {
+      console.log(content); // Should show <img>
       onChange(editor.getHTML());
     },
   });
@@ -41,6 +60,36 @@ const TiptapEditor = ({ content, onChange }: Props) => {
       editor.commands.setContent(content);
     }
   }, [content]);
+
+  const handleImageUploadEditor = () => {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'image/*';
+
+    input.onchange = async () => {
+      const file = input.files?.[0];
+      if (file) {
+        const formData = new FormData();
+        formData.append('file', file);
+
+        try {
+          const res = await fetch('/api/upload', {
+            method: 'POST',
+            body: formData,
+          });
+
+          const data = await res.json();
+          if (data?.url) {
+            editor?.chain().focus().setImage({ src: data.url }).run();
+          }
+        } catch (err) {
+          console.error('Image upload failed:', err);
+        }
+      }
+    };
+
+    input.click();
+  };
 
   const MenuButton = ({
     onClick,
@@ -55,9 +104,8 @@ const TiptapEditor = ({ content, onChange }: Props) => {
   }) => (
     <button
       onClick={onClick}
-      className={`p-2 rounded hover:bg-gray-200 transition ${
-        active ? 'bg-blue-100 text-blue-600' : ''
-      }`}
+      className={`p-2 rounded hover:bg-gray-200 transition ${active ? 'bg-blue-100 text-blue-600' : ''
+        }`}
       title={label}
     >
       {icon}
@@ -66,7 +114,6 @@ const TiptapEditor = ({ content, onChange }: Props) => {
 
   const MenuBar = ({ editor }: { editor: Editor | null }) => {
     if (!editor) return null;
-
     return (
       <div className="flex flex-wrap items-center gap-2 border-b border-gray-300 p-2 mb-2 bg-white rounded-t">
         <MenuButton
@@ -145,6 +192,11 @@ const TiptapEditor = ({ content, onChange }: Props) => {
           icon={<Redo2 size={16} />}
           label="Redo"
         />
+        <MenuButton
+          onClick={handleImageUploadEditor}
+          icon={<ImageIcon size={16} />}
+          label="Insert Image"
+        />
       </div>
     );
   };
@@ -152,7 +204,7 @@ const TiptapEditor = ({ content, onChange }: Props) => {
   return (
     <div className="border rounded shadow-sm">
       <MenuBar editor={editor} />
-      <div className="min-h-[200px] p-4 bg-white rounded-b prose max-w-none">
+      <div className="min-h-[200px] p-4 bg-white rounded-b prose max-w-none prose-img:rounded prose-img:max-w-full prose-img:h-auto">
         <EditorContent editor={editor} />
       </div>
     </div>

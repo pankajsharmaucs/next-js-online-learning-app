@@ -12,6 +12,7 @@ import ChapterQuestionAnswerForm from './ChapterQuestionAnswerForm';
 
 import dynamic from 'next/dynamic';
 const TiptapEditor = dynamic(() => import('@/components/editor/Editor'), { ssr: false });
+import SimpleEditor from '@/components/editor/SimpleEditor';
 
 
 interface ChapterForm {
@@ -339,7 +340,7 @@ function Page() {
                                             <td className="border p-2">
 
                                                 <button
-                                                    className="btn btn-outline-success py-2 me-3  flex items-center gap-1"
+                                                    className="btn btn-outline-success py-2 me-3  flex items-center gap-1 mb-1"
                                                     onClick={() => addAssessments(item._id)}
                                                     title="Add_edit" >
                                                     Add/Edit Assesments
@@ -347,7 +348,7 @@ function Page() {
 
 
                                                 <button
-                                                    className="btn btn-outline-success py-2 me-3  flex items-center gap-1"
+                                                    className="btn btn-outline-success py-2 me-3  flex items-center gap-1 mb-1"
                                                     onClick={() => addQuestionAnswer(item._id)}
                                                     title="Add_edit" >
                                                     Add/Edit Q/A
@@ -359,7 +360,7 @@ function Page() {
                                             <td className="border p-2">
 
                                                 <button
-                                                    className="btn btn-warning py-1 me-1"
+                                                    className="btn btn-warning py-1 me-1 mb-1"
                                                     onClick={() => {
                                                         setFormData(item);
                                                         setEditMode(true);
@@ -370,7 +371,7 @@ function Page() {
                                                 </button>
 
                                                 <button
-                                                    className="btn btn-secondary py-2 me-1 flex items-center gap-1"
+                                                    className="btn btn-secondary py-2 me-1 flex items-center gap-1 mb-1"
                                                     onClick={() => handleDelete(item._id)}
                                                     title="Delete"
                                                 >
@@ -427,48 +428,51 @@ function Page() {
                                 <div className="chapter-editor-layout">
                                     <div className="editor-block">
                                         <label className="font-bold">Introduction</label>
-                                        <TiptapEditor
-                                            content={formData.introduction || ''}
-                                            onChange={(html) => setFormData((prev) => ({ ...prev, introduction: html }))}
+                                        <SimpleEditor
+                                            value={formData.introduction || ''}
+                                            onChange={(html) =>
+                                                setFormData((prev) => ({ ...prev, introduction: html }))
+                                            }
                                         />
                                     </div>
 
                                     <div className="editor-block">
                                         <label className="font-bold">Summary</label>
-                                        <TiptapEditor
-                                            content={formData.summary || ''}
-                                            onChange={(html) => setFormData((prev) => ({ ...prev, summary: html }))}
+                                        <SimpleEditor
+                                            value={formData.summary || ''}
+                                            onChange={(html) =>
+                                                setFormData((prev) => ({ ...prev, summary: html }))
+                                            }
                                         />
                                     </div>
 
                                     <div className="editor-block">
-                                        <label className="font-bold ">Moral</label>
-                                        <TiptapEditor
-                                            content={formData.moral || ''}
+                                        <label className="font-bold">Moral</label>
+                                        <SimpleEditor
+                                            value={formData.moral || ''}
                                             onChange={(html) =>
                                                 setFormData((prev) => ({ ...prev, moral: html }))
                                             }
                                         />
                                     </div>
-
                                 </div>
 
 
-                                <input
-                                    type="text"
-                                    name="video_url"
-                                    value={formData.video_url}
-                                    onChange={handleChange}
-                                    placeholder="Video URL"
-                                    className="w-full border p-2 rounded my-4"
-                                />
 
-                                <div className="flex flex-col md:flex-row gap-4 mb-2">
+                                <div className="flex align-items-center gap-4 mb-2">
+                                    <input
+                                        type="text"
+                                        name="video_url"
+                                        value={formData.video_url}
+                                        onChange={handleChange}
+                                        placeholder="Video URL"
+                                        className="col-md-3 border p-2 rounded my-4 h-[40px]"
+                                    />
                                     <select
                                         name="video_access"
                                         value={formData.video_access}
                                         onChange={handleChange}
-                                        className="w-full md:w-1/2 border p-2 rounded"
+                                        className="col-md-3 border p-2 rounded h-[40px]"
                                     >
                                         <option value="free">Free Video</option>
                                         <option value="paid">Paid Video</option>
@@ -478,29 +482,31 @@ function Page() {
                                         name="assignment_access"
                                         value={formData.assignment_access}
                                         onChange={handleChange}
-                                        className="w-full md:w-1/2 border p-2 rounded"
+                                        className="col-md-3 border p-2 rounded h-[40px]"
                                     >
                                         <option value="free">Free Assignment</option>
                                         <option value="paid">Paid Assignment</option>
                                     </select>
                                 </div>
 
-                                <div className="flex-col gap-4 my-4">
-                                    <label htmlFor="" className='font-bold '>Select PDF</label>
-                                    <input
-                                        type="file"
-                                        name="pdf"
-                                        onChange={handleChange}
-                                        className="w-full border p-2 rounded mb-2"
-                                    />
+                                <div className="flex gap-4 my-4">
+                                    <div className='col-md-3 '>
+                                        <label htmlFor="" className='font-bold '>Select PDF</label>
+                                        <input
+                                            type="file"
+                                            name="pdf"
+                                            onChange={handleChange}
+                                            className="w-full border p-2 rounded mb-2"
+                                        />
+                                    </div>
                                     {editMode && formData.pdf && typeof formData.pdf === 'string' && (
-                                        <div className="mt-2 col-md-6 overflow-hidden">
-                                            <p className="font-semibold mb-1">Current PDF:</p>
+                                        <div className="mt-2 col-md-3 overflow-hidden">
+                                            <label htmlFor="" className='font-bold '>Current PDF</label>
                                             <iframe
                                                 src={formData.pdf}
                                                 title="PDF Preview"
                                                 width="100%"
-                                                height="500px"
+                                                height="300px"
                                                 className="border rounded mb-100"
                                             />
                                         </div>
@@ -510,7 +516,7 @@ function Page() {
 
                                 <button
                                     type="submit"
-                                    className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
+                                    className="w-[200px] bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
                                 >
                                     {isLoading ? 'Processing...' : editMode ? 'Update Chapter' : 'Add Chapter'}
                                 </button>
