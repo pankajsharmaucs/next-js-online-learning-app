@@ -1,3 +1,17 @@
+ol {
+  list-style-type: decimal;
+  list-style-position: outside;
+}
+
+ul, menu {
+  list-style-type: disc;
+  list-style-position: outside;
+}
+
+li {
+  list-style: inherit;
+}
+
 .chapter-editor-layout {
   display: flex;
   flex-wrap: wrap;
@@ -6,6 +20,11 @@
 
 .editor-block {
   width: 100%;
+}
+
+.mainEditorBox{
+  max-height:450px;
+  overflow-y: scroll;
 }
 
 @media (min-width: 1200px) {

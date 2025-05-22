@@ -415,18 +415,19 @@ function Page() {
                                 <input type="hidden" name="class_id" value={ClassID} />
                                 <input type="hidden" name="subject_id" value={subjectID} />
 
+                                <label className="font-bold">Title</label>
                                 <input
                                     type="text"
                                     name="chapter_name"
                                     value={formData.chapter_name}
                                     onChange={handleChange}
                                     placeholder="Chapter Name"
-                                    className="w-full border p-2 rounded mb-2"
+                                    className="w-full border p-2 rounded mb-3"
                                     required
                                 />
 
-                                <div className="chapter-editor-layout">
-                                    <div className="editor-block">
+                                <div className="chapter-editor-layout ">
+                                    <div className="editor-block ">
                                         <label className="font-bold">Introduction</label>
                                         <SimpleEditor
                                             value={formData.introduction || ''}
@@ -436,7 +437,7 @@ function Page() {
                                         />
                                     </div>
 
-                                    <div className="editor-block">
+                                    <div className="editor-block ">
                                         <label className="font-bold">Summary</label>
                                         <SimpleEditor
                                             value={formData.summary || ''}
@@ -446,7 +447,7 @@ function Page() {
                                         />
                                     </div>
 
-                                    <div className="editor-block">
+                                    <div className="editor-block ">
                                         <label className="font-bold">Moral</label>
                                         <SimpleEditor
                                             value={formData.moral || ''}
@@ -459,37 +460,48 @@ function Page() {
 
 
 
-                                <div className="flex align-items-center gap-4 mb-2">
-                                    <input
-                                        type="text"
-                                        name="video_url"
-                                        value={formData.video_url}
-                                        onChange={handleChange}
-                                        placeholder="Video URL"
-                                        className="col-md-3 border p-2 rounded my-4 h-[40px]"
-                                    />
-                                    <select
-                                        name="video_access"
-                                        value={formData.video_access}
-                                        onChange={handleChange}
-                                        className="col-md-3 border p-2 rounded h-[40px]"
-                                    >
-                                        <option value="free">Free Video</option>
-                                        <option value="paid">Paid Video</option>
-                                    </select>
+                                <div className="flex align-items-center gap-4 my-4">
+                                    <div className="col-md-3  ">
+                                        <label className="font-bold col-12 ">Video URL</label>
+                                        <input
+                                            type="text"
+                                            name="video_url"
+                                            value={formData.video_url}
+                                            onChange={handleChange}
+                                            placeholder="Video URL"
+                                            className=" border p-2 rounded  h-[40px] col-12"
+                                        />
+                                    </div>
 
-                                    <select
-                                        name="assignment_access"
-                                        value={formData.assignment_access}
-                                        onChange={handleChange}
-                                        className="col-md-3 border p-2 rounded h-[40px]"
-                                    >
-                                        <option value="free">Free Assignment</option>
-                                        <option value="paid">Paid Assignment</option>
-                                    </select>
+                                    <div className="col-md-3  ">
+                                        <label className="font-bold col-12 ">Video Access</label>
+                                        <select
+                                            name="video_access"
+                                            value={formData.video_access}
+                                            onChange={handleChange}
+                                            className="  border p-2 rounded h-[40px] col-12"
+                                        >
+                                            <option value="free">Free Video</option>
+                                            <option value="paid">Paid Video</option>
+                                        </select>
+                                    </div>
+
+                                    <div className="col-md-3  ">
+                                        <label className="font-bold col-12 ">Assessment Access</label>
+                                        <select
+                                            name="assignment_access"
+                                            value={formData.assignment_access}
+                                            onChange={handleChange}
+                                            className="  border p-2 rounded h-[40px] col-12"
+                                        >
+                                            <option value="free">Free Assignment</option>
+                                            <option value="paid">Paid Assignment</option>
+                                        </select>
+                                    </div>
+
                                 </div>
 
-                                <div className="flex gap-4 my-4">
+                                <div className="flex md:flex-wrap flex-wrap gap-4 my-4">
                                     <div className='col-md-3 '>
                                         <label htmlFor="" className='font-bold '>Select PDF</label>
                                         <input
@@ -523,51 +535,56 @@ function Page() {
                             </form>
                         </div>
                     </div>
-                </div>
-            )}
+                </div >
+            )
+            }
 
-            {showAssessmentForm && selectedChapterId && (
-                <div className="fixed inset-0 bg-white bg-opacity-40 flex justify-center items-center z-50 px-4">
-                    <div className="bg-white border rounded-lg w-full max-w-5xl overflow-y-auto max-h-[90vh] p-6 relative"
-                        style={{ padding: "16px" }} >
-                        <div className="flex justify-between items-center mb-4">
-                            <h2 className="text-xl font-semibold">Add/Edit Assessment</h2>
-                            <button onClick={handleCloseAssessmentForm} className="text-red-500 text-5xl" style={{ fontSize: "46px" }}>×</button>
+            {
+                showAssessmentForm && selectedChapterId && (
+                    <div className="fixed inset-0 bg-white bg-opacity-40 flex justify-center items-center z-50 px-4">
+                        <div className="bg-white border rounded-lg w-full max-w-5xl overflow-y-auto max-h-[90vh] p-6 relative"
+                            style={{ padding: "16px" }} >
+                            <div className="flex justify-between items-center mb-4">
+                                <h2 className="text-xl font-semibold">Add/Edit Assessment</h2>
+                                <button onClick={handleCloseAssessmentForm} className="text-red-500 text-5xl" style={{ fontSize: "46px" }}>×</button>
+                            </div>
+
+                            <AddAssessmentForm
+                                selectedChapterId={selectedChapterId}
+                                token={token!}
+                                onClose={handleCloseAssessmentForm}
+                                showSuccessToast={showSuccessToast}
+                                showErrorToast={showErrorToast}
+                            />
                         </div>
-
-                        <AddAssessmentForm
-                            selectedChapterId={selectedChapterId}
-                            token={token!}
-                            onClose={handleCloseAssessmentForm}
-                            showSuccessToast={showSuccessToast}
-                            showErrorToast={showErrorToast}
-                        />
                     </div>
-                </div>
-            )}
+                )
+            }
 
 
-            {showQuestionAnswerForm && selectedChapterId && (
-                <div className="fixed inset-0 bg-white bg-opacity-40 flex justify-center items-center z-50 px-4">
-                    <div className="bg-white border rounded-lg w-full max-w-5xl overflow-y-auto max-h-[90vh] p-6 relative"
-                        style={{ padding: "16px" }} >
-                        <div className="flex justify-between items-center mb-4">
-                            <h2 className="text-xl font-semibold">Add/Edit Q/A</h2>
-                            <button onClick={handleCloseAssessmentForm} className="text-red-500 text-5xl" style={{ fontSize: "46px" }}>×</button>
+            {
+                showQuestionAnswerForm && selectedChapterId && (
+                    <div className="fixed inset-0 bg-white bg-opacity-40 flex justify-center items-center z-50 px-4">
+                        <div className="bg-white border rounded-lg w-full max-w-5xl overflow-y-auto max-h-[90vh] p-6 relative"
+                            style={{ padding: "16px" }} >
+                            <div className="flex justify-between items-center mb-4">
+                                <h2 className="text-xl font-semibold">Add/Edit Q/A</h2>
+                                <button onClick={handleCloseAssessmentForm} className="text-red-500 text-5xl" style={{ fontSize: "46px" }}>×</button>
+                            </div>
+
+                            <ChapterQuestionAnswerForm
+                                selectedChapterId={selectedChapterId}
+                                token={token!}
+                                onClose={handleCloseAssessmentForm}
+                                showSuccessToast={showSuccessToast}
+                                showErrorToast={showErrorToast}
+                            />
                         </div>
-
-                        <ChapterQuestionAnswerForm
-                            selectedChapterId={selectedChapterId}
-                            token={token!}
-                            onClose={handleCloseAssessmentForm}
-                            showSuccessToast={showSuccessToast}
-                            showErrorToast={showErrorToast}
-                        />
                     </div>
-                </div>
-            )}
+                )
+            }
 
-        </div>
+        </div >
     );
 }
 

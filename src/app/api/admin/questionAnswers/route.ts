@@ -13,9 +13,17 @@ export async function GET(req: NextRequest) {
 
         const questions = await ChapterQuestionAnswerModel.find({ chapterId });
 
-        return NextResponse.json(questions);
+        const response = questions.map((q) => ({
+            _id: q._id,
+            chapterId: q.chapterId,
+            pageRef: q.pageRef ?? null,
+            question: q.question,
+            answers: Array.isArray(q.answers) ? q.answers : [],
+        }));
+
+        return NextResponse.json(response);
     } catch (error) {
-        return NextResponse.json({ error: 'Error fetching questions', details: error }, { status: 500 });
+        return NextResponse.json({ error: 'Error fetching questions', details: `${error}` }, { status: 500 });
     }
 }
 
@@ -27,14 +35,15 @@ export async function POST(req: NextRequest) {
         }
 
         const body = await req.json();
-        const { chapterId, question, answers } = body;
+        const { chapterId, pageRef, question, answers } = body;
 
-        if (!chapterId || !question || !Array.isArray(answers) || answers.length === 0) {
+        if (!chapterId || !pageRef || !question || !Array.isArray(answers)) {
             return NextResponse.json({ error: 'Invalid or missing fields' }, { status: 400 });
         }
 
         const newQuestion = new ChapterQuestionAnswerModel({
             chapterId,
+            pageRef,
             question,
             answers,
         });
@@ -43,7 +52,7 @@ export async function POST(req: NextRequest) {
 
         return NextResponse.json({ message: 'Question created', id: newQuestion._id }, { status: 201 });
     } catch (error) {
-        return NextResponse.json({ error: 'Error creating question', details: error }, { status: 500 });
+        return NextResponse.json({ error: 'Error creating question', details: `${error}` }, { status: 500 });
     }
 }
 
@@ -55,15 +64,15 @@ export async function PUT(req: NextRequest) {
         }
 
         const body = await req.json();
-        const { _id, chapterId, question, answers } = body;
+        const { _id, chapterId, pageRef, question, answers } = body;
 
-        if (!_id || !chapterId || !question || !Array.isArray(answers)) {
+        if (!_id || !chapterId || !pageRef || !question || !Array.isArray(answers)) {
             return NextResponse.json({ error: 'Missing or invalid fields' }, { status: 400 });
         }
 
         const updated = await ChapterQuestionAnswerModel.findByIdAndUpdate(
             _id,
-            { chapterId, question, answers },
+            { chapterId, pageRef, question, answers },
             { new: true }
         );
 
@@ -73,10 +82,9 @@ export async function PUT(req: NextRequest) {
 
         return NextResponse.json({ message: 'Question updated', id: updated._id });
     } catch (error) {
-        return NextResponse.json({ error: 'Error updating question', details: error }, { status: 500 });
+        return NextResponse.json({ error: 'Error updating question', details: `${error}` }, { status: 500 });
     }
 }
-
 
 // DELETE: Delete question by _id
 export async function DELETE(req: NextRequest) {
@@ -86,6 +94,7 @@ export async function DELETE(req: NextRequest) {
         }
 
         const id = req.nextUrl.searchParams.get('id');
+
         if (!id) {
             return NextResponse.json({ error: 'id is required' }, { status: 400 });
         }
@@ -98,6 +107,6 @@ export async function DELETE(req: NextRequest) {
 
         return NextResponse.json({ message: 'Question deleted', id: deleted._id });
     } catch (error) {
-        return NextResponse.json({ error: 'Error deleting question', details: error }, { status: 500 });
+        return NextResponse.json({ error: 'Error deleting question', details: `${error}` }, { status: 500 });
     }
 }

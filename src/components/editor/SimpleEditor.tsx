@@ -12,7 +12,7 @@ const SimpleEditor: React.FC<SimpleEditorProps> = ({ value, onChange }) => {
   };
 
   return (
-    <div className="border rounded shadow-sm bg-white p-4 min-h-[200px]">
+    <div className="mainEditorBox border rounded shadow-sm bg-white p-4 min-h-[200px]">
       <DefaultEditor value={value} onChange={handleChange} tagName="div" />
     </div>
   );

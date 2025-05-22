@@ -1,11 +1,13 @@
 import React, { useEffect, useState, FormEvent } from 'react';
 import axios from 'axios';
 import { showConfirmationDialog } from '@/components/alert/AlertToast';
+import SimpleEditor from '@/components/editor/SimpleEditor';
 
 interface QAEntry {
     _id?: string;
+    pageRef: string;
     question: string;
-    answers: string[]; // Always [singleAnswer]
+    answers: string[]; // updated to array
 }
 
 interface Props {
@@ -38,36 +40,39 @@ function ChapterQuestionAnswerForm({
 
                 if (res.data && res.data.length > 0) {
                     setQaData(
-                        res.data.map((item: QAEntry) => ({
+                        res.data.map((item: any) => ({
                             _id: item._id,
+                            pageRef: item.pageRef,
                             question: item.question,
-                            answers: [item.answers?.[0] || ''],
+                            answers: item.answers || [''],
                         }))
                     );
                 } else {
-                    setQaData([{ question: '', answers: [''] }]);
+                    setQaData([{ pageRef: '', question: '', answers: [''] }]);
                 }
             } catch (err) {
                 console.warn('No QA found or failed to fetch:', err);
-                setQaData([{ question: '', answers: [''] }]);
+                setQaData([{ pageRef: '', question: '', answers: [''] }]);
             }
         };
 
         fetchExistingQA();
     }, [selectedChapterId]);
 
-    const handleQAChange = (index: number, field: 'question' | 'answer', value: string) => {
+    const handleQAChange = (index: number, field: 'pageRef' | 'question' | 'answer', value: string) => {
         const updated = [...qaData];
-        if (field === 'question') {
+        if (field === 'pageRef') {
+            updated[index].pageRef = value;
+        } else if (field === 'question') {
             updated[index].question = value;
-        } else {
-            updated[index].answers[0] = value;
+        } else if (field === 'answer') {
+            updated[index].answers = [value]; // support single answer for now
         }
         setQaData(updated);
     };
 
     const addQA = () => {
-        setQaData((prev) => [...prev, { question: '', answers: [''] }]);
+        setQaData((prev) => [...prev, { pageRef: '', question: '', answers: [''] }]);
     };
 
     const removeQA = async (index: number) => {
@@ -78,7 +83,6 @@ function ChapterQuestionAnswerForm({
                 'Are you sure?',
                 'This question will be permanently deleted!'
             );
-
             if (!confirmed) return;
         }
 
@@ -115,6 +119,7 @@ function ChapterQuestionAnswerForm({
             for (const entry of qaData) {
                 const payload = {
                     chapterId: selectedChapterId,
+                    pageRef: entry.pageRef,
                     question: entry.question,
                     answers: entry.answers,
                 };
@@ -140,7 +145,7 @@ function ChapterQuestionAnswerForm({
                 <div key={index} className="border rounded p-4 bg-gray-100 space-y-2 mb-3">
                     <div className="flex justify-between items-center">
                         <h3 className="font-semibold">Question {index + 1}</h3>
-                        {qaData.length > 1 && (
+                        {qaData.length > 0 && (
                             <button
                                 type="button"
                                 onClick={() => removeQA(index)}
@@ -153,21 +158,30 @@ function ChapterQuestionAnswerForm({
 
                     <input
                         type="text"
-                        value={qa.question}
-                        onChange={(e) => handleQAChange(index, 'question', e.target.value)}
-                        placeholder="Enter question"
+                        value={qa.pageRef || ''}
+                        onChange={(e) => handleQAChange(index, 'pageRef', e.target.value)}
+                        placeholder="Page Reference"
                         className="w-full border p-2 rounded bg-white mb-1"
                         required
                     />
 
-                    <input
-                        type="text"
-                        value={qa.answers[0]}
-                        onChange={(e) => handleQAChange(index, 'answer', e.target.value)}
-                        placeholder="Enter answer"
-                        className="w-full border p-2 rounded bg-white mb-1"
-                        required
-                    />
+                    <div className="chapter-editor-layout">
+                        <div className="editor-block">
+                            <label className="font-bold">Question</label>
+                            <SimpleEditor
+                                value={qa.question || ''}
+                                onChange={(html) => handleQAChange(index, 'question', html)}
+                            />
+                        </div>
+
+                        <div className="editor-block">
+                            <label className="font-bold">Answer</label>
+                            <SimpleEditor
+                                value={qa.answers?.[0] || ''}
+                                onChange={(html) => handleQAChange(index, 'answer', html)}
+                            />
+                        </div>
+                    </div>
                 </div>
             ))}
 
