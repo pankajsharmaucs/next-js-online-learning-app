@@ -59,6 +59,7 @@ const Sidebar = () => {
                         <SidebarButton label="Dashboard" icon="FaTachometerAlt" link="/admin/dashboard" />
                         <SidebarButton label="Users" icon="FaUser" link="/admin/users" />
                         <SidebarButton label="Master" icon="FaPlus" link="/admin/add" />
+                        <SidebarButton label="Blog" icon="FaPlus" link="/admin/blog" />
                         <SidebarButton label="Settings" icon="FaCog" link="/admin/settings" />
                     </nav>
 

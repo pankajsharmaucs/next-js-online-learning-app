@@ -2,7 +2,6 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { connectDB } from '@/lib/mongo_db';
 import BlogCategory from '@/lib/models/blog/BlogCategory';
-// import { validateSuperAdmin } from '@/lib/apiValidator';
 
 // GET: Fetch all categories
 export async function GET(req: NextRequest) {
@@ -20,26 +19,22 @@ export async function GET(req: NextRequest) {
 
 // POST: Add a new category
 export async function POST(req: NextRequest) {
-    // if (!(await validateSuperAdmin(req))) {
-    //     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    // }
-
     try {
-        const { name } = await req.json();
-        if (!name) {
+        const { cat_name } = await req.json();
+        if (!cat_name) {
             return NextResponse.json({ error: 'Category name is required' }, { status: 400 });
         }
 
         await connectDB();
-        const existing = await BlogCategory.findOne({ name });
+        const existing = await BlogCategory.findOne({ cat_name });
         if (existing) {
             return NextResponse.json({ error: 'Category already exists' }, { status: 400 });
         }
 
-        const newCategory = new BlogCategory({ name });
+        const newCategory = new BlogCategory({ cat_name });
         await newCategory.save();
 
-        return NextResponse.json({ message: 'Category added', id: newCategory._id });
+        return NextResponse.json(newCategory);
     } catch (error) {
         return NextResponse.json(
             { error: 'Error adding category', details: (error as Error).message },
@@ -50,14 +45,10 @@ export async function POST(req: NextRequest) {
 
 // PUT: Update a category
 export async function PUT(req: NextRequest) {
-    // if (!(await validateSuperAdmin(req))) {
-    //     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    // }
-
     try {
-        const { cat_id, name } = await req.json();
-        if (!cat_id || !name) {
-            return NextResponse.json({ error: 'cat_id and name are required' }, { status: 400 });
+        const { cat_id, cat_name } = await req.json();
+        if (!cat_id || !cat_name) {
+            return NextResponse.json({ error: 'cat_id and cat_name are required' }, { status: 400 });
         }
 
         await connectDB();
@@ -66,7 +57,7 @@ export async function PUT(req: NextRequest) {
             return NextResponse.json({ error: 'Category not found' }, { status: 404 });
         }
 
-        category.name = name.trim();
+        category.cat_name = cat_name.trim();
         await category.save();
 
         return NextResponse.json({ message: 'Category updated successfully' });
@@ -80,24 +71,22 @@ export async function PUT(req: NextRequest) {
 
 // DELETE: Delete a category
 export async function DELETE(req: NextRequest) {
-    // if (!(await validateSuperAdmin(req))) {
-    //     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    // }
-
     try {
-        const { cat_id } = await req.json();
-        if (!cat_id) {
-            return NextResponse.json({ error: 'cat_id is required' }, { status: 400 });
+        await connectDB();
+        const { id } = await req.json();
+
+        if (!id) {
+            return NextResponse.json({ message: "ID is required" }, { status: 400 });
         }
 
-        await connectDB();
-        await BlogCategory.findByIdAndDelete(cat_id);
+        const deleted = await BlogCategory.findByIdAndDelete(id);
+        if (!deleted) {
+            return NextResponse.json({ message: "Category not found" }, { status: 404 });
+        }
 
-        return NextResponse.json({ message: 'Category deleted' });
+        return NextResponse.json({ message: "Category deleted" });
     } catch (error) {
-        return NextResponse.json(
-            { error: 'Error deleting category', details: (error as Error).message },
-            { status: 500 }
-        );
+        console.error(error);
+        return NextResponse.json({ message: "Internal Server Error" }, { status: 500 });
     }
 }

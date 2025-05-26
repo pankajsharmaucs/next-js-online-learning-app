@@ -1,13 +1,10 @@
 import mongoose from 'mongoose';
 
 const BlogCategorySchema = new mongoose.Schema({
-    name: { type: String, required: true },
-    description: { type: String },
-    slug: { type: String },
-    create_date: { type: String },
-    update_date: { type: String }
+  cat_name: { type: String, required: true },
+  icon: { type: String }
 });
 
-export default mongoose.models.BlogCategory || mongoose.model('BlogCategory', BlogCategorySchema);
-
- 
+// ✅ Safely reset the model if it already exists (for hot-reload dev environments)
+export default mongoose.models.BlogCategory ||
+  mongoose.model('BlogCategory', BlogCategorySchema);

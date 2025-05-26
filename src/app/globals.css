@@ -8,12 +8,26 @@
   --font-main: 'Hind', sans-serif;
 }
 
-body {
-  font-family: var(--font-main)!important;
+ul {
+  list-style: disc;
+  margin-left: 1.25rem;
+  /* optional for indentation */
+  padding-left: 0;
 }
 
-p{
-  font-family: "Hind", sans-serif!important;
+ol {
+  list-style: decimal;
+  margin-left: 1.25rem;
+  /* optional for indentation */
+  padding-left: 0;
+}
+
+body {
+  font-family: var(--font-main) !important;
+}
+
+p {
+  font-family: "Hind", sans-serif !important;
 }
 
 a {
@@ -39,6 +53,6 @@ h2 {
   color: #fff;
 }
 
-.breadcrumBox{
+.breadcrumBox {
   margin-top: 11px;
 }

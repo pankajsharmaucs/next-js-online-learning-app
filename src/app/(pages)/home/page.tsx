@@ -3,113 +3,7 @@ import React from 'react'
 const Home = () => {
   return (
     <>
-      {/* cart mini area start */}
-      <div className="cartmini__area">
-        <div className="cartmini__wrapper">
-          <div className="cartmini__title">
-            <h4>Shopping cart</h4>
-          </div>
-          <div className="cartmini__close">
-            <button type="button" className="cartmini__close-btn">
-              <i className="fal fa-times" />
-            </button>
-          </div>
-          <div className="cartmini__widget">
-            <div className="cartmini__inner">
-              <ul>
-                <li>
-                  <div className="cartmini__thumb">
-                    <a href="#">
-                      <img src="/img/course/sm/cart-1.jpg" alt="" />
-                    </a>
-                  </div>
-                  <div className="cartmini__content">
-                    <h5>
-                      <a href="#">Strategy law and organization Foundation </a>
-                    </h5>
-                    <div className="product-quantity mt-10 mb-10">
-                      <span className="cart-minus">-</span>
-                      <input className="cart-input" type="text" defaultValue={1} />
-                      <span className="cart-plus">+</span>
-                    </div>
-                    <div className="product__sm-price-wrapper">
-                      <span className="product__sm-price">$46.00</span>
-                    </div>
-                  </div>
-                  <a href="#" className="cartmini__del">
-                    <i className="fal fa-times" />
-                  </a>
-                </li>
-                <li>
-                  <div className="cartmini__thumb">
-                    <a href="#">
-                      <img src="/img/course/sm/cart-2.jpg" alt="" />
-                    </a>
-                  </div>
-                  <div className="cartmini__content">
-                    <h5>
-                      <a href="#">Fundamentals of music theory Learn new</a>
-                    </h5>
-                    <div className="product-quantity mt-10 mb-10">
-                      <span className="cart-minus">-</span>
-                      <input className="cart-input" type="text" defaultValue={1} />
-                      <span className="cart-plus">+</span>
-                    </div>
-                    <div className="product__sm-price-wrapper">
-                      <span className="product__sm-price">$32.00</span>
-                    </div>
-                  </div>
-                  <a href="#" className="cartmini__del">
-                    <i className="fal fa-times" />
-                  </a>
-                </li>
-                <li>
-                  <div className="cartmini__thumb">
-                    <a href="#">
-                      <img src="/img/course/sm/cart-3.jpg" alt="" />
-                    </a>
-                  </div>
-                  <div className="cartmini__content">
-                    <h5>
-                      <a href="#">Strategy law and organization Foundation </a>
-                    </h5>
-                    <div className="product-quantity mt-10 mb-10">
-                      <span className="cart-minus">-</span>
-                      <input className="cart-input" type="text" defaultValue={1} />
-                      <span className="cart-plus">+</span>
-                    </div>
-                    <div className="product__sm-price-wrapper">
-                      <span className="product__sm-price">$62.00</span>
-                    </div>
-                  </div>
-                  <a href="#" className="cartmini__del">
-                    <i className="fal fa-times" />
-                  </a>
-                </li>
-              </ul>
-            </div>
-            <div className="cartmini__checkout">
-              <div className="cartmini__checkout-title mb-30">
-                <h4>Subtotal:</h4>
-                <span>$113.00</span>
-              </div>
-              <div className="cartmini__checkout-btn">
-                <a href="cart.html" className="e-btn e-btn-border mb-10 w-100">
-                  {" "}
-                  <span /> view cart
-                </a>
-                <a href="checkout.html" className="e-btn w-100">
-                  {" "}
-                  <span /> checkout
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div className="body-overlay" />
-      {/* cart mini area end */}
-
+      
       <main>
         {/* hero area start */}
         <section className="hero__area hero__height d-flex align-items-center grey-bg-2 p-relative">
@@ -136,7 +30,7 @@ const Home = () => {
                 <div className="col-xxl-6 col-xl-6 col-lg-6 col-md-6">
                   <div className="hero__content p-relative z-index-1">
                     <h1 className="hero__title">
-                      <span>Access 2700+</span>
+                      <span>Access 300+</span>
                       <span className="yellow-shape">
                         Online{" "}
                         <img
