@@ -25,9 +25,27 @@ export async function POST(req: NextRequest) {
         if (!(await validateSuperAdmin(req))) {
             return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
         }
-
         const { class_id, subject_name } = await req.json();
         await connectDB();
+
+        // ✅ Validate inputs
+        if (!class_id || !subject_name) {
+            return NextResponse.json({ error: 'class_id and subject_name are required' }, { status: 400 });
+        }
+
+        // ✅ Check for duplicate subject in the same class (case-insensitive)
+        const existingSubject = await Subject.findOne({
+            class_id,
+            subject_name: { $regex: `^${subject_name}$`, $options: 'i' },
+        });
+
+         if (existingSubject) {
+            return NextResponse.json(
+                { error: 'Subject name already exists under this class' },
+                { status: 409 }
+            );
+        }
+
 
         const newSubject = await Subject.create({ class_id, subject_name });
         return NextResponse.json({ message: 'subject added', id: newSubject._id });
@@ -43,13 +61,13 @@ export async function PUT(req: NextRequest) {
             return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
         }
 
-        const { _id	, subject_name } = await req.json();
-        if (!_id	) {
+        const { _id, subject_name } = await req.json();
+        if (!_id) {
             return NextResponse.json({ error: 'ID is required' }, { status: 400 });
         }
 
         await connectDB();
-        const subject = await Subject.findById(_id	);
+        const subject = await Subject.findById(_id);
         if (!subject) {
             return NextResponse.json({ error: 'subject not found' }, { status: 404 });
         }

@@ -9,7 +9,7 @@ import { FaUser, FaPlus, FaChalkboardTeacher, FaBookOpen, FaUsers, FaCog } from 
 const Card1 = ({ title, link, icon }: CardProps) => {
     const [imageSrc, setImageSrc] = useState('');
     console.log(title);
-
+    
     useEffect(() => {
         switch (title) {
             case 'User':
@@ -43,18 +43,18 @@ const Card1 = ({ title, link, icon }: CardProps) => {
 
     return (
         <div className="bg-white border cursor-pointer   border-gray-200 rounded shadow-md hover:shadow-xl hover:border-gray-400 transition-all duration-300 text-center">
-            <Link href={link} className="flex justify-center flex-column items-center gap-2 pt-3 px-1">
+            <Link href={link} className="flex justify-center flex-column items-center gap-4 pt-3 px-3">
                 {/* {iconMap[icon as keyof typeof iconMap]} */}
 
-                {imageSrc && (
-                    <Image
-                        src={imageSrc}
-                        alt={`${title} icon`}
-                        width={80}
-                        height={40}
-                        className="rounded"
-                    />
-                )}
+                    {imageSrc && (
+                        <Image
+                            src={imageSrc}
+                            alt={`${title} icon`}
+                            width={80}
+                            height={40}
+                            className="rounded"
+                        />
+                    )}
 
                 <h5 className="">{title}</h5>
             </Link>

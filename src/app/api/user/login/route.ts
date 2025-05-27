@@ -1,52 +1,61 @@
-// src/app/api/auth/login/route.ts
-
-import { NextRequest, NextResponse } from 'next/server';
-import jwt from 'jsonwebtoken';
-import bcrypt from 'bcryptjs';
+import { NextResponse } from 'next/server';
+import type { NextRequest } from 'next/server';
 import { connectDB } from '@/lib/mongo_db';
-import User from '@/lib/models/user/User';
+import { comparePassword } from '@/lib/crypto';
+import jwt from 'jsonwebtoken';
+import  User  from '@/lib/models/user/User';
 
-const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret_key'; // Store in .env
+const JWT_SECRET = process.env.JWT_SECRET!; // Store securely in .env.local
 
 export async function POST(req: NextRequest) {
   try {
-    await connectDB();
     const { email, password } = await req.json();
 
     if (!email || !password) {
       return NextResponse.json({ error: 'Email and password are required' }, { status: 400 });
     }
 
-    const user = await User.findOne({ email, role: 'user' });
+    await connectDB(); // Connect to MongoDB
 
-    if (!user) {
+    // Find user by email and role 'super_admin'
+    const admin = await User.findOne({ email, role: 'user' });
+
+    if (!admin) {
       return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 });
     }
 
-    const passwordMatch = await bcrypt.compare(password, user.password);
+    if (admin.active_status !== 1) {
+      return NextResponse.json({ error: 'User Inactive' }, { status: 403 });
+    }
 
-    if (!passwordMatch) {
+    const isMatch = await comparePassword(password, admin.password);
+    if (!isMatch) {
       return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 });
     }
 
-    const token = jwt.sign(
-      { id: user._id, email: user.email, role: user.role },
-      JWT_SECRET,
-      { expiresIn: '7d' }
-    );
+    // Create JWT payload
+    const payload = {
+      email: admin.email,
+      role: admin.role,
+      id: admin._id,
+    };
 
-    return NextResponse.json({
-      msg: 'Login successful',
-      token,
-      user: {
-        id: user._id,
-        name: user.name,
-        email: user.email,
-        role: user.role,
-      },
+    // Sign JWT token
+    const token = jwt.sign(payload, JWT_SECRET, { expiresIn: '1h' });
+
+    // Set token in cookie
+    const response = NextResponse.json({ message: 'Login successful' });
+
+    response.cookies.set('userToken', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+      maxAge: 1 * 12 * 3600,
     });
-  } catch (error: any) {
-    console.error('Login Error:', error);
-    return NextResponse.json({ error: 'Server error', details: error.message }, { status: 500 });
+
+    return response;
+  } catch (error) {
+    console.error('Login error:', error);
+    return NextResponse.json({ error: 'Login failed', details: error }, { status: 500 });
   }
 }

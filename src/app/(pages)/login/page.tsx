@@ -13,7 +13,7 @@ const Page = () => {
   const router = useRouter();
 
   const userLogin = async (email: string, password: string) => {
-    const loginPath = process.env.NEXT_PUBLIC_USER_LOGIN_URL || '/api/user/login';
+    const loginPath = process.env.NEXT_PUBLIC_USER_LOGIN_URL;
     const baseUrl = window.location.origin;
     const loginUrl = `${baseUrl}${loginPath}`;
 

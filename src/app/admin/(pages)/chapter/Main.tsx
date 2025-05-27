@@ -206,9 +206,7 @@ function Page() {
             formDataToSubmit.append('video_url', formData.video_url || '');
             formDataToSubmit.append('video_access', formData.video_access || 'free');
             formDataToSubmit.append('assignment_access', formData.assignment_access || 'free');
-
             // console.log(formData);return
-
 
             // If a file is selected, append it to the form data
             if (formData.pdf && formData.pdf instanceof File) {

@@ -2,13 +2,13 @@
 
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { checkAdminHomeLogin } from '@/utlis/checkAdminLogin';
+import { checkUserHomeLogin } from '@/utlis/checkAdminLogin';
 
 const Page = () => {
   const router = useRouter();
   
   useEffect(() => {
-    checkAdminHomeLogin(router);
+    checkUserHomeLogin(router);
   }, [router]);
 
   return (
@@ -26,7 +26,7 @@ const Page = () => {
             <div className="col-xxl-8 offset-xxl-2 col-xl-8 offset-xl-2">
               <div className="section__title-wrapper text-center mb-55">
                 <h2 className="section__title">
-                  Admin dashboard
+                  User dashboard
                 </h2>
               </div>
             </div>

@@ -1,3 +1,8 @@
+
+.header__area, .footer__area  {
+  display: none!important;
+}
+
 /* app/admin/adminLayout.css */
 .sidebarButtonLink span{
   font-weight: 300;

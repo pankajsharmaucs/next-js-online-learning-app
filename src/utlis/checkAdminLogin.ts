@@ -60,3 +60,23 @@ export const checkAdminLoginStatus = async (): Promise<boolean> => {
     return false;
   }
 };
+
+
+// =================User==========
+
+const getUserLoginCheckUrl = (): string => {
+  const baseUrl = window.location.origin;
+  const path = process.env.NEXT_PUBLIC_USER_LOGIN_CHECK || '/api/user/check'; // fallback path
+  return `${baseUrl}${path}`;
+};
+
+export const checkUserHomeLogin = async (router: Router) => {
+  try {
+    const response = await axios.get(getUserLoginCheckUrl(), { withCredentials: true });
+
+    router.push(response.status === 200 ? "/user/dashboard" : "/login");
+  } catch (error) {
+    console.error("Error checking authentication:", error);
+    router.push("/login");
+  }
+};

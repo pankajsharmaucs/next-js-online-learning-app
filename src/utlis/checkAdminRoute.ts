@@ -12,3 +12,8 @@ export function useAdminRoute() {
   const pathname = usePathname();
   return pathname.startsWith('/admin');
 }
+
+export function useUserRoute() {
+  const pathname = usePathname();
+  return pathname.startsWith('/user');
+}

@@ -52,6 +52,19 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ error: 'Required fields missing' }, { status: 400 });
         }
 
+        const existingChapter = await ChapterModel.findOne({
+            subject_id,
+            class_id,
+            chapter_name: { $regex: `^${chapter_name}$`, $options: 'i' }, // case-insensitive match
+        });
+
+        if (existingChapter) {
+            return NextResponse.json(
+                { error: 'Chapter name already exists for the given subject and class' },
+                { status: 409 } // Conflict
+            );
+        }
+
         const newChapter = new ChapterModel({
             subject_id,
             class_id,

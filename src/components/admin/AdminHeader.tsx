@@ -53,7 +53,7 @@ const AdminHeader = () => {
 
             {/* header area start */}
             <header>
-                <div id="header-sticky" className={`header__area  header__transparent p-4 ${isSticky ? 'sticky' : ''}`} >
+                <div id="header-sticky" className={`header__area  header__transparent mt-100 p-4 ${isSticky ? 'sticky' : ''}`} >
                     <div className="container-fluid">
                         <div className="row align-items-center">
 

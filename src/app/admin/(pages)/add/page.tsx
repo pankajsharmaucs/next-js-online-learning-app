@@ -98,6 +98,9 @@ const MasterPage: React.FC = () => {
                     closeModal();
                     showSuccessToast(isEdit ? 'Updated successfully' : 'Added successfully');
                     break;
+                case 409:
+                    showErrorToast('Already Exists.');
+                    break;
                 case 400:
                     showErrorToast('Bad Request: Please check the input data.');
                     break;

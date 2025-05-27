@@ -1,21 +1,21 @@
-// app/admin/layout.tsx (Server Component)
-import Sidebar from '@/components/admin/Sidebar';
+// app/user/layout.tsx (Server Component)
+import Sidebar from '@/components/user/Sidebar';
 import './style.css';
 import { Inter, Roboto } from 'next/font/google';
-import ClientLayoutWrapper from '@/components/admin/ClientLayoutWrapper';
+import ClientLayoutWrapper from '@/components/user/ClientLayoutWrapper';
 
 const inter = Inter({ subsets: ['latin'] });
 const roboto = Roboto({ subsets: ['latin'] });
 
 export const metadata = {
-  title: 'Admin | Edusm',
+  title: 'User Dashboard | Edusm',
   description: 'Online Learning platform',
 };
 
-export default function AdminLayout({ children }: { children: React.ReactNode }) {
+export default function UserLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className={`flex h-screen ${roboto.className}`}>
-      <Sidebar />
+      {/* <Sidebar /> */}
       <ClientLayoutWrapper>
         {children}
       </ClientLayoutWrapper>

@@ -32,6 +32,19 @@ export async function POST(req: NextRequest) {
         const { class_name, board_id } = await req.json();
         await connectDB();
 
+        // ✅ Check for duplicate class
+        const existingClass = await Class.findOne({
+            board_id,
+            class_name: { $regex: `^${class_name}$`, $options: 'i' }, // case-insensitive
+        });
+
+        if (existingClass) {
+            return NextResponse.json(
+                { error: 'Class name already exists under this board' },
+                { status: 409 } // Conflict
+            );
+        }
+
         const newClass = await Class.create({ class_name, board_id });
         return NextResponse.json({ message: 'Class added', id: newClass._id });
     } catch (error) {

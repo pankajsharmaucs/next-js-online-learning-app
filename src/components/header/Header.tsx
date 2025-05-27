@@ -206,7 +206,7 @@ const Header = () => {
                                         </div>
                                     </div>
                                     <div className="header__btn ml-10  ">
-                                        <Link href="/login" className="e-btn">
+                                        <Link href="/login" className="e-btn text-white">
                                             Try free
                                         </Link>
                                     </div>

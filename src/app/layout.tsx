@@ -18,7 +18,7 @@ import './styles/css/elegantFont.css';
 import { Inter } from 'next/font/google';
  
 import LayoutClient from '../components/LayoutClient';
-import {ClientHeader, ClientFooter} from '@/components/admin/ClientHeader';  // Import the client-side header component
+import {ClientHeader, ClientFooter} from '@/components/user/ClientHeader';  // Import the client-side header component
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
 
