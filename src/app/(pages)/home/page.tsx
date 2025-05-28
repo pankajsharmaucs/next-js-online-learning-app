@@ -3,7 +3,7 @@ import React from 'react'
 const Home = () => {
   return (
     <>
-      
+
       <main>
         {/* hero area start */}
         <section className="hero__area hero__height d-flex align-items-center grey-bg-2 p-relative">
@@ -25,7 +25,7 @@ const Home = () => {
             />
           </div>
           <div className="container">
-            <div className="hero__content-wrapper mt-90">
+            <div className="hero__content-wrapper mt-10">
               <div className="row align-items-center">
                 <div className="col-xxl-6 col-xl-6 col-lg-6 col-md-6">
                   <div className="hero__content p-relative z-index-1">
@@ -40,7 +40,7 @@ const Home = () => {
                       </span>
                       Tutorial From Top Instructor.
                     </h1>
-                    <p>
+                    <p className="hidden lg:block">
                       Meet university,and cultural institutions, who'll share their
                       experience.
                     </p>
