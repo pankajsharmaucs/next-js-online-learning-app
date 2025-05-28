@@ -1,14 +1,83 @@
-export default async function Page({ params, }: { params: Promise<{ blog_id: string }> }) {
+'use client'; // Make this a client component
 
-    const { blog_id } = await params;
-    console.log(blog_id);
+import { useEffect, useState } from 'react';
+import axios from 'axios';
+import { useParams } from 'next/navigation';
+import '../../blog.css'
+import useSanitizeHTML from '@/hooks/useSanitizeHTML';
+import DOMPurify from 'dompurify';
+import CategoryList from '@/components/blog/CategoryList';
+import RecentPosts from '@/components/blog/RecentPosts';
+import TagsList from '@/components/blog/TagsList';
+import AdBanner from '@/components/blog/AdBanner';
+
+interface Blog {
+    _id: string;
+    blogtitle: string;
+    description: string;
+    image?: string;
+    blogcontent?: string;
+    createdate: string;
+    tags:string[];
+}
+
+interface BlogCategory {
+    _id: string;      // MongoDB document ID
+    cat_name: string; // Category name
+    icon?: string;    // Optional icon string
+}
+
+export default function Page() {
+    const { blog_id } = useParams();
+    const [blog, setBlog] = useState<Blog | null>(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
+
+    useEffect(() => {
+        const fetchBlog = async () => {
+            try {
+                const res = await axios.get(`${process.env.NEXT_PUBLIC_ADMIN_BLOG}?blog_id=${blog_id}`);
+                setBlog(res.data);
+                console.log(res.data);
+            } catch (err: any) {
+                console.error(err);
+                setError('Failed to fetch blog data');
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        if (blog_id) {
+            fetchBlog();
+        }
+    }, [blog_id]);
+
+    const getCategoryName = (categoryId: string, categories: BlogCategory[]): string => {
+        if (!categoryId) return "Generic"; // or "Unknown"
+        const category = categories.find(cat => cat._id === categoryId);
+        return category ? category.cat_name : "Generic";
+    };
+
+    if (loading) return <div>Loading...</div>;
+    if (error) return <div>{error}</div>;
+    if (!blog) return <div>Blog not found.</div>;
+
+    const backgroundImage = blog?.image;
+
+    const sanitizedContent = DOMPurify.sanitize(blog.blogcontent || '');
+
 
     return (
         <main>
             {/* page title area start */}
             <section
-                className="page__title-area page__title-height-2 page__title-overlay d-flex align-items-center"
-                data-background="assets/img/page-title/page-title-3.jpg"
+                className="page__title-area  page__title-overlay d-flex align-items-center"
+                style={{
+                    backgroundImage: `url("${backgroundImage}")`,
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
+                    height: '500px',
+                }}
             >
                 <div className="page__title-shape">
                     <img
@@ -38,7 +107,7 @@ export default async function Page({ params, }: { params: Promise<{ blog_id: str
                             <div className="page__title-wrapper mt-110">
                                 <span className="page__title-pre">Development</span>
                                 <h3 className="page__title-2">
-                                    The Challenge Of Global Learning In Public Education
+                                    {blog?.blogtitle}
                                 </h3>
                                 <div className="blog__meta d-flex align-items-center">
                                     <div className="blog__author d-flex align-items-center mr-40">
@@ -46,12 +115,12 @@ export default async function Page({ params, }: { params: Promise<{ blog_id: str
                                             <img src="/img/blog/author/author-1.jpg" alt="" />
                                         </div>
                                         <div className="blog__author-info blog__author-info-2">
-                                            <h5>Jim Séchen</h5>
+                                            <h5>Edusm</h5>
                                         </div>
                                     </div>
                                     <div className="blog__date blog__date-2 d-flex align-items-center">
                                         <i className="fal fa-clock" />
-                                        <span>April 02, 2022</span>
+                                        <span>{new Date(blog.createdate || '').toDateString()}</span>
                                     </div>
                                 </div>
                             </div>
@@ -68,74 +137,10 @@ export default async function Page({ params, }: { params: Promise<{ blog_id: str
                             <div className="blog__wrapper">
                                 <div className="blog__text mb-40">
                                     <p>
-                                        Me old mucker argy-bargy I'm telling pear shaped Jeffrey super
-                                        brilliant, I excuse my French blatant gormless up the duff, cup
-                                        of char up the kyver tosser cras happy days. The full monty he
-                                        nicked it he legged it bum bag burke plastered arse over tit
-                                        it's your round owt to do with me pardon you, on your bike mate
-                                        hanky panky mush cuppa only a quid crikey Jeffrey skive off,
-                                        faff about so I said what a load of rubbish blag David knees up
-                                        cockup cras. Argy-bargy give us a bell wellies gosh skive off
-                                        old bodge cheesed off A bit of how's your father off his nut
-                                        bamboozled, bugger say I'm telling morish bleeding boot up the
-                                        kyver nice one brilliant, ruddy jolly good fanny around chinwag
-                                        amongst brown bread arse brolly. Horse play it's all gone to pot
-                                        codswallop easy peasy mush knees up down the pub jolly good nice
-                                        one tosser it's your round lurgy, I vagabond barmy off his nut
-                                        only a quid so I said is gosh Charles blow off, pardon me chip
-                                        shop Richard spiffing skive off bleeding get stuffed mate
-                                        porkies amongst the full monty.
+                                        <article dangerouslySetInnerHTML={{ __html: sanitizedContent }} />
                                     </p>
                                 </div>
-                                <div className="blog__quote grey-bg mb-45 p-relative fix">
-                                    <img className="quote" src="/img/blog/quote-1.png" alt="" />
-                                    <blockquote>
-                                        <p>
-                                            After I started learning design with Quillow, I realized that
-                                            I had Improved to very advanced levels.
-                                        </p>
-                                        <h4>Chris Collins</h4>
-                                    </blockquote>
-                                </div>
-                                <div className="blog__text mb-30">
-                                    <p>
-                                        Horse play it's all gone to pot codswallop easy peasy mush knees
-                                        up down the pub jolly good nice one tosser it's your round
-                                        lurgy, I vagabond barmy off his nut only a quid so I said is
-                                        gosh Charles blow off, pardon me chip shop Richard spiffing
-                                        skive off bleeding get stuffed mate porkies amongst the full
-                                        monty. Daft burke you
-                                    </p>
-                                </div>
-                                <div className="blog__link mb-35">
-                                    <p>
-                                        The little rotter bum bag a blinding shot gosh spifing butty
-                                        eatonwha load of rubbish bamboozled.{" "}
-                                        <a href="#"> https://educal.com/courses</a>{" "}
-                                    </p>
-                                </div>
-                                <div className="blog__img w-img mb-45">
-                                    <img src="/img/blog/big/blog-big-1.jpg" alt="" />
-                                </div>
-                                <div className="blog__text mb-40">
-                                    <h3>Build a beautiful website with Quillow</h3>
-                                    <p>
-                                        Some dodgy chav car boot blower starkers bonnet tickety-boo no
-                                        biggie cheesed off, Oxford bloke fantastic the wireless bevvy
-                                        cobblers chancer give us a bell, bleeder jolly good hanky panky
-                                        do one gormless matie boy. Pear shaped my good sir I cobblers at
-                                        public school quaint tickety-boo crikey bits and bobs, wellies
-                                        bugger all mate golly gosh brolly matie boy fanny around chimney
-                                        pot cracking goal my lady, bodge so I said spiffing posh the
-                                        full monty don't get shirty with me no biggie.
-                                    </p>
-                                    <p>
-                                        Brolly grub blimey victoria sponge blag nancy boy don't get
-                                        shirty with me skive off bobby burke in my flat bog-standard,
-                                        easy peasy golly gosh up the duff show off show off pick your
-                                        nose and blow off gosh a brilliant that what a load of rubbish.
-                                    </p>
-                                </div>
+
                                 <div className="blog__line" />
                                 <div className="blog__meta-3 d-sm-flex justify-content-between align-items-center mb-80">
                                     <div className="blog__tag-2">
@@ -404,147 +409,15 @@ export default async function Page({ params, }: { params: Promise<{ blog_id: str
                         </div>
                         <div className="col-xxl-4 col-xl-4 col-lg-4">
                             <div className="blog__sidebar pl-70">
-                                <div className="sidebar__widget mb-60">
-                                    <div className="sidebar__widget-content">
-                                        <div className="sidebar__search p-relative">
-                                            <form action="#">
-                                                <input type="text" placeholder="Search for courses..." />
-                                                <button type="submit">
-                                                    <svg
-                                                        version="1.1"
-                                                        xmlns="http://www.w3.org/2000/svg"
-                                                        xmlnsXlink="http://www.w3.org/1999/xlink"
-                                                        x="0px"
-                                                        y="0px"
-                                                        viewBox="0 0 584.4 584.4"
-                                                        xmlSpace="preserve"
-                                                    >
-                                                        <g>
-                                                            <g>
-                                                                <path
-                                                                    className="st0"
-                                                                    d="M565.7,474.9l-61.1-61.1c-3.8-3.8-8.8-5.9-13.9-5.9c-6.3,0-12.1,3-15.9,8.3c-16.3,22.4-36,42.1-58.4,58.4    c-4.8,3.5-7.8,8.8-8.3,14.5c-0.4,5.6,1.7,11.3,5.8,15.4l61.1,61.1c12.1,12.1,28.2,18.8,45.4,18.8c17.1,0,33.3-6.7,45.4-18.8    C590.7,540.6,590.7,499.9,565.7,474.9z"
-                                                                />
-                                                                <path
-                                                                    className="st1"
-                                                                    d="M254.6,509.1c140.4,0,254.5-114.2,254.5-254.5C509.1,114.2,394.9,0,254.6,0C114.2,0,0,114.2,0,254.5    C0,394.9,114.2,509.1,254.6,509.1z M254.6,76.4c98.2,0,178.1,79.9,178.1,178.1s-79.9,178.1-178.1,178.1S76.4,352.8,76.4,254.5    S156.3,76.4,254.6,76.4z"
-                                                                />
-                                                            </g>
-                                                        </g>
-                                                    </svg>
-                                                </button>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="sidebar__widget mb-55">
-                                    <div className="sidebar__widget-head mb-35">
-                                        <h3 className="sidebar__widget-title">Recent posts</h3>
-                                    </div>
-                                    <div className="sidebar__widget-content">
-                                        <div className="rc__post-wrapper">
-                                            <div className="rc__post d-flex align-items-center">
-                                                <div className="rc__thumb mr-20">
-                                                    <a href="blog-details.html">
-                                                        <img src="/img/blog/sm/blog-sm-1.jpg" alt="" />
-                                                    </a>
-                                                </div>
-                                                <div className="rc__content">
-                                                    <div className="rc__meta">
-                                                        <span>October 15, 2021</span>
-                                                    </div>
-                                                    <h6 className="rc__title">
-                                                        <a href="blog-details.html">
-                                                            The Importance Intrinsic Motivation.
-                                                        </a>
-                                                    </h6>
-                                                </div>
-                                            </div>
-                                            <div className="rc__post d-flex align-items-center">
-                                                <div className="rc__thumb mr-20">
-                                                    <a href="blog-details.html">
-                                                        <img src="/img/blog/sm/blog-sm-2.jpg" alt="" />
-                                                    </a>
-                                                </div>
-                                                <div className="rc__content">
-                                                    <div className="rc__meta">
-                                                        <span>March 26, 2021</span>
-                                                    </div>
-                                                    <h6 className="rc__title">
-                                                        <a href="blog-details.html">
-                                                            A Better Alternative To Grading Student.
-                                                        </a>
-                                                    </h6>
-                                                </div>
-                                            </div>
-                                            <div className="rc__post d-flex align-items-center">
-                                                <div className="rc__thumb mr-20">
-                                                    <a href="blog-details.html">
-                                                        <img src="/img/blog/sm/blog-sm-3.jpg" alt="" />
-                                                    </a>
-                                                </div>
-                                                <div className="rc__content">
-                                                    <div className="rc__meta">
-                                                        <span>October 15, 2021</span>
-                                                    </div>
-                                                    <h6 className="rc__title">
-                                                        <a href="blog-details.html">
-                                                            Strategic Social Media &amp; Evolution of Visual
-                                                        </a>
-                                                    </h6>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="sidebar__widget mb-55">
-                                    <div className="sidebar__widget-head mb-35">
-                                        <h3 className="sidebar__widget-title">Category</h3>
-                                    </div>
-                                    <div className="sidebar__widget-content">
-                                        <div className="sidebar__category">
-                                            <ul>
-                                                <li>
-                                                    <a href="blog.html">Category</a>
-                                                </li>
-                                                <li>
-                                                    <a href="blog.html">Video &amp; Tips (4)</a>
-                                                </li>
-                                                <li>
-                                                    <a href="blog.html">Education (8)</a>
-                                                </li>
-                                                <li>
-                                                    <a href="blog.html">Business (5)</a>
-                                                </li>
-                                                <li>
-                                                    <a href="blog.html">UX Design (3)</a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="sidebar__widget mb-55">
-                                    <div className="sidebar__widget-head mb-35">
-                                        <h3 className="sidebar__widget-title">Tags</h3>
-                                    </div>
-                                    <div className="sidebar__widget-content">
-                                        <div className="sidebar__tag">
-                                            <a href="#">Art &amp; Design</a>
-                                            <a href="#">Course</a>
-                                            <a href="#">Videos</a>
-                                            <a href="#">App</a>
-                                            <a href="#">Education</a>
-                                            <a href="#">Data Science</a>
-                                            <a href="#">Machine Learning</a>
-                                            <a href="#">Tips</a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="sidebar__widget mb-55">
-                                    <div className="sidebar__banner w-img">
-                                        <img src="/img/blog/banner/banner-1.jpg" alt="" />
-                                    </div>
-                                </div>
+
+                                {<RecentPosts />}
+
+                                {<CategoryList />}
+
+                                {<TagsList tags={blog.tags || []} />}
+
+                                {<AdBanner />}
+
                             </div>
                         </div>
                     </div>

@@ -63,7 +63,7 @@ const Header = () => {
                                 <div className="header__left d-flex">
                                     <div className="logo">
                                         <Link href="/">
-                                            <img src="/img/logo/logo.png" alt="logo" />
+                                            {/* <img src="/img/logo/logo.png" alt="logo" /> */}
                                         </Link>
                                     </div>
                                     <div className="header__category">
@@ -207,7 +207,7 @@ const Header = () => {
                                     </div>
                                     <div className="header__btn ml-10  ">
                                         <Link href="/login" className="e-btn text-white">
-                                            Try free
+                                            Get Start
                                         </Link>
                                     </div>
                                     <div className="sidebar__menu d-xl-none cursor-pointer " onClick={() => setsidebarOpened(true)}>

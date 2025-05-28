@@ -1,24 +1,21 @@
-// hooks/useSanitizeHTML.ts
+'use client';
 
 import { useState, useEffect } from 'react';
 import DOMPurify from 'dompurify';
 
-/**
- * Custom hook to sanitize raw HTML content
- * @param rawHTML The raw HTML content that needs to be sanitized
- * @returns sanitizedHTML The sanitized HTML content
- */
-const useSanitizeHTML = (rawHTML: string | null): string => {
-  const [sanitizedHTML, setSanitizedHTML] = useState<string>(''); // Initialize state with empty string
+const useSanitizeHTML = (rawHTML: string): string => {
+  const [sanitizedHTML, setSanitizedHTML] = useState<string>('');
 
   useEffect(() => {
     if (rawHTML) {
-      const cleanHTML = DOMPurify.sanitize(rawHTML);  // Sanitize the raw HTML content
-      setSanitizedHTML(cleanHTML);  // Set sanitized HTML into state
+      const cleanHTML = DOMPurify.sanitize(rawHTML);
+      setSanitizedHTML(cleanHTML);
+    } else {
+      setSanitizedHTML('');
     }
-  }, [rawHTML]);  // Run whenever rawHTML changes
+  }, [rawHTML]);
 
-  return sanitizedHTML;  // Return sanitized HTML
+  return sanitizedHTML;
 };
 
 export default useSanitizeHTML;

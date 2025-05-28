@@ -69,14 +69,14 @@ const Home = () => {
                       />
                     </div>
                     <div className="hero__thumb-big mr-30">
-                      <img src="/img/hero/hero-1.jpg" alt="" />
+                      <img src="/assets/hero/hero-image.jpg" alt="" />
                       <div className="hero__quote hero__quote-animation">
                         <span>Tomorrow is our</span>
                         <h4>“When I Grow Up” Spirit Day!</h4>
                       </div>
                     </div>
                     <div className="hero__thumb-sm mt-50 d-none d-lg-block">
-                      <img src="/img/hero/hero-sm-1.jpg" alt="" />
+                      <img src="/assets/hero/hero-image-2.png" alt="" />
                     </div>
                   </div>
                 </div>
@@ -375,7 +375,7 @@ const Home = () => {
         </section>
         {/* category area end */}
         {/* banner area start */}
-        <section className="banner__area pb-110">
+        <section className="banner__area pb-110 d-none">
           <div className="container">
             <div className="row">
               <div className="col-xxl-6 col-xl-6 col-lg-6 col-md-6">
