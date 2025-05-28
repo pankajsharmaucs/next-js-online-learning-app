@@ -86,7 +86,7 @@ const Home = () => {
         </section>
         {/* hero area end */}
         {/* category area start */}
-        <section className="category__area pt-120 pb-70">
+        <section className="category__area  pb-70">
           <div className="container">
             <div className="row align-items-end">
               <div className="col-xxl-6 col-xl-6 col-lg-6 col-md-8">
@@ -426,7 +426,7 @@ const Home = () => {
         </section>
         {/* banner area end */}
         {/* course area start */}
-        <section className="course__area pt-115 pb-120 grey-bg">
+        <section className="course__area pt-50 pb-120 grey-bg">
           <div className="container">
             <div className="row align-items-end">
               <div className="col-xxl-5 col-xl-6 col-lg-6">
@@ -801,7 +801,7 @@ const Home = () => {
         </section>
         {/* course area end */}
         {/* events area start */}
-        <section className="events__area pt-115 pb-120 p-relative">
+        <section className="events__area pt-50 pb-120 p-relative">
           <div className="events__shape">
             <img
               className="events-1-shape"
@@ -926,7 +926,7 @@ const Home = () => {
         </section>
         {/* events area end */}
         {/* pricing area start */}
-        <section className="price__area pt-60 pb-130">
+        <section className="price__area pt-50 pb-130">
           <div className="container">
             <div className="row">
               <div className="col-xxl-4 offset-xxl-4">

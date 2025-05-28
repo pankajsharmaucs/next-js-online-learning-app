@@ -1,4 +1,6 @@
 import React from 'react'
+import '../../(blog)/blog/blog.css'
+import Breadcrumb from '@/components/ui/Breadcrumb'
 
 const pages = () => {
   return (
@@ -6,23 +8,19 @@ const pages = () => {
       {/* page title area start */}
       <section
         className="page__title-area page__title-height page__title-overlay d-flex align-items-center"
-        data-background="/img/page-title/page-title.jpg"
+        style={{
+          backgroundImage: `url("/assets/common/contact-banner.jpg")`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          height: "400px"
+        }}
       >
         <div className="container">
           <div className="row">
             <div className="col-xxl-12">
               <div className="page__title-wrapper mt-110">
                 <h3 className="page__title">Contact</h3>
-                <nav aria-label="breadcrumb">
-                  <ol className="breadcrumb">
-                    <li className="breadcrumb-item">
-                      <a href="index.html">Home</a>
-                    </li>
-                    <li className="breadcrumb-item active" aria-current="page">
-                      Contact
-                    </li>
-                  </ol>
-                </nav>
+                <Breadcrumb homeLabel="Home" homeHref="/" pageName="Contact" />
               </div>
             </div>
           </div>
@@ -30,7 +28,7 @@ const pages = () => {
       </section>
       {/* page title area end */}
       {/* contact area start */}
-      <section className="contact__area pt-115 pb-120">
+      <section className="contact__area pt-50 pb-120">
         <div className="container">
           <div className="row">
             <div className="col-xxl-7 col-xl-7 col-lg-6">

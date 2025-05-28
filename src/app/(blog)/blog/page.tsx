@@ -9,6 +9,7 @@ import CategoryList from '@/components/blog/CategoryList'
 import AdBanner from '@/components/blog/AdBanner'
 import TagsList from '@/components/blog/TagsList'
 import BlogCard from '@/components/blog/BlogCard'
+import Breadcrumb from '@/components/ui/Breadcrumb'
 
 interface BlogType {
   _id: string
@@ -86,16 +87,7 @@ const Page = () => {
             <div className="col-xxl-12">
               <div className="page__title-wrapper mt-110">
                 <h3 className="page__title mb-20 ">Blog Grid</h3>
-                <nav aria-label="breadcrumb">
-                  <ol className="breadcrumb">
-                    <li className="breadcrumb-item">
-                      <Link href="/">Home</Link>
-                    </li>
-                    <li className="breadcrumb-item active" aria-current="page">
-                      All Blogs
-                    </li>
-                  </ol>
-                </nav>
+                 <Breadcrumb homeLabel="Home" homeHref="/" pageName="All Blogs" />
               </div>
             </div>
           </div>
@@ -103,7 +95,7 @@ const Page = () => {
       </section>
       {/* page title area end */}
       {/* blog area start */}
-      <section className="blog__area pt-120 pb-120">
+      <section className="blog__area pt-50 pb-120">
         <div className="container">
           <div className="row">
             <div className="col-xxl-8 col-xl-8 col-lg-8">

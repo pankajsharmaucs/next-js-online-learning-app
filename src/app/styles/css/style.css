@@ -235,7 +235,7 @@ p {
 }
 
 .grey-bg-2 {
-  background: #edeef3;
+  background: #ffffff;
 }
 
 .grey-bg-5 {
@@ -275,7 +275,7 @@ p {
 }
 
 .footer-bg {
-  background: #0e1133;
+  background: #0d0f0f;
 }
 
 /*--
@@ -1015,7 +1015,7 @@ p {
   border-radius: 4px;
   background: #ffffff;
   outline: none;
-  border: 1px solid #ffffff;
+  border: 1px solid #2b4eff;
   font-size: 16px;
   padding: 25px 65px 20px 55px;
 }
@@ -1759,11 +1759,11 @@ p {
 /*  03. HERO CSS START
 /*----------------------------------------*/
 .hero__height {
-  min-height: 950px;
+  min-height: 750px;
 }
 @media only screen and (min-width: 992px) and (max-width: 1199px) {
   .hero__height {
-    min-height: 850px;
+    min-height: 750px;
   }
 }
 @media only screen and (min-width: 768px) and (max-width: 991px) {
@@ -6644,7 +6644,7 @@ p.checkout-coupon input[type=text]:focus {
   border-radius: 6px;
 }
 .rc__title {
-  font-size: 18px;
+  font-size: 15px;
   color: #0e1133;
   margin-bottom: 0px;
   font-weight: 600;

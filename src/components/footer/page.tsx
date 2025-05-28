@@ -8,7 +8,7 @@ const Footer = () => {
             {/* footer area start */}
             <footer>
                 <div className="footer__area footer-bg">
-                    <div className="footer__top pt-190 pb-40">
+                    <div className="footer__top pt-50 pb-40">
                         <div className="container">
                             <div className="row">
                                 <div className="col-xxl-3 col-xl-3 col-lg-3 col-md-4 col-sm-6">
@@ -16,7 +16,7 @@ const Footer = () => {
                                         <div className="footer__widget-head mb-22">
                                             <div className="footer__logo">
                                                 <a href="index.html">
-                                                    {/* <img src="/img/logo/logo-2.png" alt="" /> */}
+                                                    <img src="/assets/common/logo.png" alt="logo" style={{width:"200px"}} />
                                                 </a>
                                             </div>
                                         </div>

@@ -9,6 +9,7 @@ import RecentPosts from '@/components/blog/RecentPosts'
 import CategoryList from '@/components/blog/CategoryList'
 import AdBanner from '@/components/blog/AdBanner'
 import BlogCard from '@/components/blog/BlogCard'
+import Breadcrumb from '@/components/ui/Breadcrumb'
 
 interface BlogType {
   _id: string
@@ -91,14 +92,7 @@ const categorypage = () => {
             <div className="col-xxl-12">
               <div className="page__title-wrapper mt-110">
                 <h3 className="page__title mb-20">Blog Category</h3>
-                <nav aria-label="breadcrumb">
-                  <ol className="breadcrumb">
-                    <li className="breadcrumb-item"><Link href="/blog">All Blog</Link></li>
-                    <li className="breadcrumb-item active" aria-current="page">
-                      {categoryName}
-                    </li>
-                  </ol>
-                </nav>
+                 <Breadcrumb homeLabel="Home" homeHref="/" pageName={categoryName} />
               </div>
             </div>
           </div>
@@ -111,45 +105,7 @@ const categorypage = () => {
           <div className="row">
             <div className="col-xxl-8 col-xl-8 col-lg-8">
               <div className="row">
-                {/* {currentBlogs.map((blog) => {
-                  const sanitizedSlug = blog.slug.replace(/\s+/g, '-').toLowerCase() + '/' + blog._id;
-                  return (
-                    <div key={blog._id} className="col-xxl-6 col-xl-6 col-lg-6 col-md-6">
-                      <div className="blog__wrapper">
-                        <div className="blog__item white-bg mb-30 transition-3 fix">
-                          <div className="blog__thumb w-img fix">
-                            <Link href={`/blog/${sanitizedSlug}`}>
-                              <img src={blog.image || '/img/blog/blog-1.jpg'} alt={blog.blogtitle} />
-                            </Link>
-                          </div>
-                          <div className="blog__content">
-                            <div className="blog__tag">
-                              <span className="blue">{getCategoryName(blog.category || '')}</span>
-                            </div>
-                            <h3 className="blog__title">
-                              <Link href={`/blog/${sanitizedSlug}`}>{blog.blogtitle}</Link>
-                            </h3>
-                            <div className="blog__meta d-flex align-items-center justify-content-between">
-                              <div className="blog__author d-flex align-items-center">
-                                <div className="blog__author-thumb mr-10">
-                                  <img src={blog.image} alt={blog.slug} />
-                                </div>
-                                <div className="blog__author-info">
-                                  <h5>{blog.author || 'Edusm'}</h5>
-                                </div>
-                              </div>
-                              <div className="blog__date d-flex align-items-center">
-                                <i className="fal fa-clock" />
-                                <span>{new Date(blog.createdate || '').toDateString()}</span>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  )
-                })} */}
-
+                 
                 {currentBlogs.map((blog) => (
                   <BlogCard key={blog._id} blog={blog} categories={categories} />
                 ))}

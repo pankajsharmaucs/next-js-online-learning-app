@@ -10,15 +10,17 @@ import CategoryList from '@/components/blog/CategoryList';
 import RecentPosts from '@/components/blog/RecentPosts';
 import TagsList from '@/components/blog/TagsList';
 import AdBanner from '@/components/blog/AdBanner';
+import Link from 'next/link';
 
 interface Blog {
     _id: string;
+    category: string;
     blogtitle: string;
     description: string;
     image?: string;
     blogcontent?: string;
     createdate: string;
-    tags:string[];
+    tags: string[];
 }
 
 interface BlogCategory {
@@ -32,6 +34,7 @@ export default function Page() {
     const [blog, setBlog] = useState<Blog | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const [categories, setCategories] = useState<BlogCategory[]>([]);
 
     useEffect(() => {
         const fetchBlog = async () => {
@@ -51,6 +54,18 @@ export default function Page() {
             fetchBlog();
         }
     }, [blog_id]);
+
+
+    useEffect(() => {
+        axios.get(process.env.NEXT_PUBLIC_ADMIN_BLOG_CATEGORY as string)
+            .then((response) => {
+                setCategories(response.data);
+                // console.log(response.data);
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+    }, []);
 
     const getCategoryName = (categoryId: string, categories: BlogCategory[]): string => {
         if (!categoryId) return "Generic"; // or "Unknown"
@@ -76,7 +91,7 @@ export default function Page() {
                     backgroundImage: `url("${backgroundImage}")`,
                     backgroundSize: 'cover',
                     backgroundPosition: 'center',
-                    height: '500px',
+                    height: '400px',
                 }}
             >
                 <div className="page__title-shape">
@@ -105,7 +120,9 @@ export default function Page() {
                     <div className="row">
                         <div className="col-xxl-10 col-xl-10 col-lg-10 ">
                             <div className="page__title-wrapper mt-110">
-                                <span className="page__title-pre">Development</span>
+                               <Link  href={`/blog/category/${getCategoryName(blog.category, categories)}`} >
+                                <span className="page__title-pre">{getCategoryName(blog.category, categories)}</span>
+                                </Link>
                                 <h3 className="page__title-2">
                                     {blog?.blogtitle}
                                 </h3>
@@ -130,12 +147,13 @@ export default function Page() {
             </section>
             {/* page title area end */}
             {/* blog area start */}
-            <section className="blog__area pt-120 pb-120">
+            <section className="blog__area pt-50 pb-120">
                 <div className="container">
                     <div className="row">
                         <div className="col-xxl-8 col-xl-8 col-lg-8">
                             <div className="blog__wrapper">
                                 <div className="blog__text mb-40">
+                                    <p>{new Date(blog.createdate || '').toDateString()}</p>
                                     <p>
                                         <article dangerouslySetInnerHTML={{ __html: sanitizedContent }} />
                                     </p>
