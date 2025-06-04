@@ -63,7 +63,7 @@ const Header = () => {
                                 <div className="header__left d-flex">
                                     <div className="logo">
                                         <Link href="/">
-                                            <img src="/assets/common/logo.png" alt="logo" style={{width:"200px"}} />
+                                            <img src="/assets/common/logo.jpg" alt="logo" style={{width:"60px"}} />
                                         </Link>
                                     </div>
                                     {/* <div className="header__category">

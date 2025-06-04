@@ -65,6 +65,8 @@ export default function BlogPage() {
     try {
       const res = await axios.get(blogApi);
       setBlogs(res.data);
+      console.log(res.data);
+
     } catch (error) {
       console.error("Error fetching blogs:", error);
     }
@@ -238,6 +240,12 @@ export default function BlogPage() {
     }
   };
 
+  // Clean the tags array to extract proper strings
+  const cleanTags = formData.tags.map(tag => {
+    // Remove any leading/trailing square brackets and quotes
+    return tag.replace(/^\[?"?/, '').replace(/"?\]?$/, '');
+  });
+
   return (
     <div className="p-6">
       <div className="flex justify-between items-center mb-4">
@@ -245,7 +253,7 @@ export default function BlogPage() {
       </div>
 
       {/* Category Section */}
-      <div className="mt-8 mb-3 border p-4 bg-gray-50">
+      <div className="col-5 mt-8 mb-3 border p-4 bg-gray-50">
         <div className="flex justify-between items-center mb-2">
           <h3 className="text-lg font-bold text-black">Category List</h3>
           <button
@@ -271,9 +279,9 @@ export default function BlogPage() {
             {categories.map((cat) => (
               <tr key={cat._id}>
                 <td className="border p-2">{cat.cat_name}</td>
-                <td className="border p-2 space-x-2">
+                <td className="border p-2 space-x-2 flex justify-center gap-3">
                   <button
-                    className="bg-gray-600 text-white px-3 me-2 py-1 rounded"
+                    className="bg-gray-500 hover:bg-gray-600  text-white p-2 mb-2 rounded"
                     onClick={() => {
                       setNewCategoryName(cat.cat_name);
                       setEditCategory(cat);
@@ -283,7 +291,7 @@ export default function BlogPage() {
                     <Pencil size={18} />
                   </button>
                   <button
-                    className="text-red-800 hover:bg-red-100 p-2 rounded"
+                    className="text-red-800 bg-red-400 hover:bg-red-500 h-[35px] p-2 rounded"
                     onClick={() => deleteCategory(cat._id)}
                     title="Delete"
                   >
@@ -333,28 +341,43 @@ export default function BlogPage() {
                     ? categories.find((cat) => cat._id === blog.category)?.cat_name || blog.category
                     : blog.category?.cat_name}
                 </td>
+
                 <td className="border p-2">
-                  {typeof blog.tags === "object" && blog.tags.length > 0
-                    ? blog.tags.map((tag) => (
-                      <span
-                        key={tag}
-                        className="inline-block bg-blue-100 text-blue-800 text-xs rounded px-2 py-0.5 mr-1"
-                      >
-                        {tag}
-                      </span>
-                    ))
-                    : "—"}
+                  {Array.isArray(blog.tags) && blog.tags.length > 0 ? (
+                    <>
+                      {blog.tags
+                        .slice(0, 2)
+                        .map((tag) =>
+                          // Clean tag by removing leading/trailing brackets and quotes
+                          tag.replace(/^\[?"?/, '').replace(/"?\]?$/, '')
+                        )
+                        .map((cleanTag) => (
+                          <span
+                            key={cleanTag}
+                            className="inline-block bg-blue-100 text-blue-800 text-xs rounded px-2 py-0.5 mr-1"
+                          >
+                            {cleanTag}
+                          </span>
+                        ))}
+                      {blog.tags.length > 2 && (
+                        <span className="inline-block text-gray-500 text-xs">and more...</span>
+                      )}
+                    </>
+                  ) : (
+                    "—"
+                  )}
                 </td>
-                <td className="border p-2 space-x-2">
+
+                <td className="border p-2 space-x-2 flex gap-3">
                   <button
                     onClick={() => handleEdit(blog)}
-                    className="bg-gray-500 hover:bg-gray-600 w-[70px] text-white px-4 py-2 me-2 rounded"
+                    className="bg-gray-500 hover:bg-gray-600  text-white p-2 mb-2 rounded"
                   >
                     <Pencil size={18} />
                   </button>
                   <button
                     onClick={() => handleDelete(blog._id)}
-                    className="text-red-800 bg-red-300 hover:bg-red-500 p-2 rounded"
+                    className="text-red-800 bg-red-400 hover:bg-red-500 h-[35px] p-2 rounded"
                     title="Delete"
                   >
                     <Trash2 size={18} />
@@ -448,11 +471,12 @@ export default function BlogPage() {
                   placeholder="Type a tag and press Enter or comma"
                   className="border rounded px-2 py-1 w-full"
                 />
+
                 <div className="mt-2 flex flex-wrap gap-2">
-                  {formData.tags.map((tag) => (
+                  {cleanTags.map(tag => (
                     <span
                       key={tag}
-                      className="inline-flex items-center bg-blue-100 text-blue-700 rounded px-2 py-0.5 text-sm cursor-default"
+                      className="flex gap-2   items-center bg-blue-100 text-blue-700 rounded px-2 py-0.5 text-sm cursor-default"
                     >
                       {tag}
                       <button
@@ -460,15 +484,15 @@ export default function BlogPage() {
                         className="ml-1 text-blue-900 hover:text-blue-600"
                         onClick={() => removeTag(tag)}
                         aria-label={`Remove tag ${tag}`}
+                        style={{fontSize:"25px"}}
                       >
                         &times;
                       </button>
                     </span>
                   ))}
                 </div>
+
               </div>
-
-
 
               <div className="flex gap-2 justify-end mt-4">
                 <button

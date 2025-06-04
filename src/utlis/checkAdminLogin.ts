@@ -70,13 +70,39 @@ const getUserLoginCheckUrl = (): string => {
   return `${baseUrl}${path}`;
 };
 
+export const authUserLogin = async () => {
+  try {
+    const response = await axios.get(getUserLoginCheckUrl(), { withCredentials: true });
+    return response.status === 200 ? true : false;
+    
+  } catch (error) {
+    return false;
+  }
+};
+
 export const checkUserHomeLogin = async (router: Router) => {
   try {
     const response = await axios.get(getUserLoginCheckUrl(), { withCredentials: true });
 
     router.push(response.status === 200 ? "/user/dashboard" : "/login");
+    
   } catch (error) {
     console.error("Error checking authentication:", error);
     router.push("/login");
+  }
+};
+
+export const getLogginedUserData = async () => {
+  try {
+    const response = await axios.get(getUserLoginCheckUrl(), { withCredentials: true });
+
+    if (response.status === 200) {
+      return response.data.user_data; // return decoded token data
+    }
+
+    return null;
+  } catch (error) {
+    console.error("Error fetching user:", error);
+    return null;
   }
 };

@@ -24,19 +24,29 @@ export async function GET(req: NextRequest) {
     }
 
     if (category) {
-      const blogs = await Blog.find({ category }).populate("category");
-      if (!blogs.length) return NextResponse.json({ error: "No blogs found for this category" }, { status: 404 });
+      const blogs = await Blog.find({ category })
+        .populate("category")
+        .sort({ createdate: -1 });
+      if (!blogs.length) {
+        return NextResponse.json({ error: "No blogs found for this category" }, { status: 404 });
+      }
       return NextResponse.json(blogs);
     }
 
-    const query = Blog.find().populate("category").sort({ createdAt: -1 });
+    const query = Blog.find().populate("category").sort({ createdate: -1 });
+
     if (limit && limit > 0) query.limit(limit);
+
     const blogs = await query;
     return NextResponse.json(blogs);
   } catch (error) {
-    return NextResponse.json({ error: "Error fetching blogs", details: (error as Error).message }, { status: 500 });
+    return NextResponse.json(
+      { error: "Error fetching blogs", details: (error as Error).message },
+      { status: 500 }
+    );
   }
 }
+
 
 // POST: Create blog
 export async function POST(req: NextRequest) {
@@ -53,10 +63,15 @@ export async function POST(req: NextRequest) {
     const image = formData.get("image") as File | null;
 
     // New: get tags (comma-separated string or multiple tags)
-    let tagsRaw = formData.get("tags") as string | null; // e.g. "Art & Design, Education, Tips"
+    let tagsRaw = formData.get("tags") as string | null;
     let tags: string[] = [];
+
     if (tagsRaw) {
-      tags = tagsRaw.split(",").map(t => t.trim()).filter(Boolean);
+      try {
+        tags = JSON.parse(tagsRaw); // ✅ proper parsing
+      } catch (err) {
+        console.error("Failed to parse tags:", err);
+      }
     }
 
     if (!image || !(image instanceof File) || image.size === 0) {

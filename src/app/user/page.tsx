@@ -26,7 +26,7 @@ const Page = () => {
             <div className="col-xxl-8 offset-xxl-2 col-xl-8 offset-xl-2">
               <div className="section__title-wrapper text-center mb-55">
                 <h2 className="section__title">
-                  User dashboard
+                  Check User Login
                 </h2>
               </div>
             </div>

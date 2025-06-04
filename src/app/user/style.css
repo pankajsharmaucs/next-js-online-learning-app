@@ -1,3 +1,7 @@
+.cp{
+  cursor: pointer;
+}
+
 /* app/admin/adminLayout.css */
 .sidebarButtonLink span{
   font-weight: 300;

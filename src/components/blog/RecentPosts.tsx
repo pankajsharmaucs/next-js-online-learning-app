@@ -49,7 +49,11 @@ const RecentPosts = () => {
                                         <span>{new Date(blog.createdate).toLocaleDateString()}</span>
                                     </div>
                                     <h6 className="rc__title">
-                                        <Link href={`/blog/${sanitizedSlug}`}>{blog.blogtitle}</Link>
+                                        <Link href={`/blog/${sanitizedSlug}`}>
+                                            {blog.blogtitle.length > 30
+                                                ? blog.blogtitle.slice(0, 30) + "..."
+                                                : blog.blogtitle}
+                                        </Link>
                                     </h6>
                                 </div>
                             </div>
