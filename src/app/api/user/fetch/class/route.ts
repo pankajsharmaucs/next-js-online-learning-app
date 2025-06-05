@@ -26,7 +26,7 @@ export async function POST(req: NextRequest) {
     if (existingClass) {
       return NextResponse.json({ message: 'Success', data: existingClass }, { status: 200 });
     } else {
-      return NextResponse.json({ message: 'New class purchase required' }, { status: 404 });
+      return NextResponse.json({ message: 'No class record found' }, { status: 404 });
     }
 
   } catch (error) {

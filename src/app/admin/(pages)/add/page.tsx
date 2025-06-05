@@ -19,7 +19,7 @@ const MasterPage: React.FC = () => {
 
     const [boardForm, setBoardForm] = useState<Board>({ board_name: '' });
     const [classForm, setClassForm] = useState<Class>({ class_name: '', board_id: '' });
-    const [subjectForm, setSubjectForm] = useState<Subject>({ class_id: '', subject_name: '' });
+    const [subjectForm, setSubjectForm] = useState<Subject>({ class_id: '', subject_name: '', image: '' });
 
     const [modalType, setModalType] = useState<'board' | 'class' | 'subject' | null>(null);
     const [isEdit, setIsEdit] = useState(false);
@@ -56,7 +56,7 @@ const MasterPage: React.FC = () => {
         } else if (type === 'class') {
             setClassForm(edit && index !== null ? classes[index] : { board_id: '', class_name: '' });
         } else if (type === 'subject') {
-            setSubjectForm(edit && index !== null ? subjects[index] : { class_id: '', subject_name: '' });
+            setSubjectForm(edit && index !== null ? subjects[index] : { class_id: '', subject_name: '', image: '' });
         }
     };
 
@@ -73,24 +73,35 @@ const MasterPage: React.FC = () => {
         try {
             let url = '';
             let method = isEdit ? 'PUT' : 'POST';
-            let body = {};
+            let options: RequestInit = { method };
+            let body;
 
             if (modalType === 'board') {
                 url = `${ALL_BOARD}`;
-                body = boardForm;
+                body = JSON.stringify(boardForm);
+                options.headers = { 'Content-Type': 'application/json' };
+                options.body = body;
             } else if (modalType === 'class') {
                 url = `${ALL_CLASS}`;
-                body = classForm;
+                body = JSON.stringify(classForm);
+                options.headers = { 'Content-Type': 'application/json' };
+                options.body = body;
             } else if (modalType === 'subject') {
                 url = `${ALL_SUBJECT}`;
-                body = subjectForm;
+                const formData = new FormData();
+                formData.append('subject_name', subjectForm.subject_name);
+                formData.append('class_id', subjectForm.class_id);
+                if (isEdit && subjectForm._id) formData.append('_id', subjectForm._id);
+                if (subjectForm.image instanceof File) {
+                    formData.append('image', subjectForm.image);
+                }
+
+                options.body = formData; // Don't set Content-Type here
             }
 
-            const resp = await fetch(url, {
-                method,
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(body),
-            });
+            // console.log(options); return
+
+            const resp = await fetch(url, options);
 
             switch (resp.status) {
                 case 200:
@@ -166,7 +177,6 @@ const MasterPage: React.FC = () => {
             }
         }
     };
-
 
     return (
         <div className="p-4 space-y-10">

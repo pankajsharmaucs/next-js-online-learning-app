@@ -13,4 +13,5 @@ export interface Subject {
   _id?: string;
   class_id: string;
   subject_name: string;
+  image?: string | File;
 }

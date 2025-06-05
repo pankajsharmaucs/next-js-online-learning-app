@@ -22,7 +22,9 @@ interface Subject {
 export default function Page() {
     const searchParams = useSearchParams();
     const classId = searchParams.get('class_id');
-    const class_name = searchParams.get('class_name');
+    const subject_id = searchParams.get('subject_id');
+    const subject_name = searchParams.get('subject_name');
+    
     const [subjects, setSubjects] = useState<Subject[]>([]);
     const [loading, setLoading] = useState(true);
     const [authorized, setAuthorized] = useState(false);
@@ -85,7 +87,8 @@ export default function Page() {
     return (
         <div className="max-w-10xl mx-auto " >
             <Card className="backdrop-blur-md bg-white/5 shadow-xl border border-white/10 p-4 rounded-2xl" style={{ padding: "10px" }} >
-                <h2 className="text-2xl font-bold mb-4">📚 All Subjects of Class : {class_name}</h2>
+                <h2 className="text-2xl font-bold  ">📚 {subject_name}</h2>
+                <p>All Chapters</p>
 
                 {loading ? (
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">

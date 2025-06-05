@@ -126,6 +126,7 @@ export function MasterModal({
                   </option>
                 ))}
               </select>
+
               <input
                 type="text"
                 placeholder="Subject Name"
@@ -138,6 +139,39 @@ export function MasterModal({
                 }
                 className="w-full border p-2 rounded mb-2"
               />
+
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Subject Image
+              </label>
+
+
+              <input
+                type="file"
+                accept="image/*"
+                onChange={(e) => {
+                  const file = e.target.files?.[0];
+                  if (file && setSubjectForm) {
+                    setSubjectForm({ ...subjectForm, image: file });
+                  }
+                }}
+                className="w-full border p-2 rounded mb-2"
+              />
+
+              {/* Preview */}
+              {subjectForm.image && (
+                <div className="mb-2">
+                  <img
+                    src={
+                      typeof subjectForm.image === 'string'
+                        ? subjectForm.image // If it's already a URL (like when editing)
+                        : URL.createObjectURL(subjectForm.image) // For new file
+                    }
+                    alt="Preview"
+                    className="h-24 w-24 object-cover rounded border"
+                  />
+                </div>
+              )}
+
             </>
           )}
           <button

@@ -38,6 +38,7 @@ export async function POST(req: NextRequest) {
       email: admin.email,
       role: admin.role,
       id: admin._id,
+      token: admin.token,
     };
 
     // Sign JWT token

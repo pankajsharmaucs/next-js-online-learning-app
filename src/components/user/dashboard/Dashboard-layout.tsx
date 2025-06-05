@@ -47,22 +47,16 @@ const Sidebar = ({ isCollapsed }: { isCollapsed: boolean }) => {
     >
       <nav className="flex flex-col gap-2 px-2">
         <Link
-          href="/user/dashboard"
-          className={`flex items-center gap-2 px-3 py-2 rounded-md text-sm font-semibold ${isActive("/user/dashboard") ? "bg-gray-200 text-blue-600" : "text-gray-700"}`}
+          href="/user/dashboard" style={{color:"#444444"}}
+          className={`flex items-center gap-2 px-3 py-2 rounded-md text-sm font-semibold  ${isActive("/user/dashboard") ? "bg-gray-200 text-blue-700" : "text-gray-700"}`}
         >
           <LayoutDashboard className="h-6 w-6" />
           {!isCollapsed && <span>Dashboard</span>}
         </Link>
+         
         <Link
-          href="/user/subscribe"
-          className={`flex items-center gap-2 px-3 py-2 rounded-md text-sm font-semibold ${isActive("/user/subscribe") ? "bg-gray-200 text-blue-600" : "text-gray-700"}`}
-        >
-          <User className="h-6 w-6" />
-          {!isCollapsed && <span>Subscribe</span>}
-        </Link>
-        <Link
-          href="/user/classes"
-          className={`flex items-center gap-2 px-3 py-2 rounded-md text-sm font-semibold ${isActive("/user/classes") ? "bg-gray-200 text-blue-600" : "text-gray-700"}`}
+          href="/user/classes" style={{color:"#444444"}}
+          className={`flex items-center gap-2 px-3 py-2 rounded-md text-sm font-semibold  ${isActive("/user/classes") ? "bg-gray-200 text-gray-700" : "text-gray-700"}`}
         >
           <SwatchBook className="h-6 w-6" />
           {!isCollapsed && <span>Classes</span>}

@@ -7,20 +7,20 @@ import Class from '@/lib/models/api/Class';
 import subject from '@/lib/models/api/subject';
 
 export async function GET(req: NextRequest) {
-    try {
-        await connectDB();
+  try {
+    await connectDB();
 
-        const board_id = req.nextUrl.searchParams.get('board_id');
-        const filter = board_id ? { board_id } : {};
+    const board_id = req.nextUrl.searchParams.get('board_id');
+    const filter = board_id ? { board_id } : {};
 
-        const classes = await Class.find(filter);
-        return NextResponse.json(classes);
-    } catch (error) {
-        return NextResponse.json(
-            { error: 'Error fetching data', details: error },
-            { status: 500 }
-        );
-    }
+    const classes = await Class.find(filter);
+    return NextResponse.json(classes, { status: 200 });
+  } catch (error) {
+    return NextResponse.json(
+      { error: 'Error fetching data', details: (error as Error).message },
+      { status: 500 }
+    );
+  }
 }
 
 export async function POST(req: NextRequest) {

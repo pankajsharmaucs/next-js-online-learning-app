@@ -66,6 +66,7 @@ export function SubjectSection({ classes, subjects, onEdit, onDelete, onAdd }: P
               <tr>
                 <th className="border p-2">Class Name</th>
                 <th className="border p-2">Subject Name</th>
+                <th className="border p-2">Image</th> {/* New image header */}
                 <th className="border p-2 text-center">Actions</th>
                 <th className="border p-2 text-center">View All</th>
               </tr>
@@ -80,13 +81,24 @@ export function SubjectSection({ classes, subjects, onEdit, onDelete, onAdd }: P
                   return numA - numB;
                 })
                 .map((s) => {
-                  const originalIndex = subjects.findIndex(fs => fs._id === s._id); // fixed here
+                  const originalIndex = subjects.findIndex(fs => fs._id === s._id);
                   return (
                     <tr key={s._id} className="odd:bg-gray-50">
                       <td className="border p-2">
                         {classes.find(c => c._id === s.class_id.toString())?.class_name || 'NA'}
                       </td>
                       <td className="border p-2">{s.subject_name}</td>
+                      <td className="border p-2 text-center">
+                        {s.image ? (
+                          <img
+                            src={s.image}
+                            alt={s.subject_name}
+                            className="w-12 h-12 object-cover rounded"
+                          />
+                        ) : (
+                          <span className="text-gray-400 italic">No Image</span>
+                        )}
+                      </td>
                       <td className="border p-2 text-center">
                         <div>
                           <button
