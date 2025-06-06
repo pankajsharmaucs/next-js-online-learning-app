@@ -1,6 +1,6 @@
 import React from 'react'
 import '../../(blog)/blog/blog.css'
-import Breadcrumb from '@/components/Breadcrumb'
+import Breadcrumb from '@/components/PageBreadcrumb'
 
 const pages = () => {
   return (

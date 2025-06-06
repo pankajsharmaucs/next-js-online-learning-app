@@ -10,7 +10,7 @@ interface BreadcrumbProps {
   pageName: string;
 }
 
-export default function Breadcrumb({
+export default function PageBreadcrumb({
   homeLabel = "Home",
   homeHref = "/",
   pageName,

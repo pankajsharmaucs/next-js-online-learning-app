@@ -9,7 +9,7 @@ import CategoryList from '@/components/blog/CategoryList'
 import AdBanner from '@/components/blog/AdBanner'
 import TagsList from '@/components/blog/TagsList'
 import BlogCard from '@/components/blog/BlogCard'
-import Breadcrumb from '@/components/Breadcrumb'
+import PageBreadcrumb from '@/components/PageBreadcrumb'
 
 interface BlogType {
   _id: string
@@ -87,7 +87,7 @@ const Page = () => {
             <div className="col-xxl-12">
               <div className="page__title-wrapper mt-110">
                 <h3 className="page__title mb-20 ">Blog Grid</h3>
-                 <Breadcrumb homeLabel="Home" homeHref="/" pageName="All Blogs" />
+                 <PageBreadcrumb homeLabel="Home" homeHref="/" pageName="All Blogs" />
               </div>
             </div>
           </div>
