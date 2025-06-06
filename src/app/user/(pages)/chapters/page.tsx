@@ -7,28 +7,42 @@ import axios from 'axios';
 import { Card } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Button } from '@/components/ui/button';
+import Link from 'next/link';
 import { checkUserClassAccess } from '@/utlis/checkClassAccess';
 import { showErrorToast } from '@/components/alert/AlertToast';
-import Link from 'next/link';
+import Breadcrumbs from '@/components/user/breadcrum/Breadcrumbs';
+import { Poppins } from 'next/font/google';
 
-interface Subject {
+interface Chapter {
     _id: string;
-    subject_name: string;
-    image: string;
-    class_id: string;
+    chapter_name: string;
+    introduction?: string;
+    summary?: string;
+    moral?: string;
+    pdf?: string;
+    video_url?: string;
+    video_access?: 'free' | 'paid';
+    assignment_access?: 'free' | 'paid';
     createdAt: string;
 }
+
+const poppins = Poppins({
+  weight: ['600', '700'],
+  subsets: ['latin'],
+});
 
 export default function Page() {
     const searchParams = useSearchParams();
     const classId = searchParams.get('class_id');
-    const subject_id = searchParams.get('subject_id');
-    const subject_name = searchParams.get('subject_name');
-    
-    const [subjects, setSubjects] = useState<Subject[]>([]);
-    const [loading, setLoading] = useState(true);
-    const [authorized, setAuthorized] = useState(false);
+    const subjectId = searchParams.get('subject_id');
+    const subjectName = searchParams.get('subject_name');
+    const class_name = searchParams.get('class_name');
+
     const router = useRouter();
+    const [authorized, setAuthorized] = useState(false);
+
+    const [chapters, setChapters] = useState<Chapter[]>([]);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const verifyAccess = async () => {
@@ -45,97 +59,82 @@ export default function Page() {
                 return;
             }
 
-            setAuthorized(true); // ✅ Allow page rendering
+            setAuthorized(true);
         };
 
         verifyAccess();
     }, [classId]);
 
-
-
     useEffect(() => {
-        if (!classId) return;
+        const fetchChapters = async () => {
+            if (!classId || !subjectId) return;
 
-        const fetchSubjects = async () => {
             try {
                 const baseUrl = window.location.origin;
-                const url = `${baseUrl}${process.env.NEXT_PUBLIC_ADMIN_GET_ALL_SUBJECT}?class_id=${classId}`;
+                const url = `${baseUrl}${process.env.NEXT_PUBLIC_ADMIN_GET_ALL_CHAPTER}?class_id=${classId}&subject_id=${subjectId}`;
 
                 const res = await axios.get(url);
+                setChapters(res.data || []);
                 // console.log(res.data);
-                const allSubjects: Subject[] = res.data || [];
-                setSubjects(allSubjects); // Already filtered by class_id on server
+
             } catch (err) {
-                console.error("Error fetching subjects:", err);
+                console.error('Error fetching chapters:', err);
             } finally {
                 setLoading(false);
             }
         };
 
-        fetchSubjects();
-    }, [classId]);
-
-    if (!classId) {
-        return <div className="p-6 text-red-600">Missing class ID in URL.</div>;
-    }
+        fetchChapters();
+    }, [classId, subjectId]);
 
     if (!authorized) {
         return <div className="p-4 text-center">Verifying access...</div>;
     }
 
-
     return (
-        <div className="max-w-10xl mx-auto " >
-            <Card className="backdrop-blur-md bg-white/5 shadow-xl border border-white/10 p-4 rounded-2xl" style={{ padding: "10px" }} >
-                <h2 className="text-2xl font-bold  ">📚 {subject_name}</h2>
-                <p>All Chapters</p>
+        <div className="max-w-10xl mx-auto px-4 py-8">
+            <Card className="backdrop-blur-md bg-white/5 shadow-xl border border-white/10 p-4 rounded-2xl">
+
+                <div className='col-12 '>
+                    <Breadcrumbs
+                        titles={['All Classes', class_name || 'All Subjects', subjectName || 'All Chapters']}
+                        links={[
+                            '/user/classes',
+                            `/user/subjects?class_id=${classId}&class_name=${class_name}&class_name=${classId}`,
+                        ]}
+                    />
+                </div>
+
+                <h2 className="text-2xl font-bold mb-6">📘 All Chapters of {subjectName}</h2>
 
                 {loading ? (
-                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                    <div className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 gap-6 ">
                         {[...Array(4)].map((_, i) => (
                             <Skeleton key={i} className="h-40 rounded-xl" />
                         ))}
                     </div>
-                ) : subjects.length === 0 ? (
-                    <p className="text-muted-foreground">No subjects found for this class.</p>
+                ) : chapters.length === 0 ? (
+                    <p className="text-muted-foreground">No chapters available.</p>
                 ) : (
-                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-                        {subjects.map((subject) => (
-                            <div
-                                key={subject._id}
-                                className="flex flex-col justify-between bg-white/10 backdrop-blur-md border
-                                 border-white/20 rounded-xl shadow-sm hover:shadow-xl transition-shadow duration-300"
-                                style={{ padding: "3px" }}
-                            >
-                                {/* Subject Image */}
-                                <div className="mb-4 w-100 h-40 rounded-lg   ">
-                                    <img
-                                        src={subject.image}
-                                        alt={subject.subject_name}
-                                        className="object-cover w-full h-full"
-                                        loading="lazy"
-                                    />
+                    <div className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 gap-6 ">
+                        {chapters.map((chapter) => (
+                            <div key={chapter._id} className="bg-white/10 border border-white/20 backdrop-blur-lg 
+                            rounded-xl p-4 shadow-md flex flex-col justify-between">
+
+                                <div style={{ padding: "10px" }} className={`text-2xl text-center text-capitalize 
+                                font-bold mb-2 text-gray-700 ${poppins.className} `} >{chapter.chapter_name}</div>
+
+                                <div className="mt-auto space-y-2">
+                                    <Link href={'/user/start-learning?chapter_id=' + chapter._id + '&class_id=' + classId + '&subject_id=' + subjectId + '&subject_name=' + subjectName + '&class_name=' + class_name} >
+                                        <Button variant="outline" className="w-full py-4">
+                                            Start Learning
+                                        </Button>
+                                    </Link>
                                 </div>
-
-                                {/* Subject Name */}
-                                <h5 style={{ padding: "10px" }} className="text-lg text-center font-bold mb-2 text-dark">{subject.subject_name}</h5>
-
-                                {/* Open Chapter Button */}
-                                <Link
-                                    href={`/user/chapters?class_id=${subject.class_id}&subject_id=${subject._id}&subject_name=${encodeURIComponent(subject.subject_name)}`}
-                                    className="mb-20 mt-0 cp p-20 px-3" >
-                                    <Button variant="outline" className="py-4 w-full rounded-xl  flex justify-center" >
-                                        Open Chapter
-                                    </Button>
-                                </Link>
                             </div>
                         ))}
                     </div>
-
-
                 )}
-
-
             </Card>
         </div>
     );

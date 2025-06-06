@@ -3,7 +3,7 @@ import type { NextRequest } from 'next/server';
 import { connectDB } from '@/lib/mongo_db';
 import { comparePassword } from '@/lib/crypto';
 import jwt from 'jsonwebtoken';
-import  User  from '@/lib/models/user/User';
+import User from '@/lib/models/user/User';
 
 const JWT_SECRET = process.env.JWT_SECRET!; // Store securely in .env.local
 
@@ -41,8 +41,8 @@ export async function POST(req: NextRequest) {
       token: admin.token,
     };
 
-    // Sign JWT token
-    const token = jwt.sign(payload, JWT_SECRET, { expiresIn: '1h' });
+    // Sign JWT token (12 hours)
+    const token = jwt.sign(payload, JWT_SECRET, { expiresIn: '12h' });
 
     // Set token in cookie
     const response = NextResponse.json({ message: 'Login successful' });
@@ -51,7 +51,7 @@ export async function POST(req: NextRequest) {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'strict',
-      maxAge: 1 * 12 * 3600,
+      maxAge: 12 * 60 * 60, // 12 hours in seconds
     });
 
     return response;

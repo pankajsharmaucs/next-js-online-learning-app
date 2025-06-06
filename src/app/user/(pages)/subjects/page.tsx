@@ -10,6 +10,7 @@ import { Button } from '@/components/ui/button';
 import { checkUserClassAccess } from '@/utlis/checkClassAccess';
 import { showErrorToast } from '@/components/alert/AlertToast';
 import Link from 'next/link';
+import Breadcrumbs from '@/components/user/breadcrum/Breadcrumbs';
 
 interface Subject {
     _id: string;
@@ -85,6 +86,16 @@ export default function Page() {
     return (
         <div className="max-w-10xl mx-auto " >
             <Card className="backdrop-blur-md bg-white/5 shadow-xl border border-white/10 p-4 rounded-2xl" style={{ padding: "10px" }} >
+
+                <div className='col-12 '>
+                    <Breadcrumbs
+                        titles={['All Classes', class_name || 'All Subjects']}
+                        links={[
+                            '/user/classes',
+                        ]}
+                    />
+                </div>
+
                 <h2 className="text-2xl font-bold mb-4">📚 All Subjects of Class : {class_name}</h2>
 
                 {loading ? (
@@ -119,10 +130,10 @@ export default function Page() {
 
                                 {/* Open Chapter Button */}
                                 <Link
-                                    href={`/user/chapters?class_id=${subject.class_id}&subject_id=${subject._id}&subject_name=${encodeURIComponent(subject.subject_name)}`}
+                                    href={`/user/chapters?class_id=${subject.class_id}&subject_id=${subject._id}&subject_name=${encodeURIComponent(subject.subject_name)}&class_name=${encodeURIComponent(class_name || '')}`}
                                     className="mb-20 mt-0 cp p-20 px-3" >
                                     <Button variant="outline" className="py-4 w-full rounded-xl  flex justify-center" >
-                                        Open Chapter
+                                        Open Chapter(s)
                                     </Button>
                                 </Link>
                             </div>

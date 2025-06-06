@@ -28,8 +28,8 @@ const Page = () => {
       );
 
       if (response.status === 200) {
-        showSuccessToast('Logged in successfully!');
         router.push('/user/dashboard'); // Redirect to user dashboard
+        showSuccessToast('Logged in successfully!');
       } else {
         showErrorToast('Access Denied!');
       }

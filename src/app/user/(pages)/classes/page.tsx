@@ -211,11 +211,7 @@ export default function Page() {
                     </div>
 
                     {/* Action Button */}
-                    <Link
-                      href={`/user/subjects?class_id=${item.class_id}&class_name=${encodeURIComponent(
-                        getClassName(item.class_id)
-                      )}`}
-                    >
+                    <Link href={`/user/subjects?class_id=${item.class_id}&class_name=${encodeURIComponent(getClassName(item.class_id))}`} >
                       <Button
                         variant="outline"
                         className="py-3 w-full rounded-xl flex justify-center"

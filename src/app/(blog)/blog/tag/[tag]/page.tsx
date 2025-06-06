@@ -9,7 +9,7 @@ import RecentPosts from '@/components/blog/RecentPosts'
 import CategoryList from '@/components/blog/CategoryList'
 import AdBanner from '@/components/blog/AdBanner'
 import BlogCard from '@/components/blog/BlogCard'
-import Breadcrumb from '@/components/ui/Breadcrumb'
+import Breadcrumb from '@/components/Breadcrumb'
 
 interface BlogType {
   _id: string
