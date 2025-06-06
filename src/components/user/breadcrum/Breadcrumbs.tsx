@@ -1,6 +1,13 @@
 'use client';
 
-import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbSeparator } from '@/components/ui/breadcrumb';
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbSeparator,
+  BreadcrumbList,
+} from '@/components/ui/breadcrumb';
+
 import { ChevronRight } from 'lucide-react';
 import Link from 'next/link';
 
@@ -12,22 +19,32 @@ interface BreadcrumbsProps {
 export default function Breadcrumbs({ titles, links }: BreadcrumbsProps) {
   return (
     <Breadcrumb>
-      {titles.map((title, index) => (
-        <BreadcrumbItem key={index}>
-          {index < links.length ? (
-            <BreadcrumbLink asChild>
-              <Link href={links[index]} style={{ color: "444" }} className="text-gray-600 text-sm   hover:underline text-capitalize">
+      <BreadcrumbList>
+        {titles.map((title, index) => (
+          <BreadcrumbItem key={index}>
+            {index < links.length ? (
+              <BreadcrumbLink asChild>
+                <Link
+                  href={links[index]}
+                  className="text-gray-600 text-sm hover:underline capitalize"
+                >
+                  {title}
+                </Link>
+              </BreadcrumbLink>
+            ) : (
+              <BreadcrumbLink className="text-gray-700 text-sm capitalize" aria-current="page">
                 {title}
-              </Link>
-            </BreadcrumbLink>
-          ) : (
-            <BreadcrumbLink className="text-gray-700   text-sm text-capitalize" aria-current="page">
-              {title}
-            </BreadcrumbLink>
-          )}
-          {index < titles.length - 1 && <BreadcrumbSeparator><ChevronRight className="w-4 h-4" /></BreadcrumbSeparator>}
-        </BreadcrumbItem>
-      ))}
+              </BreadcrumbLink>
+            )}
+            {index < titles.length - 1 && (
+              <BreadcrumbSeparator>
+                <ChevronRight className="w-4 h-4" />
+              </BreadcrumbSeparator>
+            )}
+          </BreadcrumbItem>
+        ))}
+      </BreadcrumbList>
     </Breadcrumb>
+
   );
 }
