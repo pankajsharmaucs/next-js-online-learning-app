@@ -157,7 +157,7 @@ export default function Page() {
                     links={[
                         '/user/classes',
                         `/user/subjects?class_id=${classId}&class_name=${class_name}&class_name=${classId}`,
-                        `/user/chapters?class_id=${classId}&subject_id=${subjectId}&subject_name=${subject_name}&class_name=${classId}`,
+                        `/user/chapters?class_id=${classId}&subject_id=${subjectId}&subject_name=${subject_name}&class_name=${class_name}`,
                     ]}
                 />
             </div>

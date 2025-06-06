@@ -1,15 +1,7 @@
 'use client';
 
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbSeparator,
-  BreadcrumbList,
-} from '@/components/ui/breadcrumb';
-
-import { ChevronRight } from 'lucide-react';
 import Link from 'next/link';
+import { ChevronRight } from 'lucide-react';
 
 interface BreadcrumbsProps {
   titles: string[];
@@ -18,33 +10,31 @@ interface BreadcrumbsProps {
 
 export default function Breadcrumbs({ titles, links }: BreadcrumbsProps) {
   return (
-    <Breadcrumb>
-      <BreadcrumbList>
+    <nav className="col-12" aria-label="Breadcrumb">
+      <ul className="flex flex-wrap px-0 py-2 items-center text-sm text-gray-500 space-x-1 sm:space-x-2">
         {titles.map((title, index) => (
-          <BreadcrumbItem key={index}>
+          <li key={index} className="flex items-center space-x-1">
             {index < links.length ? (
-              <BreadcrumbLink asChild>
+              <>
                 <Link
                   href={links[index]}
-                  className="text-gray-600 text-sm hover:underline capitalize"
+                  className="text-gray-600 hover:underline capitalize"
                 >
                   {title}
                 </Link>
-              </BreadcrumbLink>
+                <ChevronRight className="w-4 h-4 text-gray-400" />
+              </>
             ) : (
-              <BreadcrumbLink className="text-gray-700 text-sm capitalize" aria-current="page">
+              <span
+                className="text-gray-800 font-medium capitalize"
+                aria-current="page"
+              >
                 {title}
-              </BreadcrumbLink>
+              </span>
             )}
-            {index < titles.length - 1 && (
-              <BreadcrumbSeparator>
-                <ChevronRight className="w-4 h-4" />
-              </BreadcrumbSeparator>
-            )}
-          </BreadcrumbItem>
+          </li>
         ))}
-      </BreadcrumbList>
-    </Breadcrumb>
-
+      </ul>
+    </nav>
   );
 }
