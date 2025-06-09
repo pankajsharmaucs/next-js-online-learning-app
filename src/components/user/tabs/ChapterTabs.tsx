@@ -2,20 +2,29 @@
 
 import * as Tabs from '@radix-ui/react-tabs';
 import DOMPurify from 'dompurify';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import VimeoPlayer from '../player/VimeoPlayer';
+import { getLogginedUserData } from '@/utlis/checkAdminLogin';
+import axios from 'axios';
+import { NextResponse } from 'next/server';
 
 interface QA {
   question: string;
   answer: string;
 }
 
-interface Assessment {
+export interface TabAssessment {
+  assessment_id: string;
   title: string;
-  marks: number;
+  questions: {
+    question: string;
+    options: string[];
+    answer: 'a' | 'b' | 'c' | 'd';
+  }[];
 }
 
-interface ChapterTabData {
+export interface ChapterTabData {
+  chapter_id: string; // ✅ Add this
   chapter_name: string;
   introduction?: string;
   summary?: string;
@@ -23,18 +32,54 @@ interface ChapterTabData {
   video_url?: string;
   pdf?: string;
   questions: QA[];
-  assessments: Assessment[];
+  assessments: TabAssessment[];
 }
 
 export default function ChapterTabs({ data }: { data: ChapterTabData }) {
   const [activeTab, setActiveTab] = useState('Introduction');
+  const [userEmail, setUserEmail] = useState<string | null>(null);
+  const [savedScores, setSavedScores] = useState<Record<string, number>>({});
+  const ASSESSMENT_API = process.env.NEXT_PUBLIC_USER_ASSESSMENT!;
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      const user = await getLogginedUserData();
+      if (user?.email) {
+        setUserEmail(user.email);
+
+        const scores: Record<string, number> = {};
+
+        for (const asmt of data.assessments) {
+          try {
+            const res = await axios.get(ASSESSMENT_API, {
+              params: {
+                user_id: user.email,
+                chapter_id: data.chapter_id,
+                assessment_id: asmt.assessment_id,
+              },
+            });
+
+            const result = res.data;
+            console.log(res.data.data);
+            
+            if (result?.success && result.submitted) {
+              scores[asmt.title] = result.data.score;
+            }
+          } catch (err) {
+            console.error(`Error checking submission for ${asmt.title}`, err);
+          }
+        }
+
+        setSavedScores(scores);
+      }
+    };
+
+    fetchUser();
+  }, [data.assessments, data.chapter_id]);
+
 
   return (
-    <Tabs.Root
-      className="w-full"
-      defaultValue="Introduction"
-      onValueChange={(value) => setActiveTab(value)}
-    >
+    <Tabs.Root className="w-full" defaultValue="Introduction" onValueChange={setActiveTab}>
       <Tabs.List className="flex flex-wrap gap-2 border-b border-gray-200">
         {['Introduction', 'Summary', 'Moral', 'video', 'pdf', 'qa', 'assessments'].map((tab) => (
           <Tabs.Trigger
@@ -108,9 +153,9 @@ export default function ChapterTabs({ data }: { data: ChapterTabData }) {
         {data.questions.length > 0 ? (
           data.questions.map((qa, i) => (
             <div key={i} className="bg-gray-50 border-l-4 border-blue-500 px-2 rounded">
-              <p className="font-semibold text-gray-800 flex ">Q{i + 1}: &nbsp; <span dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(qa.question), }} />
-              </p>
-              <p className="text-sm text-gray-700 mt-1 flex">A:{' '} &nbsp; <span dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(qa.answer), }} />
+              <div className="font-semibold text-gray-800 flex ">Q{i + 1}: &nbsp; <span dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(qa.question), }} />
+              </div>
+              <p className="text-sm text-gray-900 mt-1 flex">A:{' '} &nbsp; <span dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(qa.answer), }} />
               </p>
             </div>
           ))
@@ -119,15 +164,115 @@ export default function ChapterTabs({ data }: { data: ChapterTabData }) {
         )}
       </Tabs.Content>
 
-      <Tabs.Content value="assessments" className='shadow p-4 border'>
+      <Tabs.Content value="assessments" className="shadow p-4 border">
         {data.assessments.length > 0 ? (
-          <ul className="space-y-2 list-disc list-inside text-gray-700">
-            {data.assessments.map((as, i) => (
-              <li key={i} className="font-medium">
-                {as.title} <span className="text-sm text-gray-500">({as.marks} marks)</span>
-              </li>
-            ))}
-          </ul>
+          data.assessments.map((asmt, i) => {
+            const [answers, setAnswers] = useState<string[]>(Array(asmt.questions.length).fill(''));
+            const [submitted, setSubmitted] = useState(false);
+            const [score, setScore] = useState<number | null>(null);
+
+            const handleSelect = (qIndex: number, value: string) => {
+              const updated = [...answers];
+              updated[qIndex] = value;
+              setAnswers(updated);
+            };
+
+            const handleSubmit = async () => {
+              let marks = 0;
+              asmt.questions.forEach((q, idx) => {
+                if (answers[idx] === q.answer) marks++;
+              });
+
+              setScore(marks);
+              setSubmitted(true);
+
+              if (!userEmail) return;
+
+              const payload = {
+                user_id: userEmail,
+                chapter_id: data.chapter_id,
+                assessment_id: asmt.assessment_id,
+                questions: asmt.questions.map((q, idx) => ({
+                  question: q.question,
+                  selected: answers[idx],
+                  correct: q.answer,
+                  options: q.options,
+                })),
+                score: marks,
+              };
+
+              try {
+                console.log('Submitting assessment with payload:', payload);
+                const res = await axios.post(ASSESSMENT_API, payload);
+
+                if (res.data.success) {
+                  setSavedScores((prev) => ({ ...prev, [asmt.title]: marks }));
+                }
+              } catch (error: any) {
+                console.error('Error submitting assessment:', error?.response?.data || error.message || error);
+                // alert('Failed to submit assessment. Please try again.');
+              }
+            };
+
+            const existingScore = savedScores[asmt.title];
+
+            return (
+              <div key={i} className="bg-gray-50 p-4 rounded border border-blue-100 mb-6">
+                <h3 className="text-lg font-semibold mb-4 text-blue-800">{asmt.title}</h3>
+
+                <>
+                  {asmt.questions.map((q, j) => (
+                    <div key={j} className="mb-4">
+                      <p className="font-medium text-gray-800">Q{j + 1}: {q.question}</p>
+                      <div className="pl-2 mt-2 flex gap-2 flex-wrap">
+                        {q.options.map((opt, idx) => {
+                          const optionKey = ['a', 'b', 'c', 'd'][idx];
+                          const selected = answers[j] === optionKey;
+
+                          return (
+                            <button
+                              key={idx}
+                              type="button"
+                              className={`px-4 py-2 rounded-pill border focus:outline-none focus:ring-0 text-sm transition-all ${selected
+                                ? 'bg-blue-800 text-white  border-0'
+                                : 'bg-white text-gray-800'
+                                }`}
+                              onClick={() => handleSelect(j, optionKey)}
+                              disabled={submitted}
+                            >
+                              {['A', 'B', 'C', 'D'][idx]}. {opt}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  ))}
+
+                  {!existingScore ? (
+                    <div>
+
+                      <p>Check all and click to submit assessment</p>
+
+                      <button className="bg-green-600 text-white px-4 py-2 rounded mt-4"
+                        onClick={handleSubmit}
+                        disabled={answers.includes('')}
+                      > Submit Assessment </button>
+                    </div>
+                  ) : (
+
+                    <div>
+                      <p>Assessment Already submitted</p>
+                      <h1 className="text-green-700 mt-4 font-semibold">
+                        🎉 Score: {score}/{asmt.questions.length}
+                      </h1>
+                    </div>
+
+                  )}
+                </>
+
+              </div>
+            );
+          })
         ) : (
           <p className="text-gray-500">No assessments available.</p>
         )}

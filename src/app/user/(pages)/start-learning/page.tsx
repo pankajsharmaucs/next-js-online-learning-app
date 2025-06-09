@@ -197,6 +197,7 @@ export default function Page() {
                 ) : (
                     <ChapterTabs
                         data={{
+                            chapter_id: chapter_id || '',
                             chapter_name: chapter?.chapter_name || '',
                             introduction: chapter?.introduction,
                             summary: chapter?.summary,
@@ -210,8 +211,13 @@ export default function Page() {
                             assessments: assessment
                                 ? [
                                     {
+                                        assessment_id: assessment._id,
                                         title: assessment.title,
-                                        marks: assessment.questions.length,
+                                        questions: assessment.questions.map((q) => ({
+                                            question: q.question,
+                                            options: q.options,
+                                            answer: q.answer,
+                                        })),
                                     },
                                 ]
                                 : [],
