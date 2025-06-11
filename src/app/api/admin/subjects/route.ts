@@ -88,6 +88,7 @@ export async function PUT(req: NextRequest) {
 
         const formData = await req.formData();
         const _id = formData.get('_id')?.toString();
+        const class_id = formData.get('class_id')?.toString();
         const subject_name = formData.get('subject_name')?.toString();
         const file = formData.get('image') as File | null;
 
@@ -102,6 +103,12 @@ export async function PUT(req: NextRequest) {
         }
 
         if (subject_name) subject.subject_name = subject_name;
+
+        const existingSubject = await Subject.findOne({ class_id: class_id, subject_name: { $regex: `^${subject_name}$`, $options: 'i' }, });
+
+        if (existingSubject) {
+            return NextResponse.json({ error: 'Subject Name Already in use' }, { status: 409 });
+        }
 
         // If new image provided, replace existing image
         if (file && file.size > 0) {

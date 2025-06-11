@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
-import SubjectMaster from '@/lib/models/master/subjectMaster'; // Updated model import
+import SubjectMaster from '@/lib/models/master/subjectMaster';
 import { validateSuperAdmin } from '@/lib/apiValidator';
 import { connectDB } from '@/lib/mongo_db';
 
@@ -23,14 +23,20 @@ export async function POST(req: NextRequest) {
     }
 
     await connectDB();
-
     const { subject_name } = await req.json();
 
     if (!subject_name) {
       return NextResponse.json({ error: 'Subject name is required' }, { status: 400 });
     }
 
-    const newSubject = new SubjectMaster({ subject_name });
+    const trimmedName = subject_name.trim().toLowerCase();
+
+    const existing = await SubjectMaster.findOne({ subject_name: { $regex: `^${trimmedName}$`, $options: 'i' } });
+    if (existing) {
+      return NextResponse.json({ error: 'Subject already exists' }, { status: 409 });
+    }
+
+    const newSubject = new SubjectMaster({ subject_name: trimmedName });
     await newSubject.save();
 
     return NextResponse.json({ message: 'Subject added', id: newSubject._id });
@@ -47,21 +53,29 @@ export async function PUT(req: NextRequest) {
     }
 
     await connectDB();
-
     const { _id, subject_name } = await req.json();
 
-    if (!_id) {
-      return NextResponse.json({ error: 'Subject ID is required' }, { status: 400 });
+    if (!_id || !subject_name) {
+      return NextResponse.json({ error: 'Subject ID and name are required' }, { status: 400 });
     }
 
-    const existing = await SubjectMaster.findById(_id);
+    const trimmedName = subject_name.trim().toLowerCase();
 
-    if (!existing) {
+    const existing = await SubjectMaster.findOne({
+      subject_name: { $regex: `^${trimmedName}$`, $options: 'i' },
+      _id: { $ne: _id },
+    });
+    if (existing) {
+      return NextResponse.json({ error: 'Subject name already exists' }, { status: 409 });
+    }
+
+    const subject = await SubjectMaster.findById(_id);
+    if (!subject) {
       return NextResponse.json({ error: 'Subject not found' }, { status: 404 });
     }
 
-    existing.subject_name = subject_name?.trim() || existing.subject_name;
-    await existing.save();
+    subject.subject_name = trimmedName;
+    await subject.save();
 
     return NextResponse.json({ message: 'Subject updated' });
   } catch (error: any) {
@@ -77,7 +91,6 @@ export async function DELETE(req: NextRequest) {
     }
 
     await connectDB();
-
     const { id } = await req.json();
 
     if (!id) {
@@ -85,7 +98,6 @@ export async function DELETE(req: NextRequest) {
     }
 
     await SubjectMaster.findByIdAndDelete(id);
-
     return NextResponse.json({ message: 'Subject deleted' });
   } catch (error: any) {
     return NextResponse.json({ error: 'Error deleting subject', details: error.message }, { status: 500 });

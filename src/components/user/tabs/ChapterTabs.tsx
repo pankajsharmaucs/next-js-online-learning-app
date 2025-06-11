@@ -6,7 +6,6 @@ import React, { useEffect, useState } from 'react';
 import VimeoPlayer from '../player/VimeoPlayer';
 import { getLogginedUserData } from '@/utlis/checkAdminLogin';
 import axios from 'axios';
-import { NextResponse } from 'next/server';
 
 interface QA {
   question: string;
@@ -24,7 +23,7 @@ export interface TabAssessment {
 }
 
 export interface ChapterTabData {
-  chapter_id: string; // ✅ Add this
+  chapter_id: string;
   chapter_name: string;
   introduction?: string;
   summary?: string;
@@ -35,10 +34,24 @@ export interface ChapterTabData {
   assessments: TabAssessment[];
 }
 
+interface AssessmentState {
+  answers: string[];
+  submitted: boolean;
+  score: number | null;
+}
+
 export default function ChapterTabs({ data }: { data: ChapterTabData }) {
   const [activeTab, setActiveTab] = useState('Introduction');
   const [userEmail, setUserEmail] = useState<string | null>(null);
   const [savedScores, setSavedScores] = useState<Record<string, number>>({});
+  const [assessmentStates, setAssessmentStates] = useState<AssessmentState[]>(
+    data.assessments.map(asmt => ({
+      answers: Array(asmt.questions.length).fill(''),
+      submitted: false,
+      score: null,
+    }))
+  );
+
   const ASSESSMENT_API = process.env.NEXT_PUBLIC_USER_ASSESSMENT!;
 
   useEffect(() => {
@@ -60,8 +73,6 @@ export default function ChapterTabs({ data }: { data: ChapterTabData }) {
             });
 
             const result = res.data;
-            console.log(res.data.data);
-            
             if (result?.success && result.submitted) {
               scores[asmt.title] = result.data.score;
             }
@@ -76,7 +87,6 @@ export default function ChapterTabs({ data }: { data: ChapterTabData }) {
 
     fetchUser();
   }, [data.assessments, data.chapter_id]);
-
 
   return (
     <Tabs.Root className="w-full" defaultValue="Introduction" onValueChange={setActiveTab}>
@@ -100,6 +110,7 @@ export default function ChapterTabs({ data }: { data: ChapterTabData }) {
         ))}
       </Tabs.List>
 
+      {/* Introduction */}
       <Tabs.Content value="Introduction" className="space-y-4 shadow p-4 border">
         {data.introduction && (
           <p
@@ -109,6 +120,7 @@ export default function ChapterTabs({ data }: { data: ChapterTabData }) {
         )}
       </Tabs.Content>
 
+      {/* Summary */}
       <Tabs.Content value="Summary" className="space-y-4 shadow p-4 border">
         {data.summary && (
           <p
@@ -118,6 +130,7 @@ export default function ChapterTabs({ data }: { data: ChapterTabData }) {
         )}
       </Tabs.Content>
 
+      {/* Moral */}
       <Tabs.Content value="Moral" className="space-y-4 shadow p-4 border">
         {data.moral && (
           <p
@@ -127,35 +140,38 @@ export default function ChapterTabs({ data }: { data: ChapterTabData }) {
         )}
       </Tabs.Content>
 
+      {/* Video */}
       <Tabs.Content value="video" className="aspect-video w-full overflow-hidden rounded-lg shadow p-4 border">
-        {activeTab === 'video' && data.video_url ? (
+        { activeTab === 'video' && data.video_url ? (
           <VimeoPlayer videoId={data.video_url} />
         ) : (
           activeTab === 'video' && <p className="text-gray-500">No video available.</p>
         )}
       </Tabs.Content>
 
-      <Tabs.Content value="pdf" className='shadow p-4 border'>
+      {/* PDF */}
+      <Tabs.Content value="pdf" className="shadow p-4 border">
         {data.pdf ? (
-          <div className="w-full h-[500px] overflow-hidden ">
-            <iframe
-              src={data.pdf}
-              className="w-full h-full"
-              title="PDF Viewer"
-            />
+          <div className="w-full h-[500px] overflow-hidden">
+            <iframe src={data.pdf} className="w-full h-full" title="PDF Viewer" />
           </div>
         ) : (
           <p className="text-gray-500">No PDF available.</p>
         )}
       </Tabs.Content>
 
+      {/* Q&A */}
       <Tabs.Content value="qa" className="space-y-4 shadow p-4 border">
         {data.questions.length > 0 ? (
           data.questions.map((qa, i) => (
             <div key={i} className="bg-gray-50 border-l-4 border-blue-500 px-2 rounded">
-              <div className="font-semibold text-gray-800 flex ">Q{i + 1}: &nbsp; <span dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(qa.question), }} />
+              <div className="font-semibold text-gray-800 flex">
+                Q{i + 1}:&nbsp;
+                <span dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(qa.question) }} />
               </div>
-              <p className="text-sm text-gray-900 mt-1 flex">A:{' '} &nbsp; <span dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(qa.answer), }} />
+              <p className="text-sm text-gray-900 mt-1 flex">
+                A:&nbsp;
+                <span dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(qa.answer) }} />
               </p>
             </div>
           ))
@@ -164,27 +180,28 @@ export default function ChapterTabs({ data }: { data: ChapterTabData }) {
         )}
       </Tabs.Content>
 
+      {/* Assessments */}
       <Tabs.Content value="assessments" className="shadow p-4 border">
         {data.assessments.length > 0 ? (
           data.assessments.map((asmt, i) => {
-            const [answers, setAnswers] = useState<string[]>(Array(asmt.questions.length).fill(''));
-            const [submitted, setSubmitted] = useState(false);
-            const [score, setScore] = useState<number | null>(null);
+            const assessment = assessmentStates[i];
+            const existingScore = savedScores[asmt.title];
 
             const handleSelect = (qIndex: number, value: string) => {
-              const updated = [...answers];
-              updated[qIndex] = value;
-              setAnswers(updated);
+              setAssessmentStates(prev => {
+                const updated = [...prev];
+                updated[i].answers[qIndex] = value;
+                return [...updated];
+              });
             };
 
             const handleSubmit = async () => {
+              const answers = assessmentStates[i].answers;
               let marks = 0;
+
               asmt.questions.forEach((q, idx) => {
                 if (answers[idx] === q.answer) marks++;
               });
-
-              setScore(marks);
-              setSubmitted(true);
 
               if (!userEmail) return;
 
@@ -202,74 +219,75 @@ export default function ChapterTabs({ data }: { data: ChapterTabData }) {
               };
 
               try {
-                console.log('Submitting assessment with payload:', payload);
                 const res = await axios.post(ASSESSMENT_API, payload);
 
                 if (res.data.success) {
-                  setSavedScores((prev) => ({ ...prev, [asmt.title]: marks }));
+                  setSavedScores(prev => ({ ...prev, [asmt.title]: marks }));
+                  setAssessmentStates(prev => {
+                    const updated = [...prev];
+                    updated[i] = {
+                      answers,
+                      submitted: true,
+                      score: marks,
+                    };
+                    return updated;
+                  });
                 }
-              } catch (error: any) {
-                console.error('Error submitting assessment:', error?.response?.data || error.message || error);
-                // alert('Failed to submit assessment. Please try again.');
+              } catch (error) {
+                console.error('Error submitting assessment:', error);
               }
             };
-
-            const existingScore = savedScores[asmt.title];
 
             return (
               <div key={i} className="bg-gray-50 p-4 rounded border border-blue-100 mb-6">
                 <h3 className="text-lg font-semibold mb-4 text-blue-800">{asmt.title}</h3>
 
-                <>
-                  {asmt.questions.map((q, j) => (
-                    <div key={j} className="mb-4">
-                      <p className="font-medium text-gray-800">Q{j + 1}: {q.question}</p>
-                      <div className="pl-2 mt-2 flex gap-2 flex-wrap">
-                        {q.options.map((opt, idx) => {
-                          const optionKey = ['a', 'b', 'c', 'd'][idx];
-                          const selected = answers[j] === optionKey;
+                {asmt.questions.map((q, j) => (
+                  <div key={j} className="mb-4">
+                    <p className="font-medium text-gray-800">Q{j + 1}: {q.question}</p>
+                    <div className="pl-2 mt-2 flex gap-2 flex-wrap">
+                      {q.options.map((opt, idx) => {
+                        const optionKey = ['a', 'b', 'c', 'd'][idx];
+                        const selected = assessment.answers[j] === optionKey;
 
-                          return (
-                            <button
-                              key={idx}
-                              type="button"
-                              className={`px-4 py-2 rounded-pill border focus:outline-none focus:ring-0 text-sm transition-all ${selected
-                                ? 'bg-blue-800 text-white  border-0'
-                                : 'bg-white text-gray-800'
-                                }`}
-                              onClick={() => handleSelect(j, optionKey)}
-                              disabled={submitted}
-                            >
-                              {['A', 'B', 'C', 'D'][idx]}. {opt}
-                            </button>
-                          );
-                        })}
-                      </div>
+                        return (
+                          <button
+                            key={idx}
+                            type="button"
+                            className={`px-4 py-2 rounded border text-sm transition-all ${selected
+                              ? 'bg-blue-800 text-white'
+                              : 'bg-white text-gray-800'
+                              }`}
+                            onClick={() => handleSelect(j, optionKey)}
+                            disabled={assessment.submitted || !!existingScore}
+                          >
+                            {optionKey.toUpperCase()}. {opt}
+                          </button>
+                        );
+                      })}
                     </div>
-                  ))}
+                  </div>
+                ))}
 
-                  {!existingScore ? (
-                    <div>
-
-                      <p>Check all and click to submit assessment</p>
-
-                      <button className="bg-green-600 text-white px-4 py-2 rounded mt-4"
-                        onClick={handleSubmit}
-                        disabled={answers.includes('')}
-                      > Submit Assessment </button>
-                    </div>
-                  ) : (
-
-                    <div>
-                      <p>Assessment Already submitted</p>
-                      <h1 className="text-green-700 mt-4 font-semibold">
-                        🎉 Score: {score}/{asmt.questions.length}
-                      </h1>
-                    </div>
-
-                  )}
-                </>
-
+                {!existingScore ? (
+                  <div>
+                    <p>Check all and click to submit assessment</p>
+                    <button
+                      className="bg-green-600 text-white px-4 py-2 rounded mt-4"
+                      onClick={handleSubmit}
+                      disabled={assessment.answers.includes('')}
+                    >
+                      Submit Assessment
+                    </button>
+                  </div>
+                ) : (
+                  <div>
+                    <p>Assessment Already submitted</p>
+                    <h1 className="text-green-700 mt-4 font-semibold">
+                      🎉 Score: {savedScores[asmt.title]}/{asmt.questions.length}
+                    </h1>
+                  </div>
+                )}
               </div>
             );
           })
@@ -277,7 +295,6 @@ export default function ChapterTabs({ data }: { data: ChapterTabData }) {
           <p className="text-gray-500">No assessments available.</p>
         )}
       </Tabs.Content>
-
     </Tabs.Root>
   );
 }

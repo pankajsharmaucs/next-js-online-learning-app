@@ -93,7 +93,7 @@ function Page() {
 
 
     const CHAPTER_API = process.env.NEXT_PUBLIC_ADMIN_GET_ALL_CHAPTER;
-    const ALL_CLASS = process.env.NEXT_PUBLIC_ADMIN_GET_ALL_CLASS;
+    const ALL_CLASS = process.env.NEXT_PUBLIC_ADMIN_GET_MASTER_CLASS;
     const ALL_SUBJECT = process.env.NEXT_PUBLIC_ADMIN_GET_ALL_SUBJECT;
 
     const fetchClasses = async () => {

@@ -5,6 +5,7 @@ export interface Board {
 
 export interface Class {
   _id?: string;
+  class_id: string;
   class_name: string;
   board_id: string;
 }

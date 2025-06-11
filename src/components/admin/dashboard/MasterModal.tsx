@@ -1,5 +1,7 @@
-import React, { FormEvent } from 'react';
+import React, { FormEvent, useEffect, useState } from 'react';
+import axios from 'axios';
 import { Board, Class, Subject } from '@/types/add_types';
+import { log } from 'console';
 
 interface Props {
   type: 'board' | 'class' | 'subject';
@@ -34,6 +36,46 @@ export function MasterModal({
   loading,
   isEdit,
 }: Props) {
+  const [classOptions, setClassOptions] = useState<Class[]>([]);
+  const [subjectOptions, setSubjectOptions] = useState<Subject[]>([]);
+
+  useEffect(() => {
+    const fetchClasses = async () => {
+      try {
+        const res = await axios.get(
+          process.env.NEXT_PUBLIC_ADMIN_GET_MASTER_CLASS as string
+        );
+        setClassOptions(res.data || []);
+      } catch (err) {
+        console.error('Failed to fetch class list:', err);
+      }
+
+    };
+
+    const fetchSubjects = async () => {
+      try {
+        const res = await axios.get(
+          process.env.NEXT_PUBLIC_ADMIN_GET_MASTER_SUBJECT as string
+        );
+        setSubjectOptions(res.data || []);
+      } catch (err) {
+        console.error('Failed to fetch subject list:', err);
+      }
+    };
+
+    if (show && type === 'class') {
+      fetchClasses();
+    }
+
+    if (show && type === 'subject') {
+      fetchClasses(); // Needed for class_id selection
+      fetchSubjects();
+    }
+
+
+  }, [show, type]);
+
+
   if (!show) return null;
 
   const handleBackdropClick = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -44,7 +86,9 @@ export function MasterModal({
 
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center z-50" onClick={handleBackdropClick}
+    <div
+      className="fixed inset-0 flex items-center justify-center z-50"
+      onClick={handleBackdropClick}
       style={{ backgroundColor: 'rgba(255, 255, 255, 0.95)' }}
     >
       <div className="bg-white border rounded shadow-md w-full max-w-md relative p-4">
@@ -69,10 +113,11 @@ export function MasterModal({
               className="w-full border p-2 rounded mb-2"
             />
           )}
+
           {type === 'class' && classForm && setClassForm && (
             <>
               <select
-                disabled={isEdit}
+                required
                 value={classForm.board_id}
                 onChange={(e) =>
                   setClassForm({ ...classForm, board_id: e.target.value })
@@ -87,28 +132,56 @@ export function MasterModal({
                 ))}
               </select>
 
-              <input
-                type="hidden"
-                placeholder="Board ID"
-                value={classForm.board_id}
-                onChange={(e) =>
-                  setClassForm({ ...classForm, board_id: e.target.value })
+              <label htmlFor="class_name">Class Name</label>
+              <select
+                id="class_name"
+                value={
+                  !isEdit
+                    ? classForm.class_id // In Add mode, bind to class_id
+                    : classOptions.find((c) => c.class_name === classForm.class_name)?._id || ''
                 }
+                onChange={(e) => {
+                  const selectedId = e.target.value;
+                  const selectedClass = classOptions.find((c) => c._id === selectedId);
+
+                  if (!selectedClass) return;
+
+                  if (!isEdit) {
+                    // ADD MODE: update both class_id and class_name
+                    setClassForm({
+                      ...classForm,
+                      class_id: selectedId,
+                      class_name: selectedClass.class_name,
+                    });
+                  } else {
+                    // EDIT MODE: only update class_name
+                    setClassForm({
+                      ...classForm,
+                      class_name: selectedClass.class_name,
+                      // leave class_id as-is
+                    });
+                  }
+                }}
                 className="w-full border p-2 rounded mb-2"
+              >
+                <option value="">Select Class</option>
+                {classOptions.map((c) => (
+                  <option key={c._id} value={c._id}>
+                    {c.class_name}
+                  </option>
+                ))}
+              </select>
+
+              <input
+                className="w-full border p-1 rounded mb-2"
+                id="class_id"
+                type="text"
+                value={classForm.class_id || ''}
               />
 
-              <label htmlFor="classForm">Class Name </label>
-              <input
-                type="text"
-                placeholder="Class Name"
-                value={classForm.class_name}
-                onChange={(e) =>
-                  setClassForm({ ...classForm, class_name: e.target.value })
-                }
-                className="w-full border p-2 rounded mb-2"
-              />
             </>
           )}
+
           {type === 'subject' && subjectForm && setSubjectForm && (
             <>
               <select
@@ -120,63 +193,65 @@ export function MasterModal({
                 className="w-full border p-2 rounded mb-2"
               >
                 <option value="">Select Class</option>
-                {classes.map((c) => (
+                {classOptions.map((c) => (
                   <option key={c._id} value={c._id}>
                     {c.class_name}
                   </option>
                 ))}
               </select>
 
-              <input
-                type="text"
-                placeholder="Subject Name"
+              <label htmlFor="subject_name">Subject Name</label>
+              <select
+                id="subject_name"
                 value={subjectForm.subject_name}
                 onChange={(e) =>
-                  setSubjectForm({
-                    ...subjectForm,
-                    subject_name: e.target.value,
-                  })
+                  setSubjectForm({ ...subjectForm, subject_name: e.target.value })
                 }
                 className="w-full border p-2 rounded mb-2"
-              />
+              >
+                <option value="">Select Subject</option>
+                {subjectOptions.map((s) => (
+                  <option key={s.subject_name} value={s.subject_name}>
+                    {s.subject_name}
+                  </option>
+                ))}
+              </select>
 
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Subject Image
               </label>
-
-
               <input
                 type="file"
                 accept="image/*"
                 onChange={(e) => {
                   const file = e.target.files?.[0];
-                  if (file && setSubjectForm) {
+                  if (file) {
                     setSubjectForm({ ...subjectForm, image: file });
                   }
                 }}
                 className="w-full border p-2 rounded mb-2"
               />
-
-              {/* Preview */}
               {subjectForm.image && (
                 <div className="mb-2">
                   <img
                     src={
                       typeof subjectForm.image === 'string'
-                        ? subjectForm.image // If it's already a URL (like when editing)
-                        : URL.createObjectURL(subjectForm.image) // For new file
+                        ? subjectForm.image
+                        : URL.createObjectURL(subjectForm.image)
                     }
                     alt="Preview"
                     className="h-24 w-24 object-cover rounded border"
                   />
                 </div>
               )}
-
             </>
           )}
+
           <button
             type="submit"
-            className="w-full bg-blue-600 text-white py-2 rounded"
+            disabled={loading}
+            className={`w-full ${loading ? 'bg-blue-400' : 'bg-blue-600'
+              } text-white py-2 rounded`}
           >
             {loading ? 'Saving...' : isEdit ? 'Update' : 'Add'}
           </button>

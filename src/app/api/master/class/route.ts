@@ -1,15 +1,12 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
-import mongoose from 'mongoose';
-import ClassMaster from '@/lib/models/master/ClassMaster'; // The model you created earlier
-import { validateSuperAdmin } from '@/lib/apiValidator';
-import { connectDB } from '@/lib/mongo_db'; // Assuming this connects MongoDB
+import ClassMaster from '@/lib/models/master/ClassMaster';
+import { connectDB } from '@/lib/mongo_db';
 
 // GET: Fetch all classes
 export async function GET(req: NextRequest) {
   try {
-    await connectDB(); // MongoDB connect
-
+    await connectDB();
     const classes = await ClassMaster.find().lean();
     return NextResponse.json(classes);
   } catch (error: any) {
@@ -20,19 +17,21 @@ export async function GET(req: NextRequest) {
 // POST: Add a new class
 export async function POST(req: NextRequest) {
   try {
-    if (!(await validateSuperAdmin(req))) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
-
     await connectDB();
-
     const { class_name } = await req.json();
 
-    if (!class_name) {
+    if (!class_name || typeof class_name !== 'string') {
       return NextResponse.json({ error: 'Class name is required' }, { status: 400 });
     }
 
-    const newClass = new ClassMaster({ class_name });
+    const formattedName = class_name.trim().toLowerCase();
+
+    const existing = await ClassMaster.findOne({ class_name: { $regex: new RegExp(`^${formattedName}$`, 'i') } });
+    if (existing) {
+      return NextResponse.json({ error: 'Class already exists' }, { status: 409 });
+    }
+
+    const newClass = new ClassMaster({ class_name: formattedName });
     await newClass.save();
 
     return NextResponse.json({ message: 'Class added', id: newClass._id });
@@ -44,26 +43,30 @@ export async function POST(req: NextRequest) {
 // PUT: Update a class
 export async function PUT(req: NextRequest) {
   try {
-    if (!(await validateSuperAdmin(req))) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
-
     await connectDB();
-
     const { _id, class_name } = await req.json();
 
-    if (!_id) {
-      return NextResponse.json({ error: 'Class ID is required' }, { status: 400 });
+    if (!_id || !class_name || typeof class_name !== 'string') {
+      return NextResponse.json({ error: 'ID and class name required' }, { status: 400 });
     }
 
-    const existing = await ClassMaster.findById(_id);
+    const formattedName = class_name.trim().toLowerCase();
 
-    if (!existing) {
+    const duplicate = await ClassMaster.findOne({
+      class_name: { $regex: new RegExp(`^${formattedName}$`, 'i') },
+      _id: { $ne: _id },
+    });
+    if (duplicate) {
+      return NextResponse.json({ error: 'Class name already exists' }, { status: 409 });
+    }
+
+    const cls = await ClassMaster.findById(_id);
+    if (!cls) {
       return NextResponse.json({ error: 'Class not found' }, { status: 404 });
     }
 
-    existing.class_name = class_name?.trim() || existing.class_name;
-    await existing.save();
+    cls.class_name = formattedName;
+    await cls.save();
 
     return NextResponse.json({ message: 'Class updated' });
   } catch (error: any) {
@@ -74,12 +77,7 @@ export async function PUT(req: NextRequest) {
 // DELETE: Delete a class
 export async function DELETE(req: NextRequest) {
   try {
-    if (!(await validateSuperAdmin(req))) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
-
     await connectDB();
-
     const { id } = await req.json();
 
     if (!id) {
@@ -87,7 +85,6 @@ export async function DELETE(req: NextRequest) {
     }
 
     await ClassMaster.findByIdAndDelete(id);
-
     return NextResponse.json({ message: 'Class deleted' });
   } catch (error: any) {
     return NextResponse.json({ error: 'Error deleting class', details: error.message }, { status: 500 });

@@ -1,25 +1,23 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { ClassSection } from '@/components/admin/dashboard/ClassSection';
-import { SubjectSection } from '@/components/admin/dashboard/SubjectSection';
-import { MasterModal } from '@/components/admin/dashboard/MasterModal';
-import { Board, Class, Subject } from '@/types/add_types';
-import axios from 'axios';
-import { showConfirmationDialog, showErrorToast, showSuccessToast, showWarningToast } from '@/components/alert/AlertToast';
 import './add.css'
+import axios from 'axios';
+import { BoardSection } from '@/components/admin/dashboard/BoardSection';
+import { Board, Class, Subject } from '@/types/add_types';
+import { showConfirmationDialog, showErrorToast, showSuccessToast, showWarningToast } from '@/components/alert/AlertToast';
+import AddMasterClass from '@/components/admin/dashboard/AddMasterClass';
+import AddMasterSubject from '@/components/admin/dashboard/AddMasterSubject';
 
-const MasterPage = () => {
+const MasterPage: React.FC = () => {
     const [boards, setBoards] = useState<Board[]>([]);
     const [classes, setClasses] = useState<Class[]>([]);
-    const [mainClass, setmainClass] = useState<Class[]>([]);
     const [subjects, setSubjects] = useState<Subject[]>([]);
-    const [MasterSubject, setMasterSubject] = useState<Subject[]>([]);
     const [baseUrl, setBaseUrl] = useState('');
 
 
     const [boardForm, setBoardForm] = useState<Board>({ board_name: '' });
-    const [classForm, setClassForm] = useState<Class>({ class_id: '', class_name: '', board_id: '' });
+    const [classForm, setClassForm] = useState<Class>({ class_id: '',  class_name: '', board_id: '' });
     const [subjectForm, setSubjectForm] = useState<Subject>({ class_id: '', subject_name: '', image: '' });
 
     const [modalType, setModalType] = useState<'board' | 'class' | 'subject' | null>(null);
@@ -27,50 +25,35 @@ const MasterPage = () => {
     const [editIndex, setEditIndex] = useState<number | null>(null);
     const [loading, setLoading] = useState(false);
     const ALL_BOARD = baseUrl + process.env.NEXT_PUBLIC_ADMIN_GET_ALL_BOARD;
-    const ALL_CLASS = baseUrl + process.env.NEXT_PUBLIC_ADMIN_GET_MASTER_CLASS;
+    const ALL_CLASS = baseUrl + process.env.NEXT_PUBLIC_ADMIN_GET_ALL_CLASS;
     const ALL_SUBJECT = baseUrl + process.env.NEXT_PUBLIC_ADMIN_GET_ALL_SUBJECT;
-
-    const MAIN_CLASS = baseUrl + process.env.NEXT_PUBLIC_ADMIN_GET_ALL_CLASS;
-    const MASTER_SUBJECT = baseUrl + process.env.NEXT_PUBLIC_ADMIN_GET_MASTER_SUBJECT;
 
     useEffect(() => {
         setBaseUrl(window.location.origin);
         fetchAll();
-
-
     }, []);
 
     const fetchAll = async () => {
 
-        const [b, c, s, mc, ms] = await Promise.all([
+        const [b, c, s] = await Promise.all([
             fetch(ALL_BOARD).then(res => res.json()),
             fetch(ALL_CLASS).then(res => res.json()),
             fetch(ALL_SUBJECT).then(res => res.json()),
-            fetch(MAIN_CLASS).then(res => res.json()),
-            fetch(MASTER_SUBJECT).then(res => res.json()),
         ]);
         setBoards(b);
         setClasses(c);
         setSubjects(s);
-        setmainClass(mc)
-        setMasterSubject(ms)
-
-        console.log(c);
-        console.log(mc);
-        
-
     };
 
     const openModal = (type: typeof modalType, edit = false, index: number | null = null) => {
         setModalType(type);
         setIsEdit(edit);
         setEditIndex(index);
-        fetchAll();
 
         if (type === 'board') {
             setBoardForm(edit && index !== null ? boards[index] : { board_name: '' });
         } else if (type === 'class') {
-            setClassForm(edit && index !== null ? mainClass[index] : { class_id: '', board_id: '', class_name: '' });
+            setClassForm(edit && index !== null ? classes[index] : { class_id: '', board_id: '', class_name: '' });
         } else if (type === 'subject') {
             setSubjectForm(edit && index !== null ? subjects[index] : { class_id: '', subject_name: '', image: '' });
         }
@@ -80,8 +63,6 @@ const MasterPage = () => {
         setModalType(null);
         setIsEdit(false);
         setEditIndex(null);
-        fetchAll();
-
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -100,7 +81,7 @@ const MasterPage = () => {
                 options.headers = { 'Content-Type': 'application/json' };
                 options.body = body;
             } else if (modalType === 'class') {
-                url = `${MAIN_CLASS}`;
+                url = `${ALL_CLASS}`;
                 body = JSON.stringify(classForm);
                 options.headers = { 'Content-Type': 'application/json' };
                 options.body = body;
@@ -198,37 +179,16 @@ const MasterPage = () => {
 
     return (
         <div className="p-4 space-y-10">
+            <BoardSection
+                boards={boards}
+                onEdit={(b, i) => openModal('board', true, i)}
+                onDelete={(id) => handleDelete('boards', id)}
+                onAdd={() => openModal('board')}
+            />
+            <AddMasterClass />
 
-            <ClassSection
-                classes={mainClass}
-                boards={boards}
-                onEdit={(c, i) => openModal('class', true, i)}
-                onDelete={(id) => handleDelete('classes', id)}
-                onAdd={() => openModal('class')}
-            />
-            <SubjectSection
-                classes={classes}
-                subjects={subjects}
-                onEdit={(s, i) => openModal('subject', true, i)}
-                onDelete={(id) => handleDelete('subjects', id)}
-                onAdd={() => openModal('subject')}
-            />
-            <MasterModal
-                type={modalType!}
-                show={modalType !== null}
-                onClose={closeModal}
-                onSubmit={handleSubmit}
-                boardForm={boardForm}
-                setBoardForm={setBoardForm}
-                classForm={classForm}
-                setClassForm={setClassForm}
-                subjectForm={subjectForm}
-                setSubjectForm={setSubjectForm}
-                boards={boards}
-                classes={classes}
-                loading={loading}
-                isEdit={isEdit}
-            />
+            <AddMasterSubject />
+
         </div>
     );
 };

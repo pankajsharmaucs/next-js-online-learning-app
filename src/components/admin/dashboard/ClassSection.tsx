@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Class, Board } from '@/types/add_types';
 import { FaChevronDown, FaChevronUp, FaTrash } from 'react-icons/fa';
+import axios from 'axios';
 
 interface Props {
   classes: Class[];

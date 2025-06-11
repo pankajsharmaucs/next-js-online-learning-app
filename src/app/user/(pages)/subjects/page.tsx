@@ -126,7 +126,7 @@ export default function Page() {
                                 </div>
 
                                 {/* Subject Name */}
-                                <h5 style={{ padding: "10px" }} className="text-lg text-center font-bold mb-2 text-dark">{subject.subject_name}</h5>
+                                <h5 style={{ padding: "10px" }} className="text-lg text-center text-capitalize font-bold mb-2 text-dark">{subject.subject_name}</h5>
 
                                 {/* Open Chapter Button */}
                                 <Link

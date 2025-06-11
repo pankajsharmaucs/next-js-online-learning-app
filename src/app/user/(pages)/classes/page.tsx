@@ -5,18 +5,7 @@ import axios from 'axios';
 import { getLogginedUserData } from '@/utlis/checkAdminLogin';
 import { showErrorToast } from '@/components/alert/AlertToast';
 import { Skeleton } from '@/components/ui/skeleton';
-
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow
-} from "@/components/ui/table";
 import { Card } from "@/components/ui/card";
-import { Input } from '@/components/ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@radix-ui/react-select';
 import { Button } from "@/components/ui/button";
 import Link from 'next/link';
 
@@ -56,7 +45,7 @@ export default function Page() {
   const fetchMasterClasses = async () => {
     try {
       const baseUrl = window.location.origin;
-      const url = `${baseUrl}${process.env.NEXT_PUBLIC_ADMIN_GET_ALL_CLASS}`;
+      const url = `${baseUrl}${process.env.NEXT_PUBLIC_ADMIN_GET_MASTER_CLASS}`;
 
       const response = await axios.get(url);
       if (response.data) {
@@ -193,9 +182,9 @@ export default function Page() {
                     {/* Class Info */}
                     <div className="mb-4">
                       <h1 className="text-5xl font-bold  text-center mb-2">{getClassName(item.class_id)}</h1>
-                      <p className="text-sm text-muted-foreground text-center">
+                      {/* <p className="text-sm text-muted-foreground text-center">
                         Board: {getBoardName(item.class_id)}
-                      </p>
+                      </p> */}
                       <p className="text-sm text-muted-foreground text-center">
                         Purchased on: {new Date(item.purchase_date).toLocaleDateString()}
                       </p>

@@ -7,7 +7,7 @@ interface QAEntry {
     _id?: string;
     pageRef: string;
     question: string;
-    answers: string[]; // updated to array
+    answers: string[]; // still supporting array
 }
 
 interface Props {
@@ -26,6 +26,7 @@ function ChapterQuestionAnswerForm({
     showErrorToast,
 }: Props) {
     const [qaData, setQaData] = useState<QAEntry[]>([]);
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     useEffect(() => {
         const fetchExistingQA = async () => {
@@ -60,15 +61,17 @@ function ChapterQuestionAnswerForm({
     }, [selectedChapterId]);
 
     const handleQAChange = (index: number, field: 'pageRef' | 'question' | 'answer', value: string) => {
-        const updated = [...qaData];
-        if (field === 'pageRef') {
-            updated[index].pageRef = value;
-        } else if (field === 'question') {
-            updated[index].question = value;
-        } else if (field === 'answer') {
-            updated[index].answers = [value]; // support single answer for now
-        }
-        setQaData(updated);
+        setQaData((prev) => {
+            const updated = [...prev];
+            if (field === 'pageRef') {
+                updated[index].pageRef = value;
+            } else if (field === 'question') {
+                updated[index].question = value;
+            } else if (field === 'answer') {
+                updated[index].answers = [value];
+            }
+            return updated;
+        });
     };
 
     const addQA = () => {
@@ -111,10 +114,17 @@ function ChapterQuestionAnswerForm({
             return;
         }
 
+        const isValid = qaData.every((qa) => qa.pageRef && qa.question && qa.answers.some((a) => a));
+        if (!isValid) {
+            showErrorToast('Please fill out all fields');
+            return;
+        }
+
         const baseUrl = window.origin;
         const url = baseUrl + process.env.NEXT_PUBLIC_ADMIN_CHAPTER_QA;
         const headers = { Authorization: `Bearer ${token}` };
 
+        setIsSubmitting(true);
         try {
             for (const entry of qaData) {
                 const payload = {
@@ -136,13 +146,15 @@ function ChapterQuestionAnswerForm({
         } catch (err) {
             console.error('Failed to save QA:', err);
             showErrorToast('Failed to save questions');
+        } finally {
+            setIsSubmitting(false);
         }
     };
 
     return (
         <form onSubmit={handleSubmit} className="space-y-6">
             {qaData.map((qa, index) => (
-                <div key={index} className="border rounded p-4 bg-gray-100 space-y-2 mb-3">
+                <div key={`qa-${index}`} className="border rounded p-4 bg-gray-100 space-y-2 mb-3">
                     <div className="flex justify-between items-center">
                         <h3 className="font-semibold">Question {index + 1}</h3>
                         {qaData.length > 0 && (
@@ -169,16 +181,20 @@ function ChapterQuestionAnswerForm({
                         <div className="editor-block">
                             <label className="font-bold">Question</label>
                             <SimpleEditor
+                                key={`question-editor-${index}`} // <--- Important!
                                 value={qa.question || ''}
                                 onChange={(html) => handleQAChange(index, 'question', html)}
+                                id={`question-${index}`} // <--- Helps isolate instances
                             />
                         </div>
 
                         <div className="editor-block">
                             <label className="font-bold">Answer</label>
                             <SimpleEditor
+                                key={`answer-editor-${index}`} // <--- Important!
                                 value={qa.answers?.[0] || ''}
                                 onChange={(html) => handleQAChange(index, 'answer', html)}
+                                id={`answer-${index}`} // <--- Helps isolate instances
                             />
                         </div>
                     </div>
@@ -196,10 +212,12 @@ function ChapterQuestionAnswerForm({
 
                 <button
                     type="submit"
-                    className="bg-blue-600 text-white rounded hover:bg-blue-700"
-                    style={{ padding: "10px" }}
+                    disabled={isSubmitting}
+                    className={`bg-blue-600 text-white rounded hover:bg-blue-700 px-4 py-2 ${
+                        isSubmitting ? 'opacity-50 cursor-not-allowed' : ''
+                    }`}
                 >
-                    Save Questions
+                    {isSubmitting ? 'Saving...' : 'Save Questions'}
                 </button>
             </div>
         </form>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Class, Subject } from '@/types/add_types';
 import { FaTrash, FaChevronDown, FaChevronUp } from 'react-icons/fa';
 
@@ -24,6 +24,7 @@ export function SubjectSection({ classes, subjects, onEdit, onDelete, onAdd }: P
     selectedClassId === 'all'
       ? subjects
       : subjects.filter(subject => subject.class_id.toString() === selectedClassId);
+ 
 
   return (
     <div className="mb-20 border rounded p-2 bg-white">
@@ -121,7 +122,7 @@ export function SubjectSection({ classes, subjects, onEdit, onDelete, onAdd }: P
                           href={`/admin/chapter?class_id=${s.class_id}&subject_id=${s._id}`}
                           className="btn btn-primary me-2"
                         >
-                          View Chapters
+                          Add/View Chapters
                         </a>
                       </td>
                     </tr>

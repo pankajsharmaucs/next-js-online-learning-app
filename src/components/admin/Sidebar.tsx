@@ -43,7 +43,6 @@ const Sidebar = () => {
         return null; // Do not render sidebar on these pages
     }
 
-
     return (
         <>
             {showSideBar ? (
@@ -58,7 +57,8 @@ const Sidebar = () => {
                     <nav className="flex flex-col gap-1 w-full pt-4 pb-1 ps-2 ">
                         <SidebarButton label="Dashboard" icon="FaTachometerAlt" link="/admin/dashboard" />
                         <SidebarButton label="Users" icon="FaUser" link="/admin/users" />
-                        <SidebarButton label="Master" icon="FaPlus" link="/admin/add" />
+                        <SidebarButton label="Master" icon="FaPlus" link="/admin/master" />
+                        <SidebarButton label="Add" icon="FaPlus" link="/admin/add" />
                         <SidebarButton label="Blog" icon="FaPlus" link="/admin/blog" />
                         <SidebarButton label="Settings" icon="FaCog" link="/admin/settings" />
                     </nav>

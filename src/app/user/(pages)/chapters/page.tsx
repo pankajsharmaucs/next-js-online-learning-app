@@ -105,7 +105,7 @@ export default function Page() {
                     />
                 </div>
 
-                <h2 className="text-2xl font-bold mb-6">📘 All Chapters of {subjectName}</h2>
+                <h2 className="text-2xl font-bold text-capitalize mb-6">📘 All Chapters of {subjectName}</h2>
 
                 {loading ? (
                     <div className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 gap-6 ">
