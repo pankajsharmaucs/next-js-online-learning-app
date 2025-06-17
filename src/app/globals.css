@@ -43,6 +43,40 @@
   --sidebar-ring: oklch(0.707 0.022 261.325);
 }
 
+#curriculum h3 {
+  margin-bottom: 0px;
+}
+
+.course__curriculum .accordion-item .accordion-button {
+  outline: none;
+  border: 1px solid #edeef2;
+  -webkit-border-radius: 4px 4px 0 0;
+  -moz-border-radius: 4px 4px 0 0;
+  border-radius: 4px 4px 0 0;
+  background: #f3f4f8;
+  font-size: 20px;
+  font-weight: 700;
+  color: #0e1133;
+  padding-top: 18px;
+  padding-left: 30px;
+  padding-right: 30px;
+}
+
+.tab-pane{
+  padding: 15px 0px;
+}
+
+
+button:focus,
+button:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.header__area {
+  background: #fff !important;
+}
+
 ul {
   list-style: disc;
   margin-left: 1.25rem;
@@ -165,6 +199,7 @@ h2 {
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground;
   }

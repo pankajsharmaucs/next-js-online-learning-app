@@ -83,12 +83,12 @@ const Page = () => {
         <img className="dot" src="/img/icon/sign/dot.png" alt="" />
         <img className="bg" src="/img/icon/sign/sign-up.png" alt="" />
       </div>
-      <div className="container">
+      <div className="container mt-100">
         <div className="row">
           <div className="col-xxl-8 offset-xxl-2 col-xl-8 offset-xl-2">
             <div className="section__title-wrapper text-center mb-55">
-              <h2 className="section__title">
-                Admin Login <br /> to dashboard.
+              <h2 className="" >
+                 Login to <br /> Admin Dashboard.
               </h2>
             </div>
           </div>

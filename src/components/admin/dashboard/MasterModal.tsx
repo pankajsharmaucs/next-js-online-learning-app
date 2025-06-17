@@ -2,6 +2,7 @@ import React, { FormEvent, useEffect, useState } from 'react';
 import axios from 'axios';
 import { Board, Class, Subject } from '@/types/add_types';
 import { log } from 'console';
+import SimpleEditor from '@/components/editor/SimpleEditor';
 
 interface Props {
   type: 'board' | 'class' | 'subject';
@@ -87,11 +88,14 @@ export function MasterModal({
 
   return (
     <div
-      className="fixed inset-0 flex items-center justify-center z-50"
+      className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto"
       onClick={handleBackdropClick}
       style={{ backgroundColor: 'rgba(255, 255, 255, 0.95)' }}
     >
-      <div className="bg-white border rounded shadow-md w-full max-w-md relative p-4">
+      <div
+        className="relative bg-white border rounded shadow-md w-[70%] max-h-[90vh] overflow-y-auto p-4"
+        onClick={(e) => e.stopPropagation()} // prevent modal from closing when clicking inside
+      >
         <button
           className="absolute top-2 right-2 text-gray-600 hover:text-red-500 text-xl"
           onClick={onClose}
@@ -216,6 +220,13 @@ export function MasterModal({
                   </option>
                 ))}
               </select>
+
+              <label className="font-bold">Overview</label>
+              <SimpleEditor
+                value={subjectForm?.overview }
+                onChange={(html) => setSubjectForm((prev) => ({ ...prev, overview: html }))}
+                id="overview" 
+              />
 
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Subject Image

@@ -1,8 +1,11 @@
+'use client'
 
+import PageBreadcrumb from "@/components/PageBreadcrumb";
 
-export default async function Page({ params, }: { params: Promise<{ id: string }> }) {
+export default async function Page({ params, }: { params: Promise<{ subject_name: string }> }) {
 
-    const { id } = await params;
+    const { subject_name } = await params;
+    const subject_name_trim = subject_name.replace('-', ' ').toLowerCase();
 
     return (
         <main>
@@ -10,7 +13,7 @@ export default async function Page({ params, }: { params: Promise<{ id: string }
             <section
                 className="page__title-area page__title-height page__title-overlay d-flex align-items-center"
                 style={{
-                    backgroundImage: `url("/img/page-title/page-title.jpg")`,
+                    backgroundImage: `url("/assets/common/subject_bg.jpg")`,
                     backgroundSize: 'cover', // optional
                     backgroundPosition: 'center', // optional
                 }}
@@ -19,17 +22,8 @@ export default async function Page({ params, }: { params: Promise<{ id: string }
                     <div className="row">
                         <div className="col-xxl-12">
                             <div className="page__title-wrapper mt-110">
-                                <h3 className="page__title">{id}</h3>
-                                <nav aria-label="breadcrumb">
-                                    <ol className="breadcrumb">
-                                        <li className="breadcrumb-item">
-                                            <a href="index.html">Home</a>
-                                        </li>
-                                        <li className="breadcrumb-item active" aria-current="page">
-                                            All Classes
-                                        </li>
-                                    </ol>
-                                </nav>
+                                <h3 className="page__title text-capitalize">{subject_name_trim}</h3>
+                                <PageBreadcrumb homeLabel="Home" homeHref="/" pageName={`All Classes`} />
                             </div>
                         </div>
                     </div>

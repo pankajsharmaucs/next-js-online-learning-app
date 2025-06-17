@@ -9,7 +9,7 @@ import RecentPosts from '@/components/blog/RecentPosts'
 import CategoryList from '@/components/blog/CategoryList'
 import AdBanner from '@/components/blog/AdBanner'
 import BlogCard from '@/components/blog/BlogCard'
-import Breadcrumb from '@/components/PageBreadcrumb'
+import PageBreadcrumb from '@/components/PageBreadcrumb'
 
 interface BlogType {
   _id: string
@@ -85,7 +85,7 @@ export default function Page() {
             <div className="col-xxl-12">
               <div className="page__title-wrapper mt-110">
                 <h3 className="page__title mb-20">Blogs tagged: {tag}</h3>
-                <Breadcrumb homeLabel="Home" homeHref="/" pageName={`${tag}`} />
+                <PageBreadcrumb homeLabel="Home" homeHref="/" pageName={`${tag}`} />
               </div>
             </div>
           </div>

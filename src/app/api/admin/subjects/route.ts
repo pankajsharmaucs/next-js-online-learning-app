@@ -3,9 +3,8 @@ import type { NextRequest } from 'next/server';
 import { connectDB } from '@/lib/mongo_db';
 import { validateSuperAdmin } from '@/lib/apiValidator';
 import Subject from '@/lib/models/api/subject';
-import { writeFile } from 'fs/promises';
+import { writeFile, mkdir } from 'fs/promises';
 import path from 'path';
-import { mkdir } from 'fs/promises';
 
 // GET: Fetch all subjects by class_id
 export async function GET(req: NextRequest) {
@@ -22,7 +21,7 @@ export async function GET(req: NextRequest) {
     }
 }
 
-// POST: Add subject with image in /uploads/subjects/<subject_id>/image
+// POST: Add subject with image
 export async function POST(req: NextRequest) {
     try {
         if (!(await validateSuperAdmin(req))) {
@@ -32,10 +31,11 @@ export async function POST(req: NextRequest) {
         const formData = await req.formData();
         const class_id = formData.get('class_id')?.toString() || '';
         const subject_name = formData.get('subject_name')?.toString() || '';
+        const overview = formData.get('overview')?.toString() || '';
         const file = formData.get('image') as File | null;
 
-        if (!class_id || !subject_name) {
-            return NextResponse.json({ error: 'class_id and subject_name are required' }, { status: 400 });
+        if (!class_id || !subject_name || !overview) {
+            return NextResponse.json({ error: 'class_id, subject_name, and overview are required' }, { status: 400 });
         }
 
         await connectDB();
@@ -49,16 +49,15 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ error: 'Subject already exists' }, { status: 409 });
         }
 
-        // Step 1: Create subject without image first to get _id
         const newSubject = await Subject.create({
             class_id,
             subject_name,
-            image: '', // Temp
+            overview,
+            image: '',
         });
 
         let imagePath = '';
 
-        // Step 2: If file exists, save it under /uploads/subjects/<subject_id>/image.<ext>
         if (file && file.size > 0) {
             const buffer = Buffer.from(await file.arrayBuffer());
             const ext = path.extname(file.name) || '.jpg';
@@ -90,6 +89,7 @@ export async function PUT(req: NextRequest) {
         const _id = formData.get('_id')?.toString();
         const class_id = formData.get('class_id')?.toString();
         const subject_name = formData.get('subject_name')?.toString();
+        const overview = formData.get('overview')?.toString();
         const file = formData.get('image') as File | null;
 
         if (!_id) {
@@ -97,20 +97,25 @@ export async function PUT(req: NextRequest) {
         }
 
         await connectDB();
+
         const subject = await Subject.findById(_id);
         if (!subject) {
             return NextResponse.json({ error: 'Subject not found' }, { status: 404 });
         }
 
         if (subject_name) subject.subject_name = subject_name;
+        if (overview) subject.overview = overview;
 
-        const existingSubject = await Subject.findOne({ class_id: class_id, subject_name: { $regex: `^${subject_name}$`, $options: 'i' }, });
+        const existingSubject = await Subject.findOne({
+            class_id: class_id,
+            subject_name: { $regex: `^${subject_name}$`, $options: 'i' },
+            _id: { $ne: _id },
+        });
 
         if (existingSubject) {
             return NextResponse.json({ error: 'Subject Name Already in use' }, { status: 409 });
         }
 
-        // If new image provided, replace existing image
         if (file && file.size > 0) {
             const buffer = Buffer.from(await file.arrayBuffer());
             const ext = path.extname(file.name) || '.jpg';
@@ -142,7 +147,7 @@ export async function DELETE(req: NextRequest) {
         await connectDB();
         await Subject.findByIdAndDelete(id);
 
-        return NextResponse.json({ message: 'subject deleted' });
+        return NextResponse.json({ message: 'Subject deleted' });
     } catch (error) {
         return NextResponse.json({ error: 'Error deleting subject', details: error }, { status: 500 });
     }

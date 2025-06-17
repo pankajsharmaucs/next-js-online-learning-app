@@ -4,12 +4,42 @@ import React, { useEffect, useState } from 'react'
 import Preloader from '../preloader/Preloader'
 import Sidebar from '../sidebar/Sidebar'
 import Link from 'next/link'
+import { Class, Subject } from '@/types/add_types';
 
 const Header = () => {
+
+    const [MasterClass, setMasterClass] = useState<Class[]>([]);
+    const [MasterSubject, setMasterSubject] = useState<Subject[]>([]);
+    const [baseUrl, setBaseUrl] = useState('');
+
+
+    const MASTER_CLASS = baseUrl + process.env.NEXT_PUBLIC_ADMIN_GET_MASTER_CLASS;
+    const MASTER_SUBJECT = baseUrl + process.env.NEXT_PUBLIC_ADMIN_GET_MASTER_SUBJECT;
 
     const [showPreloader, setShowPreloader] = useState(false);
     const [sidebarOpened, setsidebarOpened] = useState(false);
     const [isSticky, setIsSticky] = useState(false);
+
+
+    useEffect(() => {
+        setBaseUrl(window.location.origin);
+        fetchAll();
+    }, []);
+
+    const fetchAll = async () => {
+
+        const [mc, ms] = await Promise.all([
+            fetch(MASTER_CLASS).then(res => res.json()),
+            fetch(MASTER_SUBJECT).then(res => res.json()),
+        ]);
+        setMasterClass(mc);
+        setMasterSubject(ms);
+
+        console.log(ms);
+
+    };
+
+
 
     useEffect(() => {
 
@@ -63,7 +93,7 @@ const Header = () => {
                                 <div className="header__left d-flex">
                                     <div className="logo">
                                         <Link href="/">
-                                            <img src="/assets/common/logo.jpg" alt="logo" style={{width:"60px"}} />
+                                            <img src="/assets/common/logo.jpg" alt="logo" style={{ width: "60px" }} />
                                         </Link>
                                     </div>
                                     {/* <div className="header__category">
@@ -157,18 +187,31 @@ const Header = () => {
                                                 <li className="has-dropdown">
                                                     <Link href="classes">Classes</Link>
                                                     <ul className="submenu">
-                                                        <li>
-                                                            <Link href="/class/10">10th</Link>
-                                                        </li>
+                                                        {
+                                                            MasterClass.length ? (
+                                                                MasterClass.map((cls: any, index: number) => (
+                                                                    <li key={index}>
+                                                                        <Link href={`/class/${cls.class_name}`}>{cls.class_name} Class</Link>
+                                                                    </li>
+                                                                ))
+                                                            ) : null
+                                                        }
                                                     </ul>
                                                 </li>
 
                                                 <li className="has-dropdown">
                                                     <Link href="/subjects">Subject</Link>
                                                     <ul className="submenu">
-                                                        <li>
-                                                            <Link href="/subject/mathematics">Mathematics</Link>
-                                                        </li>
+
+                                                        {
+                                                            MasterSubject.length ? (
+                                                                MasterSubject.map((sub: any, index: number) => (
+                                                                    <li>
+                                                                        <Link href={`/subject/${sub.subject_name.replace(' ', '-').toLowerCase()}`}>{sub.subject_name}</Link>
+                                                                    </li>
+                                                                ))
+                                                            ) : null
+                                                        }
                                                     </ul>
                                                 </li>
 

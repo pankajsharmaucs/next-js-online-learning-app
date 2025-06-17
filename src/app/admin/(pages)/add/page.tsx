@@ -20,7 +20,7 @@ const MasterPage = () => {
 
     const [boardForm, setBoardForm] = useState<Board>({ board_name: '' });
     const [classForm, setClassForm] = useState<Class>({ class_id: '', class_name: '', board_id: '' });
-    const [subjectForm, setSubjectForm] = useState<Subject>({ class_id: '', subject_name: '', image: '' });
+    const [subjectForm, setSubjectForm] = useState<Subject>({ class_id: '', subject_name: '', overview: '', image: '' });
 
     const [modalType, setModalType] = useState<'board' | 'class' | 'subject' | null>(null);
     const [isEdit, setIsEdit] = useState(false);
@@ -57,7 +57,7 @@ const MasterPage = () => {
 
         console.log(c);
         console.log(mc);
-        
+
 
     };
 
@@ -72,7 +72,7 @@ const MasterPage = () => {
         } else if (type === 'class') {
             setClassForm(edit && index !== null ? mainClass[index] : { class_id: '', board_id: '', class_name: '' });
         } else if (type === 'subject') {
-            setSubjectForm(edit && index !== null ? subjects[index] : { class_id: '', subject_name: '', image: '' });
+            setSubjectForm(edit && index !== null ? subjects[index] : { class_id: '', subject_name: '', overview: '', image: '' });
         }
     };
 
@@ -109,6 +109,7 @@ const MasterPage = () => {
                 const formData = new FormData();
                 formData.append('subject_name', subjectForm.subject_name);
                 formData.append('class_id', subjectForm.class_id);
+                formData.append('overview', subjectForm.overview);
                 if (isEdit && subjectForm._id) formData.append('_id', subjectForm._id);
                 if (subjectForm.image instanceof File) {
                     formData.append('image', subjectForm.image);
