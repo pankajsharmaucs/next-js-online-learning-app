@@ -35,7 +35,7 @@ const Header = () => {
         setMasterClass(mc);
         setMasterSubject(ms);
 
-        console.log(ms);
+        // console.log(ms);
 
     };
 

@@ -18,7 +18,7 @@ const MasterPage: React.FC = () => {
 
     const [boardForm, setBoardForm] = useState<Board>({ board_name: '' });
     const [classForm, setClassForm] = useState<Class>({ class_id: '', class_name: '', board_id: '' });
-    const [subjectForm, setSubjectForm] = useState<Subject>({ class_id: '', subject_name: '', overview: '', image: '' });
+    const [subjectForm, setSubjectForm] = useState<Subject>({ class_name: '', class_id: '', subject_name: '', overview: '', image: '' });
 
     const [modalType, setModalType] = useState<'board' | 'class' | 'subject' | null>(null);
     const [isEdit, setIsEdit] = useState(false);
@@ -55,7 +55,7 @@ const MasterPage: React.FC = () => {
         } else if (type === 'class') {
             setClassForm(edit && index !== null ? classes[index] : { class_id: '', board_id: '', class_name: '' });
         } else if (type === 'subject') {
-            setSubjectForm(edit && index !== null ? subjects[index] : { class_id: '', subject_name: '', overview: '', image: '' });
+            setSubjectForm(edit && index !== null ? subjects[index] : { class_name: '', class_id: '', subject_name: '', overview: '', image: '' });
         }
     };
 

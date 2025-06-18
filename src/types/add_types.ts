@@ -11,6 +11,7 @@ export interface Class {
 }
 
 export interface Subject {
+  class_name: any;
   _id?: string;
   class_id: string;
   subject_name: string;

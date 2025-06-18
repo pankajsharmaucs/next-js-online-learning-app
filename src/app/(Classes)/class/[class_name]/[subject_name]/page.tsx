@@ -7,13 +7,16 @@ import axios from 'axios';
 import DOMPurify from 'dompurify';
 import ChapterAccordion from '@/components/accordion/ChapterAccordion';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 
 export default function Page() {
     const params = useParams();
+    const router = useRouter();
     const [videoUrl, setVideoUrl] = useState<string | null>(null);
     const [videoLoaded, setVideoLoaded] = useState(false);
 
+    const url_className = params.class_name as string;
     const class_name = (params.class_name as string).replace('-', ' ').toLowerCase();
     const subject_name = (params.subject_name as string).replace('-', ' ').toLowerCase();
 
@@ -36,23 +39,24 @@ export default function Page() {
 
         const fetchChaptersByNames = async () => {
             try {
-                // Step 1: Get all classes and subjects
+                // Get all classes and subjects
                 const [mc, s] = await Promise.all([
                     fetch(MASTER_CLASS).then((res) => res.json()),
                     fetch(ALL_SUBJECT).then((res) => res.json()),
                 ]);
 
-                // Step 2: Match class by name
+                // Match class by name
                 const matchedClass = mc.find(
                     (cls: Class) => cls.class_name.toLowerCase().trim() === class_name
                 );
 
                 if (!matchedClass) {
                     console.warn('Class not found:', class_name);
+                    router.push('/');
                     return;
                 }
 
-                // Step 3: Match subject by name + class_id
+                // Match subject by name + class_id
                 const matchedSubject = s.find(
                     (sub: Subject) =>
                         sub.subject_name.toLowerCase().trim() === subject_name &&
@@ -61,18 +65,17 @@ export default function Page() {
 
                 if (!matchedSubject) {
                     console.warn('Subject not found:', subject_name);
+                    router.push('/class/' + url_className);
                     return;
                 }
 
-                // console.log(matchedSubject);
-
                 setSubjectDetail(matchedSubject);
-                console.log(matchedSubject);
+                // console.log(matchedSubject);
 
                 const class_id = matchedClass._id || matchedClass.id;
                 const subject_id = matchedSubject._id || matchedSubject.id;
 
-                // Step 4: Fetch chapters using class_id and subject_id
+                // Fetch chapters using class_id and subject_id
                 const res = await axios.get(ALL_CHAPTER, {
                     params: { class_id, subject_id },
                 });
@@ -117,9 +120,9 @@ export default function Page() {
                             <div className="course__wrapper">
                                 <div className="page__title-content mb-25">
                                     <div className="page__title-breadcrumb flex items-center mb-4 text-sm">
-                                      Home <i className="fa fa-circle text-[3px] mx-2 text-gray-800"></i> 
-                                      Courses <i className="fa fa-circle text-[3px] mx-2 text-gray-800"></i> 
-                                      The Business Intelligence Analyst Course 2022
+                                        Home <i className="fa fa-circle text-[3px] mx-2 text-gray-800"></i>
+                                        Courses <i className="fa fa-circle text-[3px] mx-2 text-gray-800"></i>
+                                        The Business Intelligence Analyst Course 2022
                                     </div>
                                     <span className="page__title-pre">Class {class_name}</span>
                                     <h5 className="page__title-3 text-capitalize"> {subject_name} </h5>
@@ -150,7 +153,7 @@ export default function Page() {
                                         </div>
                                         <div className="course__teacher-info-3">
                                             <h5>Review:</h5>
-                                            <p> 
+                                            <p>
                                                 <i className='fa fa-star text-orange-500 text-xs' ></i>
                                                 <i className='fa fa-star text-orange-500 text-xs' ></i>
                                                 <i className='fa fa-star text-orange-500 text-xs' ></i>
@@ -169,7 +172,7 @@ export default function Page() {
                                     />
                                 </div>
 
-                                <div className="course__tab-2 mb-10">
+                                <div className="course__tab-2 mb-5">
                                     <ul className="nav nav-tabs" role="tablist">
                                         {[
                                             { id: "description", icon: "icon_ribbon_alt", label: "Description" },
@@ -194,7 +197,7 @@ export default function Page() {
                                 {/* Tab Contents */}
                                 <div className="tab-content">
                                     <div className={`tab-pane ${activeTab === "description" ? "block" : "hidden"}`} id="description">
-                                        <div className="tab-content" id="courseTabContent">
+                                        <div className="tab-content tab-box" id="courseTabContent">
                                             <div
                                                 className="tab-pane  show active"
                                                 id="description"

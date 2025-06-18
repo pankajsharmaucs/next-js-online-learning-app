@@ -66,6 +66,9 @@
   padding: 15px 0px;
 }
 
+.tab-box {
+  padding: 0px 5px;
+}
 
 button:focus,
 button:focus-visible {

@@ -70,7 +70,9 @@ export default function ChapterAccordion({ chapterData, chapterIndex }: ChapterA
             label: "Assessment",
             value: chapterData.assignment_access,
             status: chapterData.assignment_access === "free" ? "Free" : "Paid",
-            link: "/validate-user?chapter_id=" + chapterData?._id + "&type=assessment"
+            link: "/validate-user?chapter_id=" + chapterData?._id + "&type=assessment",
+            length: "15 MCQs"
+
         }
     ];
 
@@ -79,7 +81,7 @@ export default function ChapterAccordion({ chapterData, chapterIndex }: ChapterA
             <Accordion type="single" collapsible className="w-full mb-1">
                 <AccordionItem value={chapterData._id || chapterData.chapter_name}>
                     <AccordionTrigger
-                        style={{ fontSize: "17px", marginBottom: "0px" }}
+                        style={{ fontSize: "14px", marginBottom: "0px" }}
                         className="flex align-items-center text-gray-500 font-medium bg-blue-50 py-2 px-3 mb-0"
                     >
                         <div>
@@ -104,36 +106,35 @@ export default function ChapterAccordion({ chapterData, chapterIndex }: ChapterA
                                     </div>
                                     {section.type === 'video' ? (
                                         <div className="mx-3 flex items-center gap-2">
-                                            <span className="text-sm text-gray-600">
-                                                <i className="fa fa-clock text-secondary mr-1" />
-                                                {section.length}
-                                            </span>
                                             <div
                                                 onClick={() => runVideo(section?.value as string)}
                                                 className="text-blue-600 underline cursor-pointer text-sm hover:text-blue-800"
                                             >
                                                 Play
                                             </div>
+                                            <span className="px-3 text-sm text-gray-600">
+                                                <i className="fa fa-clock text-secondary mr-1" /> {section.length}
+                                            </span>
                                         </div>
-                                    ) : section.length ? (
-                                        <span className="px-3 text-sm text-gray-600">
-                                            <i className="fa fa-clock text-secondary mr-1" /> {section.length}
-                                        </span>
                                     ) : null}
 
-                                    {section.type === 'MCQ' && chapterData.assignment_access === 'free' ? (
-                                        <div className="mx-3 flex items-center gap-2">
-                                            <div
-                                                onClick={() => runAssessment(chapterData._id as string)}
-                                                className="text-blue-600 underline cursor-pointer text-sm hover:text-blue-800"
-                                            > Attemp MCQ
+                                    {section.type === 'MCQ' ?
+                                        chapterData.assignment_access === 'free' ? (
+                                            <div className="mx-3 flex items-center gap-2">
+                                                <div
+                                                    onClick={() => runAssessment(chapterData._id as string)}
+                                                    className="text-blue-600 underline cursor-pointer text-sm hover:text-blue-800"
+                                                > Attemp MCQ
+                                                </div>
+                                                <span className="px-3 text-sm text-gray-600">
+                                                    <i className="fa fa-clock text-secondary mr-1" /> {section.length}
+                                                </span>
                                             </div>
-                                        </div>
-                                    ) : section.length ? (
-                                        <span className="px-3 text-sm text-gray-600">
+                                        ) : <span className="px-3 text-sm text-gray-600">
                                             <i className="fa fa-clock text-secondary mr-1" /> {section.length}
                                         </span>
-                                    ) : null}
+                                        : null
+                                    }
 
 
                                 </div>
