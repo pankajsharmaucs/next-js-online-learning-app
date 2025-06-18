@@ -31,7 +31,7 @@ export async function POST(req: NextRequest) {
         const formData = await req.formData();
         const class_id = formData.get('class_id')?.toString() || '';
         const subject_name = formData.get('subject_name')?.toString() || '';
-        const overview = formData.get('overview')?.toString() || '';
+        const overview = formData.get('overview') || '';
         const file = formData.get('image') as File | null;
 
         if (!class_id || !subject_name || !overview) {

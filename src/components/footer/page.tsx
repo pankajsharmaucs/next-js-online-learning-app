@@ -33,7 +33,7 @@ const Footer = () => {
                                             <div className="footer__widget-head mb-22">
                                                 <div className="footer__logo">
                                                     <a href="index.html">
-                                                        <img src="/assets/common/logo.jpg" alt="logo" style={{ width: "60px" }} />
+                                                        <img src="/assets/common/logo2.jpg" alt="logo" style={{ width: "300px" }} />
                                                     </a>
                                                 </div>
                                             </div>
