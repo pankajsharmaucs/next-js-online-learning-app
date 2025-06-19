@@ -33,6 +33,7 @@ const CategoryPage = () => {
                 ])
                 setCategories(catRes.data)
                 setBlogs(blogRes.data)
+                
             } catch (err) {
                 console.error('Error fetching data:', err)
             }

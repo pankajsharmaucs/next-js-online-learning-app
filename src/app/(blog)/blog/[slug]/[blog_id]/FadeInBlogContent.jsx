@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
+import { Skeleton } from "@/components/ui/skeleton"
 
 const FadeInBlogContent = ({
   blog,
@@ -120,14 +121,26 @@ const FadeInBlogContent = ({
                   opacity: visible.content ? 1 : 0,
                 }}
               >
-                <div className="blog__text mb-40">
-                  <p>{new Date(blog.createdate || "").toDateString()}</p>
-                  <article dangerouslySetInnerHTML={{ __html: sanitizedContent }} />
-                </div>
+                {blog && sanitizedContent ? (
+                  <div className="blog__text mb-40">
+                    <p>{new Date(blog.createdate || "").toDateString()}</p>
+                    <article dangerouslySetInnerHTML={{ __html: sanitizedContent }} />
+                  </div>
+                ) : (
+                  <div className="blog__text mb-40">
+                    <Skeleton className="w-[150px] h-[16px] mb-4" />
+                    <div className="space-y-3">
+                      <Skeleton className="w-full h-[20px] rounded" />
+                      <Skeleton className="w-[95%] h-[20px] rounded" />
+                      <Skeleton className="w-[90%] h-[20px] rounded" />
+                      <Skeleton className="w-[85%] h-[20px] rounded" />
+                      <Skeleton className="w-[75%] h-[20px] rounded" />
+                      <Skeleton className="w-[90%] h-[20px] rounded" />
+                      <Skeleton className="w-[60%] h-[20px] rounded" />
+                    </div>
+                  </div>
+                )}
 
-                {/* Other blog content here, like meta, author, comments etc */}
-
-                {/* You can insert your related posts, comments, comment form here */}
               </div>
             </div>
             <div className="col-xxl-4 col-xl-4 col-lg-4">

@@ -11,7 +11,7 @@ import RecentPosts from '@/components/blog/RecentPosts';
 import TagsList from '@/components/blog/TagsList';
 import AdBanner from '@/components/blog/AdBanner';
 import Link from 'next/link';
-import FadeInBlogContent from "./FadeInBlogContent";
+import { Skeleton } from "@/components/ui/skeleton"
 
 interface Blog {
     _id: string;
@@ -36,6 +36,13 @@ export default function Page() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [categories, setCategories] = useState<BlogCategory[]>([]);
+
+    const [visible, setVisible] = useState({
+        background: true,
+        title: true,
+        meta: true,
+        content: true,
+    });
 
     useEffect(() => {
         const fetchBlog = async () => {
@@ -74,28 +81,200 @@ export default function Page() {
         return category ? category.cat_name : "Generic";
     };
 
-    if (loading) return <div>Loading...</div>;
-    if (error) return <div>{error}</div>;
+
+    if (loading) {
+        return (
+            <main>
+                <section
+                    className="page__title-area page__title-overlay d-flex align-items-center"
+                    style={{
+                        backgroundColor: '#f0f0f0',
+                        height: '400px',
+                    }}
+                >
+                    <div className="container">
+                        <div className="row">
+                            <div className="col-xxl-10 col-xl-10 col-lg-10">
+                                <div className="page__title-wrapper mt-110">
+                                    <Skeleton className="w-[120px] h-[20px] mb-2" />
+                                    <Skeleton className="w-[80%] h-[36px] mb-3" />
+                                    <div className="d-flex align-items-center gap-4">
+                                        <div className="d-flex align-items-center gap-2">
+                                            <Skeleton className="w-[40px] h-[40px] rounded-full" />
+                                            <Skeleton className="w-[80px] h-[14px]" />
+                                        </div>
+                                        <Skeleton className="w-[100px] h-[14px]" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section className="blog__area pt-50 pb-120">
+                    <div className="container">
+                        <div className="row">
+                            <div className="col-xxl-8 col-xl-8 col-lg-8">
+                                <div className="blog__wrapper">
+                                    <div className="blog__text mb-40">
+                                        <Skeleton className="w-[150px] h-[16px] mb-4" />
+                                        <div className="space-y-3">
+                                            <Skeleton className="w-full h-[20px] rounded" />
+                                            <Skeleton className="w-[95%] h-[20px] rounded" />
+                                            <Skeleton className="w-[90%] h-[20px] rounded" />
+                                            <Skeleton className="w-[85%] h-[20px] rounded" />
+                                            <Skeleton className="w-[75%] h-[20px] rounded" />
+                                            <Skeleton className="w-[90%] h-[20px] rounded" />
+                                            <Skeleton className="w-[60%] h-[20px] rounded" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="col-xxl-4 col-xl-4 col-lg-4">
+                                <div className="blog__sidebar pl-70">
+                                    <Skeleton className="w-[100%] h-[200px] rounded mb-4" />
+                                    <Skeleton className="w-[100%] h-[200px] rounded mb-4" />
+                                    <Skeleton className="w-[100%] h-[200px] rounded mb-4" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </main>
+        );
+    }
+
+
     if (!blog) return <div>Blog not found.</div>;
-
     const backgroundImage = blog?.image;
-
     const sanitizedContent = DOMPurify.sanitize(blog.blogcontent || '');
 
 
     return (
 
-        <FadeInBlogContent
-            blog={blog}
-            sanitizedContent={sanitizedContent}
-            backgroundImage={backgroundImage}
-            categories={categories}
-            getCategoryName={getCategoryName}
-            RecentPosts={RecentPosts}
-            CategoryList={CategoryList}
-            TagsList={TagsList}
-            AdBanner={AdBanner}
-        />
+        <main>
+            <section
+                className={`page__title-area page__title-overlay d-flex align-items-center `}
+                style={{
+                    backgroundImage: `url("${backgroundImage}")`,
+                    background: `rgba(0, 0, 0, 0.9)`,
+                    backgroundSize: "cover",
+                    backgroundPosition: "center",
+                    backgroundBlendMode: "overlay",
+                    height: "400px",
+                    transition: "opacity 1s ease",
+                }}
+            >
+                <div className="page__title-shape">
+                    <img
+                        className="page-title-shape-1"
+                        src="/img/page-title/page-title-shape-1.png"
+                        alt=""
+                    />
+                    <img
+                        className="page-title-shape-2"
+                        src="/img/page-title/page-title-shape-2.png"
+                        alt=""
+                    />
+                    <img
+                        className="page-title-shape-3"
+                        src="/img/page-title/page-title-shape-3.png"
+                        alt=""
+                    />
+                    <img
+                        className="page-title-shape-4"
+                        src="/img/page-title/page-title-shape-4.png"
+                        alt=""
+                    />
+                </div>
+                <div className="container">
+                    <div className="row">
+                        <div className="col-xxl-10 col-xl-10 col-lg-10">
+                            <div
+                                className="page__title-wrapper mt-110"
+                                style={{
+                                    transition: "opacity 1s ease",
+                                    opacity: visible.title ? 1 : 0,
+                                }}
+                            >
+                                <Link href={`/blog/category/${getCategoryName(blog.category, categories)}`}>
+                                    <span className="page__title-pre">
+                                        {getCategoryName(blog.category, categories)}
+                                    </span>
+                                </Link>
+                                <h3 className="page__title-2">{blog?.blogtitle}</h3>
+                                <div
+                                    className="blog__meta d-flex align-items-center"
+                                    style={{
+                                        transition: "opacity 1s ease",
+                                        opacity: visible.meta ? 1 : 0,
+                                    }}
+                                >
+                                    <div className="blog__author d-flex align-items-center mr-40">
+                                        <div className="blog__author-thumb mr-10">
+                                            <img src="/img/blog/author/author-1.jpg" alt="" />
+                                        </div>
+                                        <div className="blog__author-info blog__author-info-2">
+                                            <h5>Edusm</h5>
+                                        </div>
+                                    </div>
+                                    <div className="blog__date blog__date-2 d-flex align-items-center">
+                                        <i className="fal fa-clock" />
+                                        <span>{new Date(blog.createdate || "").toDateString()}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section className="blog__area pt-50 pb-120">
+                <div className="container">
+                    <div className="row">
+                        <div className="col-xxl-8 col-xl-8 col-lg-8">
+                            <div
+                                className="blog__wrapper"
+                                style={{
+                                    transition: "opacity 1s ease",
+                                    opacity: visible.content ? 1 : 0,
+                                }}
+                            >
+                                {blog && sanitizedContent ? (
+                                    <div className="blog__text mb-40">
+                                        <p>{new Date(blog.createdate || "").toDateString()}</p>
+                                        <article dangerouslySetInnerHTML={{ __html: sanitizedContent }} />
+                                    </div>
+                                ) : (
+                                    <div className="blog__text mb-40">
+                                        <Skeleton className="w-[150px] h-[16px] mb-4" />
+                                        <div className="space-y-3">
+                                            <Skeleton className="w-full h-[20px] rounded" />
+                                            <Skeleton className="w-[95%] h-[20px] rounded" />
+                                            <Skeleton className="w-[90%] h-[20px] rounded" />
+                                            <Skeleton className="w-[85%] h-[20px] rounded" />
+                                            <Skeleton className="w-[75%] h-[20px] rounded" />
+                                            <Skeleton className="w-[90%] h-[20px] rounded" />
+                                            <Skeleton className="w-[60%] h-[20px] rounded" />
+                                        </div>
+                                    </div>
+                                )}
+
+                            </div>
+                        </div>
+                        <div className="col-xxl-4 col-xl-4 col-lg-4">
+                            <div className="blog__sidebar pl-70">
+                                {RecentPosts && <RecentPosts />}
+                                {CategoryList && <CategoryList />}
+                                {TagsList && <TagsList tags={blog.tags || []} />}
+                                {AdBanner && <AdBanner />}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
 
     )
 

@@ -2622,7 +2622,7 @@ p {
 }
 .course__title {
   color:#161718;
-  font-size: 30px;
+  font-size: 21px;
   font-weight: 600;
   margin-bottom: 20px;
 }
@@ -2872,7 +2872,7 @@ p {
 }
 .course__status span {
   font-size: 20px;
-  color: #b128ff;
+  color: #17ca96;
   font-weight: 600;
   padding-right: 5px;
 }

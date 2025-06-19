@@ -8,13 +8,14 @@ import DOMPurify from 'dompurify';
 import ChapterAccordion from '@/components/accordion/ChapterAccordion';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function Page() {
     const params = useParams();
     const router = useRouter();
     const [videoUrl, setVideoUrl] = useState<string | null>(null);
     const [videoLoaded, setVideoLoaded] = useState(false);
+    const [loading, setLoading] = useState(true);
 
     const url_className = params.class_name as string;
     const class_name = (params.class_name as string).replace('-', ' ').toLowerCase();
@@ -81,7 +82,7 @@ export default function Page() {
                 });
 
                 setChapters(res.data);
-
+                setLoading(false);
 
             } catch (err) {
                 console.error('Error fetching chapters:', err);
@@ -108,6 +109,59 @@ export default function Page() {
     };
 
 
+    if (loading) {
+        return (
+            <main>
+                <section className="page__title-area pt-120 pb-90">
+                    <div className="container">
+                        <div className="row">
+                            <div className="col-xxl-8 col-xl-8 col-lg-8">
+                                <div className="course__wrapper">
+                                    <div className="page__title-content mb-25 space-y-3">
+                                        <Skeleton className="w-1/2 h-5" />
+                                        <Skeleton className="w-1/4 h-4" />
+                                        <Skeleton className="w-2/3 h-6" />
+                                    </div>
+
+                                    <div className="course__meta-2 d-sm-flex mb-30 space-y-4">
+                                        <Skeleton className="w-full h-16 rounded" />
+                                    </div>
+
+                                    <div className="course__img w-img mb-30">
+                                        <Skeleton className="w-full h-[300px] rounded" />
+                                    </div>
+
+                                    <div className="course__tab-2 mb-5">
+                                        <Skeleton className="w-full h-10 rounded" />
+                                    </div>
+
+                                    <div className="tab-content space-y-4">
+                                        <Skeleton className="w-1/3 h-6" />
+                                        <Skeleton className="w-full h-4" />
+                                        <Skeleton className="w-full h-4" />
+                                        <Skeleton className="w-4/5 h-4" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="col-xxl-4 col-xl-4 col-lg-4">
+                                <div className="course__sidebar pl-70 p-relative">
+                                    <Skeleton className="w-full h-[250px] rounded mb-4" />
+                                    <Skeleton className="w-1/2 h-6 mb-2" />
+                                    <Skeleton className="w-1/2 h-4 mb-2" />
+                                    <Skeleton className="w-full h-10 mb-2 rounded" />
+                                    <Skeleton className="w-full h-10 mb-2 rounded" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </main>
+        );
+    }
+
+
+
     return (
 
         <main>
@@ -120,9 +174,10 @@ export default function Page() {
                             <div className="course__wrapper">
                                 <div className="page__title-content mb-25">
                                     <div className="page__title-breadcrumb flex items-center mb-4 text-sm">
-                                        Home <i className="fa fa-circle text-[3px] mx-2 text-gray-800"></i>
-                                        Courses <i className="fa fa-circle text-[3px] mx-2 text-gray-800"></i>
-                                        The Business Intelligence Analyst Course 2022
+                                        <Link href={'/'}> Home </Link>
+                                        <i className="fa fa-circle text-[3px] mx-2 text-gray-800"></i>
+                                        <Link href={`/class/${url_className}`}> Class {class_name} </Link>
+
                                     </div>
                                     <span className="page__title-pre">Class {class_name}</span>
                                     <h5 className="page__title-3 text-capitalize"> {subject_name} </h5>

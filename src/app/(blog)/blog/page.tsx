@@ -10,6 +10,7 @@ import AdBanner from '@/components/blog/AdBanner'
 import TagsList from '@/components/blog/TagsList'
 import BlogCard from '@/components/blog/BlogCard'
 import PageBreadcrumb from '@/components/PageBreadcrumb'
+import { Skeleton } from "@/components/ui/skeleton"
 
 interface BlogType {
   _id: string
@@ -44,6 +45,7 @@ const Page = () => {
       console.error('Failed to fetch blogs:', error)
     }
   }
+
   useEffect(() => {
     fetchBlogs()
   }, [])
@@ -86,8 +88,8 @@ const Page = () => {
           <div className="row">
             <div className="col-xxl-12">
               <div className="page__title-wrapper mt-110">
-                <h3 className="page__title mb-20 ">Blog Grid</h3>
-                 <PageBreadcrumb homeLabel="Home" homeHref="/" pageName="All Blogs" />
+                <h3 className="page__title mb-20 ">Blogs</h3>
+                <PageBreadcrumb homeLabel="Home" homeHref="/" pageName="All Blogs" />
               </div>
             </div>
           </div>
@@ -100,9 +102,45 @@ const Page = () => {
           <div className="row">
             <div className="col-xxl-8 col-xl-8 col-lg-8">
               <div className="row">
-                {blogs.map((blog) => (
-                  <BlogCard key={blog._id} blog={blog} categories={categories} />
-                ))}
+                {blogs.length > 0 ? (
+                  blogs.map((blog) => (
+                    <BlogCard key={blog._id} blog={blog} categories={categories} />
+                  ))
+                ) : (
+                  Array.from({ length: 4 }).map((_, index) => (
+                    <div
+                      key={index}
+                      className="col-xxl-6 col-xl-6 col-lg-6 col-md-6 mb-4"
+                    >
+                      <div className="blog__wrapper">
+                        <div className="blog__item white-bg transition-3 fix rounded-lg p-3">
+                          <div className="blog__thumb w-img fix mb-3">
+                            <Skeleton className="w-full h-[200px] rounded-md" />
+                          </div>
+                          <div className="blog__tag mb-2">
+                            <Skeleton className="w-[100px] h-[16px] rounded" />
+                          </div>
+                          <h3 className="blog__title mb-2">
+                            <Skeleton className="w-[80%] h-[22px] rounded" />
+                          </h3>
+                          <div className="blog__meta d-flex align-items-center justify-content-between">
+                            <div className="blog__author d-flex align-items-center">
+                              <div className="blog__author-thumb mr-10">
+                                <Skeleton className="w-[40px] h-[40px] rounded-full" />
+                              </div>
+                              <div className="blog__author-info">
+                                <Skeleton className="w-[80px] h-[14px] rounded" />
+                              </div>
+                            </div>
+                            <div className="blog__date d-flex align-items-center">
+                              <Skeleton className="w-[100px] h-[14px] rounded" />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ))
+                )}
               </div>
               <div className="row">
                 <div className="col-xxl-12">

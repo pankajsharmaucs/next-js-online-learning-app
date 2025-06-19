@@ -183,9 +183,8 @@ const Header = () => {
                                                     <Link href="/">Home</Link>
                                                 </li>
 
-
                                                 <li className="has-dropdown">
-                                                    <Link href="classes">Classes</Link>
+                                                    <Link href="#">Classes</Link>
                                                     <ul className="submenu">
                                                         {
                                                             MasterClass.length ? (
@@ -200,7 +199,7 @@ const Header = () => {
                                                 </li>
 
                                                 <li className="has-dropdown">
-                                                    <Link href="/subjects">Subject</Link>
+                                                    <Link href="#">Subject</Link>
                                                     <ul className="submenu">
 
                                                         {

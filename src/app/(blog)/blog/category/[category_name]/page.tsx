@@ -30,7 +30,8 @@ interface BlogCategory {
 
 const categorypage = () => {
   const params = useParams() as { category_name: string }
-  const categoryName = params.category_name || ''
+  const category_name = params.category_name || ''
+  const categoryName = category_name.replace('-',' ').toString(); 
 
   const [blogs, setBlogs] = useState<BlogType[]>([])
   const [categories, setCategories] = useState<BlogCategory[]>([])
@@ -47,6 +48,8 @@ const categorypage = () => {
         ])
         setBlogs(blogRes.data)
         setCategories(catRes.data)
+        console.log(blogRes);
+        
       } catch (error) {
         console.error('Error fetching data:', error)
       }

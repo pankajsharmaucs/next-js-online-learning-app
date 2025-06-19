@@ -62,7 +62,7 @@
   padding-right: 30px;
 }
 
-.tab-pane{
+.tab-pane {
   padding: 15px 0px;
 }
 
@@ -87,6 +87,8 @@ ul {
   padding-left: 0;
 }
 
+ 
+ 
 ol {
   list-style: decimal;
   margin-left: 1.25rem;

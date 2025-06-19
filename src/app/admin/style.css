@@ -1,4 +1,8 @@
 
+.cta__area {
+  display: none!important;
+}
+
 .header__area, .footer__area  {
   display: none!important;
 }

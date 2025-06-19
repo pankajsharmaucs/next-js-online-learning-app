@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
 import axios from 'axios'
+import { Skeleton } from '@/components/ui/skeleton' // adjust path as needed
 
 interface BlogCategory {
   _id: string
@@ -32,16 +33,27 @@ const CategoryList = () => {
       <div className="sidebar__widget-content">
         <div className="sidebar__category">
           <ul>
-            {categories.slice(0, 4).map((category) => (
-              <li key={category._id}>
-                <Link href={`/blog/category/${category.cat_name}`}>
-                  {category.cat_name}
-                </Link>
-              </li>
-            ))}
-            <li>
-              <Link href="/blog/categories">More...</Link>
-            </li>
+            {categories.length > 0 ? (
+              <>
+                {categories.slice(0, 4).map((category) => (
+                  <li key={category._id}>
+                    <Link href={`/blog/category/${category.cat_name.replace(' ','-').toString()}`}>
+                      {category.cat_name}
+                    </Link>
+                  </li>
+                ))}
+                <li>
+                  <Link href="/blog/categories">More...</Link>
+                </li>
+              </>
+            ) : (
+              // Render 4 skeleton items
+              Array.from({ length: 4 }).map((_, i) => (
+                <li key={i}>
+                  <Skeleton className="h-[18px] w-[120px] mb-2 rounded" />
+                </li>
+              ))
+            )}
           </ul>
         </div>
       </div>
