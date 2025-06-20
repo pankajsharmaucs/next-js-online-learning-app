@@ -1,6 +1,6 @@
 openapi: 3.0.3
 info:
-  title: Edusm User & Admin Management API
+  title: CourseWorld User & Admin Management API
   version: 1.0.0
   description: API for creating users/admins, login, and role-based validation with token and superadmin_email.
 

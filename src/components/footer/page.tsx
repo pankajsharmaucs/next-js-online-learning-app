@@ -1,8 +1,42 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
+import { Class, Subject } from '@/types/add_types';
+import Link from 'next/link';
 
 const Footer = () => {
+
+
+    const [MasterClass, setMasterClass] = useState<Class[]>([]);
+    const [MasterSubject, setMasterSubject] = useState<Subject[]>([]);
+    const [baseUrl, setBaseUrl] = useState('');
+
+
+    const MASTER_CLASS = baseUrl + process.env.NEXT_PUBLIC_ADMIN_GET_MASTER_CLASS;
+    const MASTER_SUBJECT = baseUrl + process.env.NEXT_PUBLIC_ADMIN_GET_MASTER_SUBJECT;
+
+    const [showPreloader, setShowPreloader] = useState(false);
+    const [sidebarOpened, setsidebarOpened] = useState(false);
+    const [isSticky, setIsSticky] = useState(false);
+
+
+    useEffect(() => {
+        setBaseUrl(window.location.origin);
+        fetchAll();
+    }, []);
+
+    const fetchAll = async () => {
+
+        const [mc, ms] = await Promise.all([
+            fetch(MASTER_CLASS).then(res => res.json()),
+            fetch(MASTER_SUBJECT).then(res => res.json()),
+        ]);
+        setMasterClass(mc);
+        setMasterSubject(ms);
+
+        // console.log(ms);
+
+    };
 
     const [loading, setLoading] = useState(true);
 
@@ -49,6 +83,7 @@ const Footer = () => {
                     </div>
                 </section>
                 {/* cta area end */}
+
                 {/* footer area start */}
                 <footer>
                     <div className="footer__area footer-bg">
@@ -60,14 +95,13 @@ const Footer = () => {
                                             <div className="footer__widget-head mb-22">
                                                 <div className="footer__logo">
                                                     <a href="index.html">
-                                                        <img src="/assets/common/logo2.jpg" alt="logo" style={{ width: "300px" }} />
+                                                        <img src="/assets/common/logo4.jpg" alt="logo" style={{ width: "300px" }} />
                                                     </a>
                                                 </div>
                                             </div>
                                             <div className="footer__widget-body">
                                                 <p>
-                                                    Great lesson ideas and lesson plans for ESL teachers!
-                                                    Educators can customize lesson plans to best.
+                                                    Learn. Practice. Succeed.
                                                 </p>
                                                 <div className="footer__social">
                                                     <ul>
@@ -94,32 +128,22 @@ const Footer = () => {
                                     <div className="col-xxl-2 offset-xxl-1 col-xl-2 offset-xl-1 col-lg-3 offset-lg-0 col-md-2 offset-md-1 col-sm-5 offset-sm-1">
                                         <div className="footer__widget mb-50">
                                             <div className="footer__widget-head mb-22">
-                                                <h3 className="footer__widget-title">Company</h3>
+                                                <h3 className="footer__widget-title">Classes</h3>
                                             </div>
                                             <div className="footer__widget-body">
                                                 <div className="footer__link">
-                                                    <ul>
-                                                        <li>
-                                                            <a href="#">About</a>
-                                                        </li>
-                                                        <li>
-                                                            <a href="#">Courses</a>
-                                                        </li>
-                                                        <li>
-                                                            <a href="#">Events</a>
-                                                        </li>
-                                                        <li>
-                                                            <a href="#">Instructor</a>
-                                                        </li>
-                                                        <li>
-                                                            <a href="#">Career</a>
-                                                        </li>
-                                                        <li>
-                                                            <a href="#">Become a Teacher</a>
-                                                        </li>
-                                                        <li>
-                                                            <a href="#">Contact</a>
-                                                        </li>
+                                                    <ul className='p-0'>
+
+                                                        {
+                                                            MasterClass.length ? (
+                                                                MasterClass.map((cls: any, index: number) => (
+                                                                    <li key={index}>
+                                                                        <Link className='text-capitalize' href={`/class/${cls.class_name}`}>Class {cls.class_name}  </Link>
+                                                                    </li>
+                                                                ))
+                                                            ) : null
+                                                        }
+
                                                     </ul>
                                                 </div>
                                             </div>
@@ -128,29 +152,22 @@ const Footer = () => {
                                     <div className="col-xxl-2 col-xl-2 col-lg-2 offset-lg-0 col-md-3 offset-md-1 col-sm-6">
                                         <div className="footer__widget mb-50">
                                             <div className="footer__widget-head mb-22">
-                                                <h3 className="footer__widget-title">Platform</h3>
+                                                <h3 className="footer__widget-title">Subjects</h3>
                                             </div>
                                             <div className="footer__widget-body">
                                                 <div className="footer__link">
-                                                    <ul>
-                                                        <li>
-                                                            <a href="#">Browse Library</a>
-                                                        </li>
-                                                        <li>
-                                                            <a href="#">Library</a>
-                                                        </li>
-                                                        <li>
-                                                            <a href="#">Partners</a>
-                                                        </li>
-                                                        <li>
-                                                            <a href="#">News &amp; Blogs</a>
-                                                        </li>
-                                                        <li>
-                                                            <a href="#">FAQs</a>
-                                                        </li>
-                                                        <li>
-                                                            <a href="#">Tutorials</a>
-                                                        </li>
+                                                    <ul className='p-0'>
+
+                                                        {
+                                                            MasterSubject.length ? (
+                                                                MasterSubject.map((sub: any, index: number) => (
+                                                                    <li>
+                                                                        <Link className='text-capitalize' href={`/subject/${sub.subject_name.replace(' ', '-').toLowerCase()}`}>{sub.subject_name}</Link>
+                                                                    </li>
+                                                                ))
+                                                            ) : null
+                                                        }
+
                                                     </ul>
                                                 </div>
                                             </div>
@@ -172,7 +189,7 @@ const Footer = () => {
                                                             </button>
                                                         </div>
                                                     </form>
-                                                    <p>Get the latest news and updates right at your inbox.</p>
+                                                    <p>Unlock Smart Learning – Subscribe Today</p>
                                                 </div>
                                             </div>
                                         </div>
@@ -185,10 +202,7 @@ const Footer = () => {
                                 <div className="row">
                                     <div className="col-xxl-12">
                                         <div className="footer__copyright text-center">
-                                            <p>
-                                                © 2022 Educal, All Rights Reserved. Design By{" "}
-                                                <a href="index.html">Theme Pure</a>
-                                            </p>
+                                            <p>© 2025 Courseworld, All Rights Reserved. Developed By Pankajsharma </p>
                                         </div>
                                     </div>
                                 </div>

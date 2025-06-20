@@ -24,8 +24,11 @@ import LoaderWrapper from '@/components/preloader/LoaderWrapper';
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
 
 export const metadata = {
-  title: 'Edusm',
+  title: 'Courseworld',
   description: 'Online Learning platform',
+  icons: {
+    icon: "/favicon.ico",
+  },
 };
 
 export default function GlobalLayout({ children }: { children: React.ReactNode }) {

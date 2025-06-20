@@ -9,8 +9,10 @@ import ChapterAccordion from '@/components/accordion/ChapterAccordion';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Skeleton } from "@/components/ui/skeleton";
+import RazorpayButton from '@/components/pricing/RazorpayButton';
 
 export default function Page() {
+    const [price, setPrice] = useState<number | null>(null);
     const params = useParams();
     const router = useRouter();
     const [videoUrl, setVideoUrl] = useState<string | null>(null);
@@ -26,6 +28,20 @@ export default function Page() {
     const [baseUrl, setBaseUrl] = useState('');
     const [chapters, setChapters] = useState<any[]>([]);
     const [SubjectDetail, setSubjectDetail] = useState<any>(null);
+
+    // ✅ Fetch price when component mounts or `type` changes
+    useEffect(() => {
+        const fetchPrice = async () => {
+            try {
+                const res = await axios.get(`${process.env.NEXT_PUBLIC_GET_PRICING}?type=subject`);
+                setPrice(Number(res.data.price));
+            } catch (err) {
+                console.error('Failed to fetch price:', err);
+            }
+        };
+
+        fetchPrice();
+    }, [baseUrl]);
 
     useEffect(() => {
         setBaseUrl(window.location.origin);
@@ -71,7 +87,6 @@ export default function Page() {
                 }
 
                 setSubjectDetail(matchedSubject);
-                // console.log(matchedSubject);
 
                 const class_id = matchedClass._id || matchedClass.id;
                 const subject_id = matchedSubject._id || matchedSubject.id;
@@ -82,6 +97,7 @@ export default function Page() {
                 });
 
                 setChapters(res.data);
+                // console.log(res.data[0].video_url);
                 setLoading(false);
 
             } catch (err) {
@@ -190,7 +206,7 @@ export default function Page() {
                                         </div>
                                         <div className="course__teacher-info-3">
                                             <h5>Created by</h5>
-                                            <p>EDUSM</p>
+                                            <p>Courseworld</p>
                                         </div>
                                     </div>
 
@@ -203,7 +219,7 @@ export default function Page() {
                                         </div>
                                     </div>
 
-                                    <div className="course__teacher-3 d-flex align-items-center mr-70 mb-30">
+                                    <div className="course__teacher-3 d-flex align-items-center mr-70">
                                         <div className="course__teacher-thumb-3 mr-15">
                                         </div>
                                         <div className="course__teacher-info-3">
@@ -458,16 +474,17 @@ export default function Page() {
                                 <div className="course__sidebar-widget-2 white-bg mb-20">
                                     <div className="course__video">
 
-                                        <div className="col-12 mb-4 bg-black rounded py-5 flex justify-center items-center">
-                                            <img src="/assets/common/playBtn.png" alt="" width={'50px'} />
+                                        <div onClick={() => { runVideo(chapters[0].video_url as string) }} className="col-12 mb-4
+                                         bg-black rounded py-5 flex justify-center items-center cursor-pointer">
+                                            <img src="/assets/common/playBtn.png" alt="" className='hover:scale-150  ' width={'50px'} />
                                         </div>
 
                                         <div className="course__video-meta mb-25 d-flex align-items-center justify-content-between">
                                             <div className="course__video-price">
                                                 <h5>
-                                                    $74.<span>00</span>{" "}
+                                                    &#8377; {price}<span></span>{" "}
                                                 </h5>
-                                                <h5 className="old-price">$129.00</h5>
+                                                <h5 className="old-price">{price}.00</h5>
                                             </div>
                                             <div className="course__video-discount">
                                                 <span>68% OFF</span>
@@ -544,16 +561,18 @@ export default function Page() {
                                             </ul>
                                         </div>
 
-                                        <div className="course__enroll-btn mb-2">
-                                            <Link href={`enroll?subject_id=${SubjectDetail?._id}`} className="e-btn e-btn-7 w-100">
-                                                Buy Subject <i className="far fa-arrow-right" />
-                                            </Link>
-                                        </div>
 
-                                        <div className="course__enroll-btn mb-2 ">
-                                            <Link href={`enroll?class_id=${SubjectDetail?._id}`} className="e-btn2 e-btn-7 w-100">
+
+                                        <div className="course__enroll-btn mb-2 text-center">
+                                            {/* <Link href={`enroll?class_id=${SubjectDetail?._id}`} className="e-btn2 e-btn-7 w-100">
                                                 Get All Subjects <i className="far fa-arrow-right" />
-                                            </Link>
+                                            </Link> */}
+                                            <RazorpayButton
+                                                class_name={class_name}
+                                                subject_name={subject_name}
+                                                type="class"
+                                                price={price || 0}
+                                            />
                                         </div>
                                     </div>
                                 </div>
@@ -569,7 +588,8 @@ export default function Page() {
             {/* Video Modal */}
             {videoUrl && (
                 <div
-                    className="fixed inset-0 z-[1000] flex items-center justify-center bg-white bg-opacity-75"
+                    className="fixed inset-0 z-[1000] flex items-center justify-center"
+                    style={{ backgroundColor: 'rgba(0, 0, 0, 0.8)' }}
                     onClick={closeModal}
                 >
                     <div
@@ -591,14 +611,12 @@ export default function Page() {
                             allowFullScreen
                             onLoad={() => setVideoLoaded(true)}
                         ></iframe>
-
                         <button
                             onClick={closeModal}
-                            className="absolute top-2 right-2 text-white bg-red-500 hover:bg-red-600 p-1 px-2 rounded"
-                        >
-                            ✕
-                        </button>
+                            className="absolute top-m20 right-m4  text-white bg-red-500 hover:bg-red-600 p-1 px-2 rounded"
+                        > ✕ </button>
                     </div>
+
                 </div>
             )}
 

@@ -9,7 +9,7 @@ const inter = Inter({ subsets: ['latin'] });
 const roboto = Roboto({ subsets: ['latin'] });
 
 export const metadata = {
-  title: 'User Dashboard | Edusm',
+  title: 'User Dashboard | Courseworld',
   description: 'Online Learning platform',
 };
 

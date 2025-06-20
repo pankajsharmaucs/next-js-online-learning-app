@@ -123,22 +123,21 @@ const Home = () => {
                 <div className="col-xxl-6 col-xl-6 col-lg-6 col-md-6">
                   <div className="hero__content p-relative z-index-1">
                     <h1 className="hero__title">
-                      <span>Access 300+</span>
+                      <span>Explore  300+</span>
                       <span className="yellow-shape">
-                        Online{" "}
+                        Interactive{" "}
                         <img
                           src="/img/shape/yellow-bg.png"
                           alt="yellow-shape"
                         />{" "}
                       </span>
-                      Tutorial From Top Instructor.
+                      Lessons to Boost Your Learning Journey.
                     </h1>
                     <p className="hidden lg:block">
-                      Meet university,and cultural institutions, who'll share their
-                      experience.
+                      Learn from experienced teachers and top educators through engaging video content, PDFs, and chapter-wise practice.
                     </p>
-                    <a href="course-grid.html" className="e-btn">
-                      view all course
+                    <a href="#courseList" className="e-btn">
+                      Browse All Courses
                     </a>
                   </div>
                 </div>
@@ -164,8 +163,8 @@ const Home = () => {
                     <div className="hero__thumb-big mr-30">
                       <img src="/assets/hero/hero-image.jpg" alt="" />
                       <div className="hero__quote hero__quote-animation">
-                        <span>Tomorrow is our</span>
-                        <h4>“When I Grow Up” Spirit Day!</h4>
+                        <span>Fuel your ambition with</span>
+                        <h4>“Every Chapter, A Step Toward Success!”</h4>
                       </div>
                     </div>
                     <div className="hero__thumb-sm mt-50 d-none d-lg-block">
@@ -264,7 +263,7 @@ const Home = () => {
         {/* category area end */}
 
         {/* course area start */}
-        <section className="course__area pt-50 pb-120 grey-bg">
+        <section className="course__area pt-50 pb-120 grey-bg" id="courseList">
           <div className="container">
             <div className="row align-items-end">
               <div className="col-xxl-5 col-xl-6 col-lg-6">
@@ -285,11 +284,11 @@ const Home = () => {
                   </p>
                 </div>
               </div>
-              <div className="col-xxl-7 col-xl-6 col-lg-6">
-                <div className="course__menu d-flex justify-content-lg-end mb-60">
+              <div className="col-xxl-7 col-xl-6 col-lg-6 col-12">
+                <div className="course__menu d-flex justify-content-lg-end mb-30">
                   <div className="filter-button-group">
                     <button
-                      className={`px-4 py-2 ${filteredSubjectName === 'All'
+                      className={`px-1 py-2 ${filteredSubjectName === 'All'
                         ? 'font-bold underline text-[#17ca96]'
                         : 'text-[#080808]'
                         }`}
@@ -301,7 +300,7 @@ const Home = () => {
                     {Array.from(new Set(subjects.map((sub) => sub.subject_name))).map((subjectName) => (
                       <button
                         key={subjectName}
-                        className={`px-4 py-2 ${filteredSubjectName === subjectName
+                        className={`px-1 py-2 ${filteredSubjectName === subjectName
                           ? 'font-bold underline text-[#17ca96]'
                           : 'text-[#333]'
                           }`}
@@ -331,7 +330,7 @@ const Home = () => {
                     return (
                       <div
                         key={index}
-                        className="col-xxl-4 col-xl-4 col-lg-4 col-md-6 grid-item cat1 cat2 cat4"
+                        className="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-6 grid-item cat1 cat2 cat4"
                       >
                         <div className="course__item white-bg mb-30 fix">
                           <div className="course__thumb w-img p-relative fix">
@@ -345,7 +344,7 @@ const Home = () => {
                             </div>
                           </div>
                           <div className="course__content">
-                            <div className="course__meta d-flex align-items-center justify-content-between">
+                            <div className="course__meta flex flex-col sm:flex-row sm:items-center sm:justify-between">
                               <div className="course__lesson">
                                 <span>
                                   <i className="far fa-book-alt" />
@@ -368,7 +367,7 @@ const Home = () => {
                               <div className="course__teacher-thumb mr-15">
                                 <img src="/assets/common/logo.jpg" alt="" />
                               </div>
-                              <h6>EDUSM</h6>
+                              <h6>Courseworld</h6>
                             </div>
                           </div>
                           <Link href={`/class/${class_name_slug}/${slug}`}>
@@ -422,7 +421,6 @@ const Home = () => {
           </div>
         </section>
         {/* course area end */}
-
 
         {/* pricing area start */}
         <section className="price__area pt-50 pb-130">

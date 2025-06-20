@@ -65,7 +65,7 @@ function BlogCard({ blog, categories }: BlogCardProps) {
                   />
                 </div>
                 <div className="blog__author-info">
-                  <h5>Edusm</h5>
+                  <h5>Courseworld</h5>
                 </div>
               </div>
               <div className="blog__date d-flex align-items-center">

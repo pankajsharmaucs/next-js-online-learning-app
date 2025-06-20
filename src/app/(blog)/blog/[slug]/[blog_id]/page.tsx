@@ -216,7 +216,7 @@ export default function Page() {
                                             <img src="/img/blog/author/author-1.jpg" alt="" />
                                         </div>
                                         <div className="blog__author-info blog__author-info-2">
-                                            <h5>Edusm</h5>
+                                            <h5>CourseWorld</h5>
                                         </div>
                                     </div>
                                     <div className="blog__date blog__date-2 d-flex align-items-center">

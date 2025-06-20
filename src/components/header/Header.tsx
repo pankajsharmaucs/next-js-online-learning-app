@@ -89,11 +89,11 @@ const Header = () => {
                     <div className="container-fluid">
                         <div className="row align-items-center">
 
-                            <div className="col-xxl-3 col-xl-3 col-lg-3 col-md-3 col-sm-3 col-4 p-0">
+                            <div className="col-xxl-3 col-xl-3 col-lg-3 col-md-3 col-sm-3 col-6 p-0">
                                 <div className="header__left d-flex">
                                     <div className="logo">
                                         <Link href="/">
-                                            <img src="/assets/common/logo2.jpg" alt="logo" style={{ width: "300px" }} />
+                                            <img src="/assets/common/logo4.jpg" alt="logo" style={{ width: "300px" }} />
                                         </Link>
                                     </div>
                                     {/* <div className="header__category">
@@ -174,7 +174,7 @@ const Header = () => {
                                 </div>
                             </div>
 
-                            <div className="col-xxl-9 col-xl-9 col-lg-9 col-md-9 col-sm-9 col-8 ">
+                            <div className="col-xxl-9 col-xl-9 col-lg-9 col-md-9 col-sm-9 col-6 ">
                                 <div className="header__right d-flex justify-content-md-around justify-content-end align-items-center">
                                     <div className="main-menu">
                                         <nav id="mobile-menu" className='d-none d-md-none d-lg-block'>
@@ -249,7 +249,7 @@ const Header = () => {
                                     </div>
                                     <div className="header__btn ml-10  ">
                                         <Link href="/login" className="e-btn text-white">
-                                            Get Start
+                                            Login
                                         </Link>
                                     </div>
                                     <div className="sidebar__menu d-xl-none cursor-pointer " onClick={() => setsidebarOpened(true)}>

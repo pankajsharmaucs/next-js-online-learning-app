@@ -162,19 +162,15 @@ export default function Page() {
                                                                         {subject?.subject_name}
                                                                     </h1>
                                                                 </div>
-                                                                <div className="course__more d-flex justify-content-between align-items-center">
-                                                                    <div className="course__status">
-                                                                        <span>Explore</span>
-                                                                    </div>
-                                                                    <div className="course__btn">
-                                                                        <Link
-                                                                            href={`${class_name_slug}/${subject_name_slug}`}
-                                                                            className="link-btn"
-                                                                        >
-                                                                            Know Details <i className="far fa-arrow-right" />
-                                                                            <i className="far fa-arrow-right" />
-                                                                        </Link>
-                                                                    </div>
+                                                                <div className="course__btn">
+                                                                    <Link href={`/class/${class_name_slug}/${subject_name_slug}`}>
+                                                                        <div className="course__more d-flex justify-content-center align-items-center">
+                                                                            <div className="course__status">
+                                                                                <span>Explore</span>
+                                                                                <i className="far fa-arrow-right text-[#17ca96]" />
+                                                                            </div>
+                                                                        </div>
+                                                                    </Link>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -708,93 +704,7 @@ export default function Page() {
                         </div>
 
                         <div className="col-xxl-4 col-xl-4 col-lg-4">
-                            <div className="course__sidebar pl-70 p-relative">
 
-                                <div className="course__shape">
-                                    <img
-                                        className="course-dot"
-                                        src="assets/img/course/course-dot.png"
-                                        alt=""
-                                    />
-                                </div>
-
-                                <div className="course__sidebar-widget-2 white-bg mb-20">
-                                    <div className="course__video">
-
-                                        <div className="col-12 mb-4 bg-black rounded py-5 flex justify-center items-center">
-                                            <img src="/assets/common/playBtn.png" alt="" width={'50px'} />
-                                        </div>
-
-                                        <div className="course__video-meta mb-25 d-flex align-items-center justify-content-between">
-                                            <div className="course__video-price">
-                                                <h5>
-                                                    &#8377; 299 {" "}
-                                                </h5>
-                                                <h5 className="old-price">$129.00</h5>
-                                            </div>
-                                            <div className="course__video-discount">
-                                                <span>68% OFF</span>
-                                            </div>
-                                        </div>
-                                        <div className="course__video-content mb-35">
-                                            <ul className='p-0'>
-                                                <li className="d-flex align-items-center">
-                                                    <div className="course__video-icon">
-                                                        <svg
-                                                            version="1.1"
-                                                            xmlns="http://www.w3.org/2000/svg"
-                                                            xmlnsXlink="http://www.w3.org/1999/xlink"
-                                                            x="0px"
-                                                            y="0px"
-                                                            viewBox="0 0 24 24"
-                                                            xmlSpace="preserve"
-                                                        >
-                                                            <path
-                                                                className="st0"
-                                                                d="M4,19.5C4,18.1,5.1,17,6.5,17H20"
-                                                            />
-                                                            <path
-                                                                className="st0"
-                                                                d="M6.5,2H20v20H6.5C5.1,22,4,20.9,4,19.5v-15C4,3.1,5.1,2,6.5,2z"
-                                                            />
-                                                        </svg>
-                                                    </div>
-                                                    <div className="course__video-info">
-                                                        <h5>
-                                                            <span>Chapters :</span>14
-                                                        </h5>
-                                                    </div>
-                                                </li>
-                                                <li className="d-flex align-items-center">
-                                                    <div className="course__video-icon">
-                                                        <svg>
-                                                            <path
-                                                                className="st0"
-                                                                d="M13.3,14v-1.3c0-1.5-1.2-2.7-2.7-2.7H5.3c-1.5,0-2.7,1.2-2.7,2.7V14"
-                                                            />
-                                                            <circle className="st0" cx={8} cy="4.7" r="2.7" />
-                                                        </svg>
-                                                    </div>
-                                                    <div className="course__video-info">
-                                                        <h5>
-                                                            <span>Enrolled :</span>{filteredSubjects?.length} Subjects
-                                                        </h5>
-                                                    </div>
-                                                </li>
-
-                                            </ul>
-                                        </div>
-
-
-                                        <div className="course__enroll-btn mb-2 ">
-                                            <Link href={`enroll?class_name=${class_name}`} className="e-btn2 e-btn-7 w-100">
-                                                Get All Subjects <i className="far fa-arrow-right" />
-                                            </Link>
-                                        </div>
-                                    </div>
-                                </div>
-
-                            </div>
                         </div>
 
                     </div>

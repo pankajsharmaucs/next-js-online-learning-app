@@ -171,19 +171,15 @@ export default function Page() {
                                                                         Class {class_name_slug} - {subject?.subject_name}
                                                                     </h1>
                                                                 </div>
-                                                                <div className="course__more d-flex justify-content-between align-items-center">
-                                                                    <div className="course__status">
-                                                                        <span>Explore</span>
-                                                                    </div>
-                                                                    <div className="course__btn">
-                                                                        <Link
-                                                                            href={`/class/${class_name_slug}/${subject_name_slug}`}
-                                                                            className="link-btn"
-                                                                        >
-                                                                            Know Details <i className="far fa-arrow-right" />
-                                                                            <i className="far fa-arrow-right" />
-                                                                        </Link>
-                                                                    </div>
+                                                                <div className="course__btn">
+                                                                    <Link href={`/class/${class_name_slug}/${subject_name_slug}`}>
+                                                                        <div className="course__more d-flex justify-content-center align-items-center">
+                                                                            <div className="course__status">
+                                                                                <span>Explore</span>
+                                                                                <i className="far fa-arrow-right text-[#17ca96]" />
+                                                                            </div>
+                                                                        </div>
+                                                                    </Link>
                                                                 </div>
                                                             </div>
                                                         </div>
