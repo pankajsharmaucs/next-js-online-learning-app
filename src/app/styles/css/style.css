@@ -2042,8 +2042,10 @@ p {
 }
 
 .hero__title {
-  font-size: 60px;
+  font-size: 40px;
   line-height: 1;
+  font-weight: 600;
+
 }
 
 @media only screen and (min-width: 1200px) and (max-width: 1399px) {
@@ -2077,7 +2079,7 @@ p {
 }
 
 .hero__title span:first-child {
-  font-weight: 300;
+  font-weight: 600;
   display: block;
 }
 
@@ -2107,7 +2109,7 @@ p {
 }
 
 .hero__content p {
-  font-size: 22px;
+  font-size: 15px;
   color: #0e1133;
   padding-right: 130px;
   line-height: 30px;

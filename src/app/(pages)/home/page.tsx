@@ -35,7 +35,7 @@ const Home = () => {
         ]);
 
         setclasses(classes);
-        console.log(classes);
+        // console.log(classes);
 
         // Map through all subjects and attach the corresponding class_name
         const updatedSubjects = subjects.map((sub: Subject) => {
@@ -47,7 +47,7 @@ const Home = () => {
         });
 
         setSubjects(updatedSubjects); // All subjects, now include class_name
-        console.log(updatedSubjects);
+        // console.log(updatedSubjects);
 
         // Optionally set className from the first subject (if needed)
         if (updatedSubjects.length > 0 && updatedSubjects[0].class_name) {

@@ -61,7 +61,7 @@ const Footer = () => {
                     <div className="container">
                         <div className="cta__inner blue-bg fix">
                             <div className="cta__shape">
-                                <img src="/img/cta/cta-shape.png" alt="" />
+                                {/* <img src="/img/cta/cta-shape.png" alt="" /> */}
                             </div>
                             <div className="row align-items-center">
                                 <div className="col-xxl-7 col-xl-7 col-lg-8 col-md-8">

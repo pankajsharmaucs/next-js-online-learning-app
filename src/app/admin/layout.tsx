@@ -10,6 +10,9 @@ const roboto = Roboto({ subsets: ['latin'] });
 export const metadata = {
   title: 'Admin | Courseworld',
   description: 'Online Learning platform',
+  icons: {
+    icon: "/favicon.ico",
+  },
 };
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
