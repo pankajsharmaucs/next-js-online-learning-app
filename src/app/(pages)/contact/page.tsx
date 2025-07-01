@@ -133,13 +133,13 @@ const pages = () => {
                           </svg>
                         </div>
                         <div className="contact__info-text">
-                          <h4>New York Office</h4>
+                          <h4>India Office</h4>
                           <p>
                             <a
                               target="_blank"
-                              href="https://www.google.com/maps/place/Dhaka/@23.7806207,90.3492859,12z/data=!3m1!4b1!4m5!3m4!1s0x3755b8b087026b81:0x8fa563bbdd5904c2!8m2!3d23.8104753!4d90.4119873"
+                              href="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d7011.075153085031!2d77.2037636665618!3d28.52355732909593!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390ce1f0dd053fdd%3A0x97d95c1a5860139f!2sSaket%2C%20New%20Delhi%2C%20Delhi%20110017!5e0!3m2!1sen!2sin!4v1751373105342!5m2!1sen!2sin"
                             >
-                              Maypole Crescent 70-80 Upper St Norwich NR2 1LT
+                              Saket, New Delhi
                             </a>
                           </p>
                         </div>
@@ -160,11 +160,11 @@ const pages = () => {
                           <h4>Email us directly</h4>
                           <p>
                             <a href="mailto:support@educal.com">
-                              support@educal.com
+                              support@courseworld.com
                             </a>
                           </p>
                           <p>
-                            <a href="mailto:info@educal.com"> info@educal.com</a>
+                            <a href="mailto:info@educal.com"> info@courseworld.com</a>
                           </p>
                         </div>
                       </div>
@@ -182,10 +182,7 @@ const pages = () => {
                         <div className="contact__info-text">
                           <h4>Phone</h4>
                           <p>
-                            <a href="tel:+(426)-742-26-44">+(426) 742 26 44</a>
-                          </p>
-                          <p>
-                            <a href="tel:+(224)-762-442-32">+(224) 762 442 32</a>
+                            <a href="tel:+(426)-742-26-44">+(91) 8800 637 982 </a>
                           </p>
                         </div>
                       </div>
@@ -250,7 +247,7 @@ const pages = () => {
                     My good sir plastered cuppa barney cobblers mush argy bargy
                     ruddy.
                   </p>
-                  <a href="contact.html" className="e-btn e-btn-border">
+                  <a href="contact.html" className="e-btn2 e-btn-border">
                     Visit Documentation
                   </a>
                 </div>
@@ -277,7 +274,7 @@ const pages = () => {
                     My good sir plastered cuppa barney cobblers mush argy bargy
                     ruddy.
                   </p>
-                  <a href="contact.html" className="e-btn e-btn-border">
+                  <a href="contact.html" className="e-btn2 e-btn-border">
                     Send a Ticket
                   </a>
                 </div>

@@ -915,7 +915,7 @@ p {
 
 @media (max-width: 575px) {
   .header__padding {
-    padding: 20px;
+    padding: 10px;
   }
 }
 
