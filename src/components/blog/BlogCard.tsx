@@ -47,7 +47,7 @@ function BlogCard({ blog, categories }: BlogCardProps) {
           <div className="blog__content">
             <div className="blog__tag">
               <Link
-                href={`/blog/category/${getCategoryName(blog.category || '')}`}
+                href={`/blog/category/${getCategoryName(blog.category || '').replace(' ','-').toString()}`}
                 className="blue"
               >
                 {getCategoryName(blog.category || '')}

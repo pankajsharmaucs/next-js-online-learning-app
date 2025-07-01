@@ -35,7 +35,6 @@ const Header = () => {
         setMasterClass(mc);
         setMasterSubject(ms);
 
-        // console.log(ms);
 
     };
 
@@ -89,7 +88,7 @@ const Header = () => {
                     <div className="container-fluid">
                         <div className="row align-items-center">
 
-                            <div className="col-xxl-3 col-xl-3 col-lg-3 col-md-3 col-sm-3 col-6 p-0">
+                            <div className="col-xxl-3 col-xl-3 col-lg-3 col-md-3 col-sm-3 col-7 p-0">
                                 <div className="header__left d-flex">
                                     <div className="logo">
                                         <Link href="/">
@@ -174,7 +173,7 @@ const Header = () => {
                                 </div>
                             </div>
 
-                            <div className="col-xxl-9 col-xl-9 col-lg-9 col-md-9 col-sm-9 col-6 ">
+                            <div className="col-xxl-9 col-xl-9 col-lg-9 col-md-9 col-sm-9 col-5 ">
                                 <div className="header__right d-flex justify-content-md-around justify-content-end align-items-center">
                                     <div className="main-menu">
                                         <nav id="mobile-menu" className='d-none d-md-none d-lg-block'>
@@ -248,12 +247,19 @@ const Header = () => {
                                         </div>
                                     </div>
                                     <div className="header__btn ml-10  ">
-                                        <Link href="/login" className="e-btn text-white">
+                                        {/* Desktop Login Button */}
+                                        <Link href="/login" className="e-btn text-white hidden md:flex">
                                             Login
                                         </Link>
+
+                                        {/* Mobile Icon Button (visible only below md) */}
+                                        <Link href="/login" className="md:hidden flex">
+                                            <i className="fa fa-user text-2xl text-[#1b50ff]"></i>
+                                        </Link>
+
                                     </div>
                                     <div className="sidebar__menu d-xl-none cursor-pointer " onClick={() => setsidebarOpened(true)}>
-                                        <div className="sidebar-toggle-btn ml-30" id="sidebar-toggle">
+                                        <div className="sidebar-toggle-btn ml-15" id="sidebar-toggle">
                                             <span className="line" />
                                             <span className="line" />
                                             <span className="line" />
@@ -267,7 +273,7 @@ const Header = () => {
             </header>
             {/* header area end */}
 
-            <Sidebar openCloseTrigger={sidebarOpened} setsidebarOpened={setsidebarOpened} />
+            <Sidebar MasterSubject={MasterSubject} MasterClass={MasterClass} openCloseTrigger={sidebarOpened} setsidebarOpened={setsidebarOpened} />
         </>
     )
 }

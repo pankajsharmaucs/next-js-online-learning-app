@@ -1,0 +1,27 @@
+export const metadata = {
+  title: "NCERT Study Material - Class 5 to 12 Notes, PDFs, Videos | CourseWorld",
+  description:
+    "Free NCERT study resources for Class 5 to 12. Access CBSE syllabus, revision notes, NCERT videos, science and math preparation, and downloadable PDFs.",
+  keywords: [
+    "NCERT study material",
+    "Class 5 to 12 notes",
+    "CBSE syllabus",
+    "NCERT videos",
+    "free study resources",
+    "NCERT PDFs",
+    "Class 10 science notes",
+    "Class 12 math preparation",
+    "free NCERT study material 2025",
+    "class 9 to 12 revision notes CBSE",
+    "CBSE syllabus 2025 PDF",
+    "NCERT video lectures for science",
+    "NCERT PDFs for all classes",
+    "class 10 science chapter-wise notes",
+    "class 12 maths board exam preparation",
+    "NCERT Hindi medium notes",
+    "download NCERT textbooks PDF",
+    "CBSE 2025-26 curriculum",
+    "online NCERT videos class 8 to 12",
+    "free CBSE study material",
+  ],
+};

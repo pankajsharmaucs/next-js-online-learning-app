@@ -81,7 +81,6 @@ const Page = () => {
           backgroundImage: `url("/assets/blog/blogBG2.jpg")`,
           backgroundSize: "cover",
           backgroundPosition: "center",
-          height: "400px"
         }}
       >
         <div className="container">
@@ -197,7 +196,7 @@ const Page = () => {
             </div>
 
             <div className="col-xxl-4 col-xl-4 col-lg-4">
-              <div className="blog__sidebar pl-70">
+              <div className="blog__sidebar md:pl-70 pl-0">
 
                 {<RecentPosts />}
 

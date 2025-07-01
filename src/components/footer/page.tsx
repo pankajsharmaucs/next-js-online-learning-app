@@ -73,7 +73,7 @@ const Footer = () => {
                                 </div>
                                 <div className="col-xxl-5 col-xl-5 col-lg-4 col-md-4">
                                     <div className="cta__more d-md-flex justify-content-end p-relative z-index-1">
-                                        <a href="contact.html" className="e-btn e-btn-white">
+                                        <a href="contact.html" className="e-btn2 e-btn-white">
                                             Get Started
                                         </a>
                                     </div>

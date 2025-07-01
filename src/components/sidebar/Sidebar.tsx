@@ -4,12 +4,16 @@ import React from 'react'
 import SidebarMenu from './SidebarMenu';
 import Link from 'next/link';
 
+import { Class, Subject } from '@/types/add_types';
+
 interface OpenCloseType {
-    openCloseTrigger: boolean;
-    setsidebarOpened: (value: boolean) => void; // function to update sidebar state
+  openCloseTrigger: boolean;
+  setsidebarOpened: (value: boolean) => void;
+  MasterClass: Class[];
+  MasterSubject: Subject[];
 }
 
-const Sidebar = ({ openCloseTrigger, setsidebarOpened }: OpenCloseType) => {
+const Sidebar = ({ openCloseTrigger, setsidebarOpened, MasterClass,MasterSubject }: OpenCloseType) => {
     return (
         <>
             {/* sidebar area start */}
@@ -24,9 +28,9 @@ const Sidebar = ({ openCloseTrigger, setsidebarOpened }: OpenCloseType) => {
                         </button>
                     </div>
                     <div className="sidebar__content">
-                        <div className="logo mb-40">
+                        <div className="logo mb-40 ml-10">
                             <Link href="/" onClick={() => setsidebarOpened(false)}>
-                                <img src="/assets/common/logo.png" alt="logo" style={{width:"120px"}} />
+                                <img src="/assets/common/logo3.png" alt="logo" style={{ width: "55px" }} />
                             </Link>
                         </div>
                         <div className="mobile-menu fix" />
@@ -40,7 +44,7 @@ const Sidebar = ({ openCloseTrigger, setsidebarOpened }: OpenCloseType) => {
                         </div>
 
                         <div className="sidebar__content  py-3">
-                            <SidebarMenu setsidebarOpened={setsidebarOpened} />
+                            <SidebarMenu MasterSubject={MasterSubject} MasterClass={MasterClass} setsidebarOpened={setsidebarOpened} />
                         </div>
                     </div>
                 </div>

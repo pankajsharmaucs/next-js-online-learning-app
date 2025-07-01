@@ -99,7 +99,7 @@ const Home = () => {
 
       <main>
         {/* hero area start */}
-        <section className="hero__area hero__height d-flex align-items-center grey-bg-2 p-relative">
+        <section className="hero__area hero__height d-flex align-items-center grey-bg-2 p-relative ">
           <div className="hero__shape">
             <img
               className="hero-1-circle"
@@ -136,13 +136,13 @@ const Home = () => {
                     <p className="hidden lg:block">
                       Learn from experienced teachers and top educators through engaging video content, PDFs, and chapter-wise practice.
                     </p>
-                    <a href="#courseList" className="e-btn">
+                    <a href="#courseList" className="e-btn2 text-white cursor-pointer">
                       Browse All Courses
                     </a>
                   </div>
                 </div>
                 <div className="col-xxl-6 col-xl-6 col-lg-6 col-md-6">
-                  <div className="hero__thumb d-flex p-relative">
+                  <div className="hero__thumb  d-flex p-relative">
                     <div className="hero__thumb-shape">
                       <img
                         className="hero-1-dot"
@@ -194,15 +194,7 @@ const Home = () => {
                   </h2>
                 </div>
               </div>
-              <div className="col-xxl-6 col-xl-6 col-lg-6 col-md-4">
-                <div className="category__more mb-50 float-md-end fix">
-                  <a href="course-grid.html" className="link-btn">
-                    View all Category
-                    <i className="far fa-arrow-right" />
-                    <i className="far fa-arrow-right" />
-                  </a>
-                </div>
-              </div>
+
             </div>
 
             <div className="row">
@@ -210,10 +202,10 @@ const Home = () => {
                 AllClasses.map((data, index) => {
                   const slug = data?.class_name.replace(/\s+/g, '-').toLowerCase();
                   return (
-                    <div key={index} className="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-6">
+                    <div key={index} className="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-6 col-6">
                       <Link href={`/class/${slug}`}>
                         <div className="category__item mb-30 transition-3 d-flex align-items-center">
-                          <div className="category__icon mr-30">
+                          <div className="category__icon md:mr-30 mr-10">
                             <svg viewBox="0 0 512 512">
                               <g>
                                 <path
@@ -244,7 +236,7 @@ const Home = () => {
               ) : (
                 // Show 6 skeleton cards
                 Array.from({ length: 6 }).map((_, index) => (
-                  <div key={index} className="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-6">
+                  <div key={index} className="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-6 col-6">
                     <div className="category__item mb-30 transition-3 d-flex align-items-center">
                       <div className="category__icon mr-30">
                         <Skeleton className="w-[60px] h-[60px] rounded-full" />
@@ -267,7 +259,7 @@ const Home = () => {
           <div className="container">
             <div className="row align-items-end">
               <div className="col-xxl-5 col-xl-6 col-lg-6">
-                <div className="section__title-wrapper mb-60">
+                <div className="section__title-wrapper mb:mb-60 mb-10">
                   <h2 className="section__title">
                     Find the Right
                     <br />
@@ -288,9 +280,9 @@ const Home = () => {
                 <div className="course__menu d-flex justify-content-lg-end mb-30">
                   <div className="filter-button-group">
                     <button
-                      className={`px-1 py-2 ${filteredSubjectName === 'All'
-                        ? 'font-bold underline text-[#17ca96]'
-                        : 'text-[#080808]'
+                      className={` mb-1  py-2 ${filteredSubjectName === 'All'
+                        ? 'font-bold underline text-[#17ca96] bg-[#17ca96]' 
+                        : 'text-[#17ca96]'
                         }`}
                       onClick={() => setFilteredSubjectName('All')}
                     >
@@ -300,9 +292,9 @@ const Home = () => {
                     {Array.from(new Set(subjects.map((sub) => sub.subject_name))).map((subjectName) => (
                       <button
                         key={subjectName}
-                        className={`px-1 py-2 ${filteredSubjectName === subjectName
-                          ? 'font-bold underline text-[#17ca96]'
-                          : 'text-[#333]'
+                        className={` mb-1  py-2 ${filteredSubjectName === subjectName
+                          ? 'font-bold underline text-[#17ca96] bg-[#17ca96]'
+                          : 'text-[#17ca96]'
                           }`}
                         onClick={() => setFilteredSubjectName(subjectName)}
                       >
@@ -330,7 +322,7 @@ const Home = () => {
                     return (
                       <div
                         key={index}
-                        className="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-6 grid-item cat1 cat2 cat4"
+                        className="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12 grid-item cat1 cat2 cat4"
                       >
                         <div className="course__item white-bg mb-30 fix">
                           <div className="course__thumb w-img p-relative fix">
@@ -344,7 +336,7 @@ const Home = () => {
                             </div>
                           </div>
                           <div className="course__content">
-                            <div className="course__meta flex flex-col sm:flex-row sm:items-center sm:justify-between">
+                            <div className="course__meta flex items-center justify-between">
                               <div className="course__lesson">
                                 <span>
                                   <i className="far fa-book-alt" />
@@ -358,7 +350,7 @@ const Home = () => {
                                 </span>
                               </div>
                             </div>
-                            <h3 className="course__title">
+                            <h3 className="course__title text-capitalize mt-10">
                               <Link href={`/class/${class_name_slug}/${slug}`}>
                                 {subject?.subject_name}
                               </Link>
@@ -367,14 +359,14 @@ const Home = () => {
                               <div className="course__teacher-thumb mr-15">
                                 <img src="/assets/common/logo.jpg" alt="" />
                               </div>
-                              <h6>Courseworld</h6>
+                              <h6><span className='text-xs'>Created by: <br /></span>CW</h6>
                             </div>
                           </div>
                           <Link href={`/class/${class_name_slug}/${slug}`}>
                             <div className="course__more d-flex justify-content-center align-items-center">
                               <div className="course__status">
                                 <span>Explore</span>
-                                <i className="far fa-arrow-right text-[#17ca96]" />
+                                <i className="far fa-arrow-right text-[#2B4EFF]" />
                               </div>
                             </div>
                           </Link>
@@ -423,7 +415,7 @@ const Home = () => {
         {/* course area end */}
 
         {/* pricing area start */}
-        <section className="price__area pt-50 pb-130">
+        <section className="price__area pt-50 pb-30">
           <div className="container">
             <div className="row">
               <div className="col-xxl-4 offset-xxl-4">
@@ -477,9 +469,9 @@ const Home = () => {
                               </li>
                             </ul>
                           </div>
-                          <a href="contact.html" className="e-btn e-btn-4">
+                          <Link href="/contact" className="e-btn2 text-white e-btn-4">
                             Get Started
-                          </a>
+                          </Link>
                         </div>
                       </div>
 
@@ -517,9 +509,9 @@ const Home = () => {
                               </li>
                             </ul>
                           </div>
-                          <a href="contact.html" className="e-btn e-btn-4">
+                          <Link href="/contact" className="e-btn2 text-white e-btn-4">
                             Get Started
-                          </a>
+                          </Link>
                         </div>
                       </div>
 

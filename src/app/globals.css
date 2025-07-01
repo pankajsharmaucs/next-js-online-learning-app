@@ -43,6 +43,14 @@
   --sidebar-ring: oklch(0.707 0.022 261.325);
 }
 
+.blog__thumb  { 
+  height: 150px!important;
+}
+
+a {
+  color: #063982 !important;
+}
+
 #curriculum h3 {
   margin-bottom: 0px;
 }

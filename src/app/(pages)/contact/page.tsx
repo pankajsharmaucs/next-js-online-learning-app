@@ -11,8 +11,7 @@ const pages = () => {
         style={{
           backgroundImage: `url("/assets/common/contact-banner.jpg")`,
           backgroundSize: "cover",
-          backgroundPosition: "center",
-          height: "400px"
+          backgroundPositionY: "45%",
         }}
       >
         <div className="container">

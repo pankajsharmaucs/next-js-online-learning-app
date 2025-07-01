@@ -144,7 +144,7 @@ const FadeInBlogContent = ({
               </div>
             </div>
             <div className="col-xxl-4 col-xl-4 col-lg-4">
-              <div className="blog__sidebar pl-70">
+              <div className="blog__sidebar md:pl-70 pl-0">
                 {RecentPosts && <RecentPosts />}
                 {CategoryList && <CategoryList />}
                 {TagsList && <TagsList tags={blog.tags || []} />}

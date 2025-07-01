@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
 import axios from 'axios'
+import PageBreadcrumb from '@/components/PageBreadcrumb'
 
 interface Blog {
     _id: string
@@ -60,7 +61,6 @@ const CategoryPage = () => {
                     backgroundImage: `url("/assets/blog/blogBG2.jpg")`,
                     backgroundSize: 'cover',
                     backgroundPosition: 'center',
-                    height: '400px',
                 }}
             >
                 <div className="container">
@@ -68,12 +68,7 @@ const CategoryPage = () => {
                         <div className="col-xxl-12">
                             <div className="page__title-wrapper mt-110">
                                 <h3 className="page__title mb-20">All Blog Categories</h3>
-                                <nav aria-label="breadcrumb">
-                                    <ol className="breadcrumb">
-                                        <li className="breadcrumb-item"><Link href="/blog">All Blog</Link></li>
-                                        <li className="breadcrumb-item active">Categories</li>
-                                    </ol>
-                                </nav>
+                                 <PageBreadcrumb homeLabel="All Blog" homeHref="/blog" pageName={'Categories'} />
                             </div>
                         </div>
                     </div>
@@ -96,13 +91,13 @@ const CategoryPage = () => {
                                     <div className="blog__wrapper">
                                         <div className="blog__item white-bg mb-30 transition-3 fix">
                                             <div className="blog__thumb w-img fix">
-                                                <Link href={`/blog/category/${category.cat_name}`}>
+                                                <Link href={`/blog/category/${category.cat_name.replace(' ','-').toString()}`}>
                                                     <img src={firstBlog.image} alt={category.cat_name} />
                                                 </Link>
                                             </div>
                                             <div className="p-3">
                                                 <h3 className="">
-                                                    <Link href={`/blog/category/${category.cat_name}`}>
+                                                    <Link href={`/blog/category/${category.cat_name.replace(' ','-').toString()}`}>
                                                         {category.cat_name}
                                                     </Link>
                                                 </h3>

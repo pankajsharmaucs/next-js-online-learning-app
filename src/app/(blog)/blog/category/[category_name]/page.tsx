@@ -133,7 +133,7 @@ const categorypage = () => {
 
             {/* Sidebar - keep as-is or update with dynamic data */}
             <div className="col-xxl-4 col-xl-4 col-lg-4">
-              <div className="blog__sidebar pl-70">
+              <div className="blog__sidebar md:pl-70 pl-0">
 
                 {<RecentPosts />}
 

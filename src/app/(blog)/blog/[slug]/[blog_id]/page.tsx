@@ -132,7 +132,7 @@ export default function Page() {
                             </div>
 
                             <div className="col-xxl-4 col-xl-4 col-lg-4">
-                                <div className="blog__sidebar pl-70">
+                                <div className="blog__sidebar md:pl-70 pl-0">
                                     <Skeleton className="w-[100%] h-[200px] rounded mb-4" />
                                     <Skeleton className="w-[100%] h-[200px] rounded mb-4" />
                                     <Skeleton className="w-[100%] h-[200px] rounded mb-4" />
@@ -198,7 +198,7 @@ export default function Page() {
                                     opacity: visible.title ? 1 : 0,
                                 }}
                             >
-                                <Link href={`/blog/category/${getCategoryName(blog.category, categories)}`}>
+                                <Link href={`/blog/category/${getCategoryName(blog.category, categories).replace(' ','-').toString()}`}>
                                     <span className="page__title-pre">
                                         {getCategoryName(blog.category, categories)}
                                     </span>
@@ -264,7 +264,7 @@ export default function Page() {
                             </div>
                         </div>
                         <div className="col-xxl-4 col-xl-4 col-lg-4">
-                            <div className="blog__sidebar pl-70">
+                            <div className="blog__sidebar md:pl-70 pl-0">
                                 {RecentPosts && <RecentPosts />}
                                 {CategoryList && <CategoryList />}
                                 {TagsList && <TagsList tags={blog.tags || []} />}
